@@ -17,6 +17,7 @@ export function Header({ cartCount = 0, userName = null }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [liveCount, setLiveCount] = useState(cartCount);
+  const [selectedMobileCategory, setSelectedMobileCategory] = useState<string>("men");
   const pathname = usePathname();
   const router = useRouter();
 
@@ -61,8 +62,12 @@ export function Header({ cartCount = 0, userName = null }: HeaderProps) {
     }
   };
 
+  const activeCategoryData =
+    MAIN_CATEGORIES.find((c) => c.slug === selectedMobileCategory) || MAIN_CATEGORIES[1];
+
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#080808]/95 backdrop-blur-md border-b border-[#2A2A2A]">
+    <>
+      <header className="sticky top-0 z-40 w-full bg-[#080808]/95 backdrop-blur-md border-b border-[#2A2A2A]">
       {/* Top Announcement Bar */}
       <div className="w-full bg-[#111111] border-b border-[#2A2A2A] text-[11px] uppercase tracking-luxury text-[#F5F0E6]/90 py-1.5 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -237,101 +242,140 @@ export function Header({ cartCount = 0, userName = null }: HeaderProps) {
         </div>
       )}
 
-      {/* Mobile Drawer Navigation (No Horizontal Overflow) */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Overlay */}
-          <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
+      </header>
 
-          {/* Drawer */}
-          <div className="fixed inset-y-0 left-0 w-full max-w-xs bg-[#080808] border-r border-[#2A2A2A] shadow-2xl p-6 overflow-y-auto flex flex-col justify-between">
-            <div>
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between pb-6 border-b border-[#2A2A2A]">
-                <div className="font-brand text-xl font-bold tracking-brand text-[#F5F0E6]">
+      {/* Fullscreen Zero-Scroll Mobile Navigation Modal (Rendered outside <header> so backdrop-blur does not trap it!) */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[100] lg:hidden bg-[#080808] flex flex-col justify-between overflow-y-auto animate-fade-in">
+          <div className="p-4 sm:p-6 space-y-4">
+            {/* Top Bar with Brand & Big Close Button */}
+            <div className="flex items-center justify-between pb-3 border-b border-[#2A2A2A]">
+              <div>
+                <div className="font-brand text-lg font-extrabold tracking-brand text-[#F5F0E6]">
                   ROYAL SHOES
                 </div>
-                <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-1.5 text-gray-400 hover:text-[#D4AF37]"
-                  aria-label="Close menu"
-                >
-                  <X size={22} />
-                </button>
+                <div className="text-[9px] tracking-[0.3em] text-[#D4AF37] uppercase font-semibold">
+                  {BRAND.tagline}
+                </div>
               </div>
-
-              {/* Mobile Category Links */}
-              <nav className="py-6 space-y-4">
-                {MAIN_CATEGORIES.map((cat) => {
-                  const href = cat.slug === "all" ? "/all" : `/${cat.slug}`;
-                  const isExpanded = activeDropdown === cat.slug;
-                  return (
-                    <div key={cat.slug} className="border-b border-[#2A2A2A]/40 pb-3">
-                      <div className="flex items-center justify-between">
-                        <Link
-                          href={href}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="text-sm font-semibold tracking-luxury uppercase text-[#F5F0E6] hover:text-[#D4AF37]"
-                        >
-                          {cat.name}
-                        </Link>
-                        {cat.subcategories.length > 0 && (
-                          <button
-                            onClick={() => setActiveDropdown(isExpanded ? null : cat.slug)}
-                            className="p-1 text-gray-400 hover:text-[#D4AF37]"
-                            aria-label={`Toggle ${cat.name} subcategories`}
-                          >
-                            <ChevronDown
-                              size={16}
-                              className={`transition-transform duration-200 ${isExpanded ? "rotate-180 text-[#D4AF37]" : ""}`}
-                            />
-                          </button>
-                        )}
-                      </div>
-
-                      {/* Nested subcategories */}
-                      {isExpanded && cat.subcategories.length > 0 && (
-                        <div className="mt-2 pl-3 space-y-2 border-l border-[#2A2A2A]">
-                          {cat.subcategories.map((sub) => (
-                            <Link
-                              key={sub.slug}
-                              href={`/${cat.slug}?sub=${encodeURIComponent(sub.name)}`}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="block text-xs text-gray-400 hover:text-[#D4AF37] py-1"
-                            >
-                              {sub.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </nav>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#D4AF37]/60 bg-[#111111] hover:bg-[#171717] text-[#D4AF37] hover:text-white text-xs font-bold uppercase tracking-luxury rounded-sm transition-colors"
+                aria-label="Close menu"
+              >
+                <X size={16} />
+                <span>Close</span>
+              </button>
             </div>
 
-            {/* Mobile Drawer Footer with Contact & Policies */}
-            <div className="pt-6 border-t border-[#2A2A2A] space-y-3 text-xs text-gray-400">
-              <div className="flex items-center gap-2 text-[#D4AF37]">
-                <Phone size={14} />
-                <a href={BRAND.contact.phoneTel} className="font-mono">
-                  {BRAND.contact.phoneDisplay}
-                </a>
+            {/* Department Selector (All 6 Departments Clearly Displayed on Screen) */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-luxury text-gray-400">
+                <span>Select Department:</span>
+                <span className="text-[#D4AF37]">Tap to view styles</span>
               </div>
-              <div className="flex flex-col gap-1.5 text-[11px] uppercase tracking-wider">
-                <Link href="/about" className="hover:text-white">Our Story</Link>
-                <Link href="/shipping" className="hover:text-white">Shipping Policy</Link>
-                <Link href="/returns" className="hover:text-white">Return & Exchange</Link>
-                <Link href="/contact" className="hover:text-white">Contact Concierge</Link>
+              <div className="grid grid-cols-3 gap-1.5">
+                {MAIN_CATEGORIES.map((cat) => {
+                  const isSelected = selectedMobileCategory === cat.slug;
+                  return (
+                    <button
+                      key={cat.slug}
+                      type="button"
+                      onClick={() => {
+                        if (cat.slug === "all") {
+                          router.push("/all");
+                          setIsMobileMenuOpen(false);
+                        } else {
+                          setSelectedMobileCategory(cat.slug);
+                        }
+                      }}
+                      className={`py-2 px-1 text-center border text-[11px] font-bold uppercase tracking-luxury transition-all rounded-sm flex flex-col items-center justify-center ${
+                        isSelected
+                          ? "bg-[#D4AF37] text-[#080808] border-[#D4AF37] shadow-lg font-extrabold"
+                          : "bg-[#111111] text-[#F5F0E6] border-[#2A2A2A] hover:border-[#D4AF37]"
+                      }`}
+                    >
+                      <span>{cat.name}</span>
+                      <span className={`text-[8.5px] uppercase mt-0.5 tracking-wider ${isSelected ? "text-[#080808]/80 font-bold" : "text-gray-400"}`}>
+                        {cat.slug === "all" ? "222 Items" : `${cat.subcategories.length} Styles`}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
+            </div>
+
+            {/* Subcategories Grid for the Active Department (Direct on screen, 0 scrolling!) */}
+            {activeCategoryData && activeCategoryData.subcategories.length > 0 && (
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center justify-between border-b border-[#2A2A2A]/60 pb-1.5">
+                  <span className="text-[11px] font-bold uppercase tracking-luxury text-[#D4AF37]">
+                    {activeCategoryData.name} Styles ({activeCategoryData.subcategories.length})
+                  </span>
+                  <Link
+                    href={`/${activeCategoryData.slug}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-[10px] uppercase tracking-luxury text-gray-300 hover:text-[#D4AF37] underline font-semibold"
+                  >
+                    View All {activeCategoryData.name} &rarr;
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-2 gap-1.5">
+                  {activeCategoryData.subcategories.map((sub) => (
+                    <Link
+                      key={sub.slug}
+                      href={`/${activeCategoryData.slug}?sub=${encodeURIComponent(sub.name)}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="p-2.5 bg-[#111111] hover:bg-[#1a1a1a] border border-[#2A2A2A] hover:border-[#D4AF37] transition-all flex items-center justify-between group rounded-sm"
+                    >
+                      <span className="text-[11px] text-[#F5F0E6] group-hover:text-[#D4AF37] font-medium line-clamp-1">
+                        {sub.name}
+                      </span>
+                      <span className="text-[#D4AF37] text-xs opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-transform">
+                        &rarr;
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Quick Footer: Direct Concierge & Links */}
+          <div className="p-4 bg-[#111111] border-t border-[#2A2A2A] space-y-3">
+            <div className="flex items-center justify-between text-xs">
+              <a
+                href={BRAND.contact.phoneTel}
+                className="flex items-center gap-1.5 text-[#D4AF37] font-mono text-xs font-bold"
+              >
+                <Phone size={13} />
+                <span>{BRAND.contact.phoneDisplay}</span>
+              </a>
+              <a
+                href={BRAND.contact.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-400 font-bold text-[11px] uppercase tracking-wider flex items-center gap-1"
+              >
+                <span>WhatsApp Chat</span>
+              </a>
+            </div>
+            <div className="flex items-center justify-between text-[11px] text-gray-400 uppercase tracking-luxury pt-1 border-t border-[#2A2A2A]/40">
+              <Link href="/all" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">
+                All Products
+              </Link>
+              <Link href="/account" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">
+                My Account
+              </Link>
+              <Link href="/shipping" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">
+                Delivery Info
+              </Link>
             </div>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
 

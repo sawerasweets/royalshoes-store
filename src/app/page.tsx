@@ -52,12 +52,12 @@ export default async function HomePage() {
   ]);
 
   const categoryThumbnails: Record<string, string> = {
-    men: "/products/prod-men-boots-1-1.svg",
+    men: "/products/prod-men-formal-shoes-1-1.svg",
     women: "/products/prod-women-block-heels-1-1.svg",
     bags: "/products/prod-bags-backpacks-1-1.svg",
     accessories: "/products/prod-accessories-wallets-1-1.svg",
     kids: "/products/prod-kids-boys-shoes-1-1.svg",
-    all: "/products/prod-men-boots-1-1.svg",
+    all: "/products/prod-men-formal-shoes-1-1.svg",
   };
 
   return (
