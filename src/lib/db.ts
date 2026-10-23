@@ -168,15 +168,52 @@ function convertQueryForPg(sql: string, params: any[] = []): { sql: string; para
   return { sql: pgSql, params };
 }
 
+const cacheMap = new Map<string, { rows: any; fields: any; expiry: number }>();
+
+export function clearCache() {
+  cacheMap.clear();
+}
+
 export const pool = {
   async query<T = any>(sql: string, params: any[] = []): Promise<[T, any]> {
+    const isSelect = sql.trim().toUpperCase().startsWith("SELECT");
+    const cacheKey = isSelect ? `${sql}::${JSON.stringify(params)}` : null;
+
+    if (cacheKey) {
+      const cached = cacheMap.get(cacheKey);
+      if (cached && Date.now() < cached.expiry) {
+        return [cached.rows as any, cached.fields];
+      }
+    } else {
+      // Writing query: immediately invalidate cache
+      cacheMap.clear();
+    }
+
     if (isPostgres && pgPool) {
       const converted = convertQueryForPg(sql, params);
       const res = await pgPool.query(converted.sql, converted.params);
       const rows = res.rows.map(normalizeRow);
+
+      if (cacheKey) {
+        cacheMap.set(cacheKey, { rows, fields: res.fields, expiry: Date.now() + 30000 });
+        if (cacheMap.size > 200) {
+          const oldest = cacheMap.keys().next().value;
+          if (oldest) cacheMap.delete(oldest);
+        }
+      }
+
       return [rows as any, res.fields];
     } else if (mysqlPool) {
       const [rows, fields] = await mysqlPool.query(sql, params);
+
+      if (cacheKey) {
+        cacheMap.set(cacheKey, { rows, fields, expiry: Date.now() + 30000 });
+        if (cacheMap.size > 200) {
+          const oldest = cacheMap.keys().next().value;
+          if (oldest) cacheMap.delete(oldest);
+        }
+      }
+
       return [rows as any, fields];
     }
     throw new Error("No database pool available");
@@ -191,6 +228,7 @@ export const pool = {
         },
         async commit() {
           await client.query("COMMIT");
+          cacheMap.clear();
         },
         async rollback() {
           await client.query("ROLLBACK");

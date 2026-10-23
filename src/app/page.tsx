@@ -9,42 +9,47 @@ import ProductCard from "@/components/storefront/ProductCard";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // Fetch real database records
-  const campaign = await prisma.homepageCampaign.findFirst();
-  const featuredProducts = await prisma.product.findMany({
-    where: { isPublished: true, isFeatured: true },
-    include: { images: true, variants: true },
-    take: 8,
-  });
-
-  const newArrivals = await prisma.product.findMany({
-    where: { isPublished: true, isNewArrival: true },
-    include: { images: true, variants: true },
-    take: 4,
-  });
-
-  const bestsellers = await prisma.product.findMany({
-    where: { isPublished: true, isBestseller: true },
-    include: { images: true, variants: true },
-    take: 4,
-  });
-
-  const menProducts = await prisma.product.findMany({
-    where: { isPublished: true, categoryId: "cat-men" },
-    include: { images: true, variants: true },
-    take: 4,
-  });
-
-  const womenProducts = await prisma.product.findMany({
-    where: { isPublished: true, categoryId: "cat-women" },
-    include: { images: true, variants: true },
-    take: 4,
-  });
-
-  const categories = await prisma.category.findMany({
-    where: { isActive: true },
-    include: { subcategories: true },
-  });
+  // Fetch all homepage data in parallel for maximum speed
+  const [
+    campaign,
+    featuredProducts,
+    newArrivals,
+    bestsellers,
+    menProducts,
+    womenProducts,
+    categories,
+  ] = await Promise.all([
+    prisma.homepageCampaign.findFirst(),
+    prisma.product.findMany({
+      where: { isPublished: true, isFeatured: true },
+      include: { images: true, variants: true },
+      take: 8,
+    }),
+    prisma.product.findMany({
+      where: { isPublished: true, isNewArrival: true },
+      include: { images: true, variants: true },
+      take: 4,
+    }),
+    prisma.product.findMany({
+      where: { isPublished: true, isBestseller: true },
+      include: { images: true, variants: true },
+      take: 4,
+    }),
+    prisma.product.findMany({
+      where: { isPublished: true, categoryId: "cat-men" },
+      include: { images: true, variants: true },
+      take: 4,
+    }),
+    prisma.product.findMany({
+      where: { isPublished: true, categoryId: "cat-women" },
+      include: { images: true, variants: true },
+      take: 4,
+    }),
+    prisma.category.findMany({
+      where: { isActive: true },
+      include: { subcategories: true },
+    }),
+  ]);
 
   const categoryThumbnails: Record<string, string> = {
     men: "/products/mens-classic-derby.svg",
