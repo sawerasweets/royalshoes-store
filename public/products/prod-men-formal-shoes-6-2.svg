@@ -1,0 +1,68 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1c1c1c"/>
+      <stop offset="60%" stop-color="#0e0e0e"/>
+      <stop offset="100%" stop-color="#060606"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5E0A9"/>
+      <stop offset="35%" stop-color="#D4AF37"/>
+      <stop offset="70%" stop-color="#AA820A"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#000000" flood-opacity="0.85"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="750" fill="url(#bgGlow)"/>
+
+  <!-- Luxury Framing -->
+  <rect x="24" y="24" width="552" height="702" fill="none" stroke="#262626" stroke-width="1"/>
+  <rect x="30" y="30" width="540" height="690" fill="none" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.4"/>
+  
+  <!-- Corner Ornaments -->
+  <path d="M 24 38 L 38 24 M 576 38 L 562 24 M 24 712 L 38 726 M 576 712 L 562 726" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Top Brand Mark -->
+  <text x="300" y="75" text-anchor="middle" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="16" font-weight="700" letter-spacing="7" fill="url(#goldGrad)">SAWERA</text>
+  <text x="300" y="94" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="8.5" font-weight="600" letter-spacing="3" fill="#888888">STEP INTO ELEGANCE</text>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="300" cy="510" rx="190" ry="22" fill="#000000" opacity="0.85" filter="blur(8px)"/>
+
+  <!-- PRODUCT ILLUSTRATION -->
+  <g filter="url(#subtleShadow)">
+    
+      <!-- Oxford Brogue Silhouette -->
+      <path d="M 130 460 C 120 420, 140 370, 190 355 C 240 340, 280 345, 340 370 C 410 400, 470 410, 485 450 C 490 475, 470 495, 440 500 C 370 510, 280 510, 210 505 C 160 500, 135 485, 130 460 Z" fill="#141414" stroke="#E5C158" stroke-width="1.5"/>
+      <!-- Stacked Heel -->
+      <path d="M 130 460 L 140 505 L 190 505 L 180 460 Z" fill="#0A0A0A" stroke="#333" stroke-width="1"/>
+      <!-- Leather Sole Edge -->
+      <path d="M 180 495 C 260 500, 370 500, 450 488 C 480 480, 485 460, 480 445" fill="none" stroke="#E5C158" stroke-width="2.5"/>
+      <!-- Cap Toe Seam with Brogue Perforations -->
+      <path d="M 400 405 C 410 435, 415 470, 405 495" fill="none" stroke="#E5C158" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Closed Lacing & Gold Eyelets -->
+      <path d="M 270 355 C 290 370, 310 395, 315 425" fill="none" stroke="#E5C158" stroke-width="1.2"/>
+      <circle cx="282" cy="372" r="2.5" fill="#E5C158"/>
+      <circle cx="290" cy="384" r="2.5" fill="#E5C158"/>
+      <circle cx="298" cy="397" r="2.5" fill="#E5C158"/>
+      <circle cx="305" cy="410" r="2.5" fill="#E5C158"/>
+      <!-- Laces -->
+      <line x1="282" y1="372" x2="295" y2="378" stroke="#E5C158" stroke-width="1.2"/>
+      <line x1="290" y1="384" x2="303" y2="390" stroke="#E5C158" stroke-width="1.2"/>
+      <line x1="298" y1="397" x2="310" y2="403" stroke="#E5C158" stroke-width="1.2"/>
+    
+  </g>
+
+  <!-- Category & Silhouette Badge -->
+  <g transform="translate(300, 630)">
+    <line x1="-130" y1="0" x2="130" y2="0" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="0" cy="0" r="4" fill="url(#goldGrad)"/>
+    <text x="0" y="24" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12" font-weight="700" letter-spacing="4" fill="#F5F0E6">REGENT WINGTIP SEMI-BROGUE</text>
+    <text x="0" y="42" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="8.5" font-weight="500" letter-spacing="2" fill="#D4AF37">HAND-BURNISHED CALFSKIN BROGUE</text>
+  </g>
+</svg>

@@ -1,0 +1,63 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1c1c1c"/>
+      <stop offset="60%" stop-color="#0e0e0e"/>
+      <stop offset="100%" stop-color="#060606"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5E0A9"/>
+      <stop offset="35%" stop-color="#D4AF37"/>
+      <stop offset="70%" stop-color="#AA820A"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#000000" flood-opacity="0.85"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="750" fill="url(#bgGlow)"/>
+
+  <!-- Luxury Framing -->
+  <rect x="24" y="24" width="552" height="702" fill="none" stroke="#262626" stroke-width="1"/>
+  <rect x="30" y="30" width="540" height="690" fill="none" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.4"/>
+  
+  <!-- Corner Ornaments -->
+  <path d="M 24 38 L 38 24 M 576 38 L 562 24 M 24 712 L 38 726 M 576 712 L 562 726" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Top Brand Mark -->
+  <text x="300" y="75" text-anchor="middle" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="16" font-weight="700" letter-spacing="7" fill="url(#goldGrad)">SAWERA</text>
+  <text x="300" y="94" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="8.5" font-weight="600" letter-spacing="3" fill="#888888">STEP INTO ELEGANCE</text>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="300" cy="510" rx="190" ry="22" fill="#000000" opacity="0.85" filter="blur(8px)"/>
+
+  <!-- PRODUCT ILLUSTRATION -->
+  <g filter="url(#subtleShadow)">
+    
+      <!-- Loafer Silhouette -->
+      <path d="M 135 465 C 125 425, 150 375, 205 360 C 275 340, 345 350, 415 385 C 465 410, 485 440, 475 470 C 455 505, 350 515, 240 510 C 170 505, 140 490, 135 465 Z" fill="#141414" stroke="#E5C158" stroke-width="1.5"/>
+      <!-- Low Stacked Heel -->
+      <path d="M 135 465 L 145 505 L 195 505 L 185 465 Z" fill="#0A0A0A" stroke="#222" stroke-width="1"/>
+      <!-- Apron Stitch -->
+      <path d="M 270 380 C 330 365, 390 380, 435 415 C 455 430, 460 455, 450 470 C 425 480, 385 475, 335 450" fill="none" stroke="#E5C158" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <!-- Gold Horsebit Hardware -->
+      <g transform="translate(330, 410) rotate(-15)">
+        <rect x="-35" y="-6" width="70" height="12" rx="4" fill="none" stroke="#E5C158" stroke-width="2.5"/>
+        <circle cx="-25" cy="0" r="8" fill="none" stroke="#E5C158" stroke-width="2.5"/>
+        <circle cx="25" cy="0" r="8" fill="none" stroke="#E5C158" stroke-width="2.5"/>
+        <line x1="-12" y1="0" x2="12" y2="0" stroke="#E5C158" stroke-width="4"/>
+      </g>
+    
+  </g>
+
+  <!-- Category & Silhouette Badge -->
+  <g transform="translate(300, 630)">
+    <line x1="-130" y1="0" x2="130" y2="0" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="0" cy="0" r="4" fill="url(#goldGrad)"/>
+    <text x="0" y="24" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12" font-weight="700" letter-spacing="4" fill="#F5F0E6">MONTE CARLO HORSEBIT MOCCASINS</text>
+    <text x="0" y="42" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="8.5" font-weight="500" letter-spacing="2" fill="#D4AF37">GLOVE-SOFT DRIVING MOCCASIN</text>
+  </g>
+</svg>

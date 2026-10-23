@@ -1,0 +1,67 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1c1c1c"/>
+      <stop offset="60%" stop-color="#0e0e0e"/>
+      <stop offset="100%" stop-color="#060606"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5E0A9"/>
+      <stop offset="35%" stop-color="#D4AF37"/>
+      <stop offset="70%" stop-color="#AA820A"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#000000" flood-opacity="0.85"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="750" fill="url(#bgGlow)"/>
+
+  <!-- Luxury Framing -->
+  <rect x="24" y="24" width="552" height="702" fill="none" stroke="#262626" stroke-width="1"/>
+  <rect x="30" y="30" width="540" height="690" fill="none" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.4"/>
+  
+  <!-- Corner Ornaments -->
+  <path d="M 24 38 L 38 24 M 576 38 L 562 24 M 24 712 L 38 726 M 576 712 L 562 726" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Top Brand Mark -->
+  <text x="300" y="75" text-anchor="middle" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="16" font-weight="700" letter-spacing="7" fill="url(#goldGrad)">SAWERA</text>
+  <text x="300" y="94" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="8.5" font-weight="600" letter-spacing="3" fill="#888888">STEP INTO ELEGANCE</text>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="300" cy="510" rx="190" ry="22" fill="#000000" opacity="0.85" filter="blur(8px)"/>
+
+  <!-- PRODUCT ILLUSTRATION -->
+  <g filter="url(#subtleShadow)">
+    
+      <!-- Slipper Sole -->
+      <path d="M 140 485 C 135 440, 160 380, 220 370 C 300 355, 390 360, 445 395 C 480 420, 485 460, 465 488 C 430 520, 320 520, 230 515 C 170 510, 145 500, 140 485 Z" fill="#1C140E" stroke="#E5C158" stroke-width="1.2"/>
+      <path d="M 148 478 C 144 445, 170 390, 222 380 C 298 365, 385 370, 438 402 C 470 424, 474 456, 456 480 C 424 508, 320 508, 232 505 C 175 500, 150 490, 148 478 Z" fill="#140D08" stroke="#E5C158" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+      <!-- Heel Cushion with Gold Crest -->
+      <circle cx="195" cy="455" r="16" fill="#1F150D" stroke="#E5C158" stroke-width="0.8"/>
+      <path d="M 189 458 L 195 448 L 201 458 L 195 455 Z" fill="#E5C158"/>
+
+      <!-- Velvet/Leather Upper Vamp (Open Back Mule) -->
+      <path d="M 270 375 C 320 360, 400 365, 450 400 C 480 425, 485 460, 465 488 C 420 495, 360 480, 320 450 C 280 420, 265 395, 270 375 Z" fill="#110B07" stroke="#E5C158" stroke-width="1.8"/>
+      
+      <!-- Gold Bullion Embroidered Crest on Vamp -->
+      <g transform="translate(390, 425)">
+        <ellipse cx="0" cy="0" rx="26" ry="18" fill="none" stroke="#E5C158" stroke-width="1.2"/>
+        <path d="M -12 4 L 0 -10 L 12 4 L 6 0 L 0 5 L -6 0 Z" fill="#E5C158"/>
+        <text x="0" y="10" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="6.5" font-weight="700" letter-spacing="1" fill="#E5C158">SAWERA</text>
+      </g>
+    
+  </g>
+
+  <!-- Category & Silhouette Badge -->
+  <g transform="translate(300, 630)">
+    <line x1="-130" y1="0" x2="130" y2="0" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="0" cy="0" r="4" fill="url(#goldGrad)"/>
+    <text x="0" y="24" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12" font-weight="700" letter-spacing="4" fill="#F5F0E6">MONARCH LEATHER SLIDE SLIPPER</text>
+    <text x="0" y="42" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="8.5" font-weight="500" letter-spacing="2" fill="#D4AF37">ROYAL EMBROIDERED HOUSE SLIPPER</text>
+  </g>
+</svg>

@@ -1,0 +1,61 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1c1c1c"/>
+      <stop offset="60%" stop-color="#0e0e0e"/>
+      <stop offset="100%" stop-color="#060606"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5E0A9"/>
+      <stop offset="35%" stop-color="#D4AF37"/>
+      <stop offset="70%" stop-color="#AA820A"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#000000" flood-opacity="0.85"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="750" fill="url(#bgGlow)"/>
+
+  <!-- Luxury Framing -->
+  <rect x="24" y="24" width="552" height="702" fill="none" stroke="#262626" stroke-width="1"/>
+  <rect x="30" y="30" width="540" height="690" fill="none" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.4"/>
+  
+  <!-- Corner Ornaments -->
+  <path d="M 24 38 L 38 24 M 576 38 L 562 24 M 24 712 L 38 726 M 576 712 L 562 726" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Top Brand Mark -->
+  <text x="300" y="75" text-anchor="middle" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="16" font-weight="700" letter-spacing="7" fill="url(#goldGrad)">SAWERA</text>
+  <text x="300" y="94" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="8.5" font-weight="600" letter-spacing="3" fill="#888888">STEP INTO ELEGANCE</text>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="300" cy="510" rx="190" ry="22" fill="#000000" opacity="0.85" filter="blur(8px)"/>
+
+  <!-- PRODUCT ILLUSTRATION -->
+  <g filter="url(#subtleShadow)">
+    
+      <!-- Minaudière Evening Hard-Shell Clutch -->
+      <rect x="180" y="370" width="240" height="150" rx="20" fill="#141414" stroke="#D4AF37" stroke-width="2.5"/>
+      <!-- Quilted Texture Grid -->
+      <line x1="200" y1="380" x2="400" y2="500" stroke="#D4AF37" stroke-width="0.6" opacity="0.5"/>
+      <line x1="240" y1="375" x2="415" y2="480" stroke="#D4AF37" stroke-width="0.6" opacity="0.5"/>
+      <line x1="185" y1="410" x2="330" y2="515" stroke="#D4AF37" stroke-width="0.6" opacity="0.5"/>
+      <line x1="400" y1="380" x2="200" y2="500" stroke="#D4AF37" stroke-width="0.6" opacity="0.5"/>
+      <line x1="360" y1="375" x2="185" y2="480" stroke="#D4AF37" stroke-width="0.6" opacity="0.5"/>
+      <line x1="415" y1="410" x2="270" y2="515" stroke="#D4AF37" stroke-width="0.6" opacity="0.5"/>
+      <!-- Faceted Jewel Gold Clasp -->
+      <polygon points="300,340 316,355 316,370 284,370 284,355" fill="#D4AF37" stroke="#FDF6D8" stroke-width="1.2"/>
+    
+  </g>
+
+  <!-- Category & Silhouette Badge -->
+  <g transform="translate(300, 630)">
+    <line x1="-130" y1="0" x2="130" y2="0" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="0" cy="0" r="4" fill="url(#goldGrad)"/>
+    <text x="0" y="24" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12" font-weight="700" letter-spacing="4" fill="#F5F0E6">SOVEREIGN ENVELOPE LEATHER CLUTCH</text>
+    <text x="0" y="42" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="8.5" font-weight="500" letter-spacing="2" fill="#D4AF37">EVENING MINAUDIÈRE HARD CLUTCH</text>
+  </g>
+</svg>
