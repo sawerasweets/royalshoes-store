@@ -6,7 +6,7 @@ import prisma from "@/lib/db";
 import { BRAND, MAIN_CATEGORIES } from "@/lib/constants";
 import ProductCard from "@/components/storefront/ProductCard";
 
-export const revalidate = 60; // ISR cache for 60 seconds
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   // Fetch real database records

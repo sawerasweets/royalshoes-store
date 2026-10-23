@@ -2,7 +2,7 @@ import React from "react";
 import prisma from "@/lib/db";
 import CollectionLayout from "@/components/storefront/CollectionLayout";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   searchParams: { sub?: string; sort?: string };

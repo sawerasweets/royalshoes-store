@@ -3,7 +3,7 @@ import { Phone, MessageCircle, MapPin, Clock, ShieldCheck, Mail } from "lucide-r
 import prisma from "@/lib/db";
 import { BRAND } from "@/lib/constants";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function ContactPage() {
   const settings = await prisma.storeSettings.findUnique();

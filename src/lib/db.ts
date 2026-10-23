@@ -133,10 +133,32 @@ function normalizeRow(row: any): any {
   return out;
 }
 
+const CAMEL_WORDS = [
+  "isActive", "showInNav", "isPublished", "isFeatured", "isNewArrival", "isBestseller",
+  "displayOrder", "categoryId", "categoryName", "categorySlug", "subcategoryId",
+  "subcategoryName", "subcategorySlug", "originalPrice", "orderId", "userId", "productId",
+  "variantId", "orderNumber", "customerName", "customerPhone", "customerEmail",
+  "shippingAddress", "deliveryNotes", "paymentMethod", "paymentStatus", "shippingFee",
+  "grandTotal", "couponCode", "productName", "productSku", "lineTotal", "imageUrl",
+  "proofImageUrl", "referenceNumber", "discountPercent", "discountAmount", "minOrderAmount",
+  "maxDiscount", "usageLimit", "timesUsed", "startDate", "endDate", "referenceId",
+  "ipAddress", "passwordHash", "businessPhone", "whatsappNumber", "telephoneLink",
+  "currencySymbol", "freeShippingThreshold", "standardShippingFee", "easypaisaInstructions",
+  "bankInstructions", "announcementText", "showAnnouncement", "createdAt", "updatedAt",
+  "storeName", "storeTagline", "logoUrl", "verifiedBy", "verifiedAt", "postalCode",
+  "fullName", "addressLine", "isDefault", "isPrimary", "additionalPrice"
+];
+CAMEL_WORDS.sort((a, b) => b.length - a.length);
+const CAMEL_REGEX = new RegExp(`(?<!["\`])\\b(${CAMEL_WORDS.join("|")})\\b(?!["\`])`, "g");
+
 function convertQueryForPg(sql: string, params: any[] = []): { sql: string; params: any[] } {
   let idx = 0;
-  let pgSql = sql.replace(/\?/g, () => `$${++idx}`);
-  pgSql = pgSql.replace(/`([a-zA-Z0-9_]+)`/g, '"$1"');
+  // Convert backticks to quotes
+  let pgSql = sql.replace(/`([a-zA-Z0-9_]+)`/g, '"$1"');
+  // Quote all unquoted camelCase table columns so PostgreSQL doesn't lowercase them
+  pgSql = pgSql.replace(CAMEL_REGEX, '"$1"');
+  // Convert ? to $1, $2, ...
+  pgSql = pgSql.replace(/\?/g, () => `$${++idx}`);
   if (pgSql.includes("ON DUPLICATE KEY UPDATE")) {
     pgSql = pgSql.replace(
       /ON DUPLICATE KEY UPDATE.*/i,

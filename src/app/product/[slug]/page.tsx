@@ -4,7 +4,7 @@ import prisma from "@/lib/db";
 import ProductDetailClient from "@/components/storefront/ProductDetailClient";
 import ProductCard from "@/components/storefront/ProductCard";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 interface ProductPageProps {
   params: { slug: string };
