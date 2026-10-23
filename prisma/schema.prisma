@@ -206,6 +206,7 @@ model InventoryMovement {
   variant      ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@index([variantId])
+  @@map("inventory_movements")
 }
 
 model Cart {

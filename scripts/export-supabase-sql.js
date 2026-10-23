@@ -151,6 +151,19 @@ CREATE TABLE product_variants (
 );
 CREATE INDEX idx_variants_product ON product_variants("productId");
 
+CREATE TABLE inventory_movements (
+  "id" VARCHAR(64) PRIMARY KEY,
+  "variantId" VARCHAR(64) NOT NULL REFERENCES product_variants("id") ON DELETE CASCADE,
+  "quantity" INTEGER NOT NULL,
+  "reason" VARCHAR(100) NOT NULL,
+  "referenceId" VARCHAR(100) NULL,
+  "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX idx_inv_mov_variant ON inventory_movements("variantId");
+CREATE INDEX idx_inv_mov_created ON inventory_movements("createdAt");
+CREATE INDEX idx_inv_mov_reason ON inventory_movements("reason");
+CREATE INDEX idx_inv_mov_reference ON inventory_movements("referenceId");
+
 CREATE TABLE product_images (
   "id" VARCHAR(64) PRIMARY KEY,
   "productId" VARCHAR(64) NOT NULL REFERENCES products("id") ON DELETE CASCADE,

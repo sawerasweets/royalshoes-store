@@ -1044,6 +1044,38 @@ export const prisma = {
       return rows;
     },
   },
+
+  inventoryMovement: {
+    create: async (args: { data: { variantId: string; quantity: number; reason: string; referenceId?: string | null } }) => {
+      const id = `mov-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      await pool.query(
+        "INSERT INTO inventory_movements (id, variantId, quantity, reason, referenceId) VALUES (?, ?, ?, ?, ?)",
+        [id, args.data.variantId, args.data.quantity, args.data.reason, args.data.referenceId || null]
+      );
+      return { id, ...args.data, createdAt: new Date() };
+    },
+    findMany: async (args?: { where?: { variantId?: string; referenceId?: string }; take?: number }) => {
+      const take = args?.take || 50;
+      let sql = "SELECT * FROM inventory_movements";
+      const params: any[] = [];
+      const conds: string[] = [];
+      if (args?.where?.variantId) {
+        conds.push("variantId = ?");
+        params.push(args.where.variantId);
+      }
+      if (args?.where?.referenceId) {
+        conds.push("referenceId = ?");
+        params.push(args.where.referenceId);
+      }
+      if (conds.length > 0) {
+        sql += " WHERE " + conds.join(" AND ");
+      }
+      sql += " ORDER BY createdAt DESC LIMIT ?";
+      params.push(take);
+      const [rows] = await pool.query<any[]>(sql, params);
+      return rows;
+    },
+  },
 };
 
 export default prisma;

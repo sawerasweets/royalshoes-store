@@ -77,6 +77,15 @@ export interface ProductVariantModel {
   updatedAt?: Date;
 }
 
+export interface InventoryMovementModel {
+  id: string;
+  variantId: string;
+  quantity: number;
+  reason: string;
+  referenceId?: string | null;
+  createdAt: Date;
+}
+
 export interface ProductModel {
   id: string;
   categoryId: string;
