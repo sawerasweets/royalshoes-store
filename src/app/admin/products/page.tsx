@@ -378,135 +378,252 @@ export default function AdminProductsPage() {
           </div>
         </div>
 
-        {/* Products Table */}
+        {/* Products View: Mobile Cards + Desktop Table */}
         <div className="bg-[#111111] border border-[#2A2A2A] overflow-hidden">
           {loading ? (
             <div className="p-12 text-center text-xs text-gray-400">Loading catalog...</div>
           ) : filteredProducts.length === 0 ? (
             <div className="p-12 text-center text-xs text-gray-500">No products match your search.</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
-                    <th className="p-3.5">Image</th>
-                    <th className="p-3.5">Product Title</th>
-                    <th className="p-3.5">SKU</th>
-                    <th className="p-3.5">Category</th>
-                    <th className="p-3.5 text-right">Price (PKR)</th>
-                    <th className="p-3.5 text-center">Discount</th>
-                    <th className="p-3.5 text-center">Status</th>
-                    <th className="p-3.5 text-center">Featured</th>
-                    <th className="p-3.5 text-center">Stock</th>
-                    <th className="p-3.5 text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#2A2A2A]">
-                  {filteredProducts.map((p) => {
-                    const hasDiscount = p.originalPrice && p.originalPrice > p.price;
-                    const discount = hasDiscount
-                      ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
-                      : null;
-                    const primaryImg = p.images?.find((img: any) => img.isPrimary)?.url || p.images?.[0]?.url || "/products/luxury-oxford.svg";
-                    const totalStock = p.variants?.reduce((sum: number, v: any) => sum + (v.stock || 0), 0) ?? 0;
+            <>
+              {/* MOBILE CARD VIEW (Optimized for all smartphones) */}
+              <div className="block md:hidden divide-y divide-[#2A2A2A]">
+                {filteredProducts.map((p) => {
+                  const hasDiscount = p.originalPrice && p.originalPrice > p.price;
+                  const discount = hasDiscount
+                    ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+                    : null;
+                  const primaryImg = p.images?.find((img: any) => img.isPrimary)?.url || p.images?.[0]?.url || "/products/luxury-oxford.svg";
+                  const totalStock = p.variants?.reduce((sum: number, v: any) => sum + (v.stock || 0), 0) ?? 0;
 
-                    return (
-                      <tr key={p.id} className="hover:bg-[#171717] transition-colors">
-                        <td className="p-3.5">
-                          <div className="relative w-11 h-14 bg-[#0A0A0A] border border-[#2A2A2A] overflow-hidden">
-                            <Image
-                              src={primaryImg}
-                              alt={p.name}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        </td>
-                        <td className="p-3.5">
-                          <div className="font-semibold text-[#F5F0E6] line-clamp-1">{p.name}</div>
-                          <div className="text-[10px] text-gray-400 truncate max-w-xs">{p.description}</div>
-                        </td>
-                        <td className="p-3.5 font-mono text-gray-400 text-[11px] whitespace-nowrap">{p.sku}</td>
-                        <td className="p-3.5 text-gray-300 whitespace-nowrap">
-                          <span className="text-[10px] uppercase font-bold text-[#D4AF37] block">
-                            {p.categoryName || "ROYAL SHOES"}
-                          </span>
-                          <span className="text-[11px] text-gray-300">
-                            {p.subcategoryName || "—"}
-                          </span>
-                        </td>
-                        <td className="p-3.5 text-right whitespace-nowrap">
-                          <div className="font-mono font-bold text-[#F5F0E6]">
-                            {formatPKR(p.price)}
-                          </div>
-                          {hasDiscount && (
-                            <div className="font-mono text-[10px] text-gray-500 line-through">
-                              {formatPKR(p.originalPrice)}
-                            </div>
-                          )}
-                        </td>
-                        <td className="p-3.5 text-center whitespace-nowrap">
-                          {hasDiscount ? (
-                            <span className="px-1.5 py-0.5 text-[10px] font-bold bg-[#D4AF37] text-[#080808]">
-                              -{discount}%
-                            </span>
-                          ) : (
-                            <span className="text-gray-600 text-[11px]">—</span>
-                          )}
-                        </td>
-                        <td className="p-3.5 text-center whitespace-nowrap">
+                  return (
+                    <div key={p.id} className="p-4 space-y-3 bg-[#111111] hover:bg-[#151515] transition-colors">
+                      {/* Top Bar: SKU + Status */}
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-mono text-gray-400 font-semibold">{p.sku}</span>
+                        <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleTogglePublish(p)}
                             className={`px-2 py-0.5 text-[10px] uppercase font-bold border transition-colors ${
                               p.isPublished
-                                ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400 hover:border-emerald-400"
-                                : "bg-gray-800 border-gray-600 text-gray-400 hover:border-gray-400"
+                                ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400"
+                                : "bg-gray-800 border-gray-600 text-gray-400"
                             }`}
                           >
                             {p.isPublished ? "Active" : "Draft"}
                           </button>
-                        </td>
-                        <td className="p-3.5 text-center">
-                          {p.isFeatured ? (
-                            <span className="text-[#D4AF37] text-sm">★</span>
-                          ) : (
-                            <span className="text-gray-600 text-xs">—</span>
-                          )}
-                        </td>
-                        <td className="p-3.5 text-center font-mono text-gray-300">
-                          {totalStock > 0 ? (
-                            <span className="text-emerald-400">{totalStock}</span>
-                          ) : (
-                            <span className="text-red-400 font-bold">0</span>
-                          )}
-                        </td>
-                        <td className="p-3.5 text-center whitespace-nowrap">
-                          <div className="flex items-center justify-center gap-2">
-                            <button
-                              onClick={() => handleOpenEdit(p)}
-                              className="inline-flex items-center gap-1 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-3 py-1 font-bold text-[11px] uppercase tracking-luxury shadow transition-colors"
-                              title="Edit product details, discount, picture, and stock"
-                            >
-                              <Edit3 size={11} />
-                              <span>Edit</span>
-                            </button>
-                            <a
-                              href={`/product/${p.slug}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1 border border-[#2A2A2A] hover:border-[#D4AF37] text-gray-400 hover:text-[#D4AF37] transition-colors"
-                              title="View on Storefront"
-                            >
-                              <ExternalLink size={12} />
-                            </a>
+                          {p.isFeatured && <span className="text-[#D4AF37] text-xs">★</span>}
+                        </div>
+                      </div>
+
+                      {/* Middle: Image + Details */}
+                      <div className="flex gap-3">
+                        <div className="relative w-16 h-20 bg-[#0A0A0A] border border-[#2A2A2A] flex-shrink-0 overflow-hidden">
+                          <Image
+                            src={primaryImg}
+                            alt={p.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="font-semibold text-sm text-[#F5F0E6] line-clamp-1">{p.name}</div>
+                          <div className="text-[10px] text-[#D4AF37] uppercase font-bold">
+                            {p.categoryName || "ROYAL SHOES"} {p.subcategoryName ? `• ${p.subcategoryName}` : ""}
                           </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          <div className="flex items-baseline gap-2 pt-0.5">
+                            <span className="font-mono font-bold text-sm text-[#F5F0E6]">{formatPKR(p.price)}</span>
+                            {hasDiscount && (
+                              <span className="font-mono text-[10px] text-gray-500 line-through">
+                                {formatPKR(p.originalPrice)}
+                              </span>
+                            )}
+                            {hasDiscount && (
+                              <span className="px-1 py-0.2 text-[9px] font-bold bg-[#D4AF37] text-[#080808]">
+                                -{discount}%
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[11px] text-gray-400">
+                            Stock:{" "}
+                            {totalStock > 0 ? (
+                              <span className="text-emerald-400 font-bold">{totalStock} units</span>
+                            ) : (
+                              <span className="text-red-400 font-bold">Out of stock</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Prominent Action Button: EDIT PRODUCT & PRICE */}
+                      <div className="pt-1 flex items-center gap-2">
+                        <button
+                          onClick={() => handleOpenEdit(p)}
+                          className="flex-1 py-2.5 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold text-xs uppercase tracking-luxury flex items-center justify-center gap-2 shadow rounded-sm transition-all"
+                        >
+                          <Edit3 size={13} />
+                          <span>Edit Product & Price</span>
+                        </button>
+                        <a
+                          href={`/product/${p.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2.5 border border-[#2A2A2A] hover:border-[#D4AF37] text-gray-400 hover:text-[#D4AF37] transition-colors"
+                          title="View on Storefront"
+                        >
+                          <ExternalLink size={14} />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* DESKTOP TABLE VIEW (With sticky actions column & Column 2 Edit button) */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
+                      <th className="p-3.5">Image</th>
+                      <th className="p-3.5">Product Title & Action</th>
+                      <th className="p-3.5">SKU</th>
+                      <th className="p-3.5">Category</th>
+                      <th className="p-3.5 text-right">Price (PKR)</th>
+                      <th className="p-3.5 text-center">Discount</th>
+                      <th className="p-3.5 text-center">Status</th>
+                      <th className="p-3.5 text-center">Featured</th>
+                      <th className="p-3.5 text-center">Stock</th>
+                      <th className="p-3.5 text-center sticky right-0 bg-[#0A0A0A] shadow-[-6px_0_12px_rgba(0,0,0,0.6)] z-10">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#2A2A2A]">
+                    {filteredProducts.map((p) => {
+                      const hasDiscount = p.originalPrice && p.originalPrice > p.price;
+                      const discount = hasDiscount
+                        ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+                        : null;
+                      const primaryImg = p.images?.find((img: any) => img.isPrimary)?.url || p.images?.[0]?.url || "/products/luxury-oxford.svg";
+                      const totalStock = p.variants?.reduce((sum: number, v: any) => sum + (v.stock || 0), 0) ?? 0;
+
+                      return (
+                        <tr key={p.id} className="hover:bg-[#171717] transition-colors group">
+                          <td className="p-3.5">
+                            <div className="relative w-11 h-14 bg-[#0A0A0A] border border-[#2A2A2A] overflow-hidden">
+                              <Image
+                                src={primaryImg}
+                                alt={p.name}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          </td>
+                          <td className="p-3.5 min-w-[220px]">
+                            <div className="font-semibold text-[#F5F0E6] line-clamp-1">{p.name}</div>
+                            <div className="text-[10px] text-gray-400 truncate max-w-xs">{p.description}</div>
+                            {/* Immediate In-Cell Edit Button (Unmissable) */}
+                            <div className="mt-2 flex items-center gap-2">
+                              <button
+                                onClick={() => handleOpenEdit(p)}
+                                className="inline-flex items-center gap-1.5 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-2.5 py-1 text-[11px] font-bold uppercase tracking-luxury rounded-sm shadow transition-all hover:scale-105"
+                                title="Edit product details, price, discount, picture & stock"
+                              >
+                                <Edit3 size={11} />
+                                <span>Edit Product & Price</span>
+                              </button>
+                              <a
+                                href={`/product/${p.slug}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-[#D4AF37] border border-[#2A2A2A] hover:border-[#D4AF37] px-2 py-0.5 transition-colors"
+                                title="View on Storefront"
+                              >
+                                <ExternalLink size={11} />
+                                <span>View</span>
+                              </a>
+                            </div>
+                          </td>
+                          <td className="p-3.5 font-mono text-gray-400 text-[11px] whitespace-nowrap">{p.sku}</td>
+                          <td className="p-3.5 text-gray-300 whitespace-nowrap">
+                            <span className="text-[10px] uppercase font-bold text-[#D4AF37] block">
+                              {p.categoryName || "ROYAL SHOES"}
+                            </span>
+                            <span className="text-[11px] text-gray-300">
+                              {p.subcategoryName || "—"}
+                            </span>
+                          </td>
+                          <td className="p-3.5 text-right whitespace-nowrap">
+                            <div className="font-mono font-bold text-[#F5F0E6]">
+                              {formatPKR(p.price)}
+                            </div>
+                            {hasDiscount && (
+                              <div className="font-mono text-[10px] text-gray-500 line-through">
+                                {formatPKR(p.originalPrice)}
+                              </div>
+                            )}
+                          </td>
+                          <td className="p-3.5 text-center whitespace-nowrap">
+                            {hasDiscount ? (
+                              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-[#D4AF37] text-[#080808]">
+                                -{discount}%
+                              </span>
+                            ) : (
+                              <span className="text-gray-600 text-[11px]">—</span>
+                            )}
+                          </td>
+                          <td className="p-3.5 text-center whitespace-nowrap">
+                            <button
+                              onClick={() => handleTogglePublish(p)}
+                              className={`px-2 py-0.5 text-[10px] uppercase font-bold border transition-colors ${
+                                p.isPublished
+                                  ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400 hover:border-emerald-400"
+                                  : "bg-gray-800 border-gray-600 text-gray-400 hover:border-gray-400"
+                              }`}
+                            >
+                              {p.isPublished ? "Active" : "Draft"}
+                            </button>
+                          </td>
+                          <td className="p-3.5 text-center">
+                            {p.isFeatured ? (
+                              <span className="text-[#D4AF37] text-sm">★</span>
+                            ) : (
+                              <span className="text-gray-600 text-xs">—</span>
+                            )}
+                          </td>
+                          <td className="p-3.5 text-center font-mono text-gray-300">
+                            {totalStock > 0 ? (
+                              <span className="text-emerald-400">{totalStock}</span>
+                            ) : (
+                              <span className="text-red-400 font-bold">0</span>
+                            )}
+                          </td>
+                          <td className="p-3.5 text-center whitespace-nowrap sticky right-0 bg-[#111111] group-hover:bg-[#171717] shadow-[-6px_0_12px_rgba(0,0,0,0.6)] z-10">
+                            <div className="flex items-center justify-center gap-2">
+                              <button
+                                onClick={() => handleOpenEdit(p)}
+                                className="inline-flex items-center gap-1 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-3 py-1 font-bold text-[11px] uppercase tracking-luxury shadow transition-colors"
+                                title="Edit product details, discount, picture, and stock"
+                              >
+                                <Edit3 size={11} />
+                                <span>Edit</span>
+                              </button>
+                              <a
+                                href={`/product/${p.slug}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-1 border border-[#2A2A2A] hover:border-[#D4AF37] text-gray-400 hover:text-[#D4AF37] transition-colors"
+                                title="View on Storefront"
+                              >
+                                <ExternalLink size={12} />
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </div>
 

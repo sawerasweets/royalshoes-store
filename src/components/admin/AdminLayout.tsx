@@ -33,8 +33,62 @@ export function AdminLayout({ children, adminName = "Administrator" }: AdminLayo
 
   return (
     <div className="min-h-screen bg-[#080808] text-[#F5F0E6] flex flex-col md:flex-row border-t border-[#2A2A2A]">
-      {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-[#111111] border-r border-[#2A2A2A] p-6 flex flex-col justify-between flex-shrink-0">
+      {/* Mobile Top Header & Navigation Bar (Compact, No Vertical Bloat) */}
+      <div className="md:hidden bg-[#111111] border-b border-[#2A2A2A] sticky top-0 z-30">
+        <div className="p-3.5 flex items-center justify-between border-b border-[#2A2A2A]/60">
+          <div>
+            <div className="text-[9px] font-bold tracking-brand uppercase text-[#D4AF37]">
+              EXECUTIVE DESK
+            </div>
+            <div className="font-brand text-sm font-bold tracking-luxury text-[#F5F0E6]">
+              ROYAL SHOES ADMIN
+            </div>
+          </div>
+          <div className="flex items-center gap-3 text-xs">
+            <Link
+              href="/"
+              className="flex items-center gap-1 text-gray-400 hover:text-[#D4AF37] text-[11px]"
+            >
+              <Store size={14} />
+              <span>Store</span>
+            </Link>
+            <form action="/api/auth/logout" method="POST">
+              <button
+                type="submit"
+                className="flex items-center gap-1 text-rose-400 hover:text-rose-300 text-[11px]"
+              >
+                <LogOut size={13} />
+                <span>Exit</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Mobile Horizontal Scrollable Tab Bar */}
+        <div className="overflow-x-auto flex items-center gap-1 px-2 py-2 scrollbar-none">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-1.5 px-3 py-1.5 whitespace-nowrap text-[11px] font-bold uppercase tracking-luxury transition-colors border rounded-sm flex-shrink-0 ${
+                  isActive
+                    ? "bg-[#D4AF37] text-[#080808] border-[#D4AF37]"
+                    : "bg-[#080808] text-gray-400 border-[#2A2A2A] hover:border-[#D4AF37]"
+                }`}
+              >
+                <Icon size={12} />
+                <span>{item.label.split(" ")[0]}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Desktop Sidebar Navigation */}
+      <aside className="hidden md:flex w-64 bg-[#111111] border-r border-[#2A2A2A] p-6 flex-col justify-between flex-shrink-0 min-h-screen">
         <div className="space-y-6">
           {/* Admin Header */}
           <div className="pb-4 border-b border-[#2A2A2A] space-y-1">
@@ -92,7 +146,7 @@ export function AdminLayout({ children, adminName = "Administrator" }: AdminLayo
       </aside>
 
       {/* Main Admin Area */}
-      <main className="flex-1 p-6 sm:p-10 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-6 lg:p-10 overflow-y-auto max-w-full">
         {children}
       </main>
     </div>

@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     await requireAdmin();
     const products = await prisma.product.findMany({
       include: { images: true, variants: true },
-      take: 200,
+      take: 500,
     });
     return NextResponse.json({ success: true, products });
   } catch (error: any) {

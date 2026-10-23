@@ -52,86 +52,51 @@ export default async function HomePage() {
   ]);
 
   const categoryThumbnails: Record<string, string> = {
-    men: "/products/mens-classic-derby.svg",
-    women: "/products/women-monogram-heels.svg",
-    bags: "/products/women-handbag-silhouette.svg",
-    accessories: "/products/monogram-leather-wallet.svg",
-    kids: "/products/luxury-oxford.svg",
-    all: "/products/mens-cap-toe-oxford.svg",
+    men: "/products/prod-men-boots-1-1.svg",
+    women: "/products/prod-women-block-heels-1-1.svg",
+    bags: "/products/prod-bags-backpacks-1-1.svg",
+    accessories: "/products/prod-accessories-wallets-1-1.svg",
+    kids: "/products/prod-kids-boys-shoes-1-1.svg",
+    all: "/products/prod-men-boots-1-1.svg",
   };
 
   return (
-    <div className="space-y-20 pb-12">
-      {/* 1. Compact Campaign Banner (Product-First: Does NOT push shopping experience far down) */}
-      <section className="relative overflow-hidden border border-[#2A2A2A] bg-gradient-to-r from-[#080808] via-[#111111] to-[#080808] p-8 sm:p-12 lg:p-16">
-        <div className="absolute inset-0 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
-        <div className="relative max-w-3xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 border border-[#D4AF37]/40 bg-[#171717] text-[#D4AF37] text-[10px] font-bold tracking-brand uppercase">
-            <Sparkles size={12} />
-            <span>BLACK & GOLD EDITION</span>
-          </div>
-          <h1 className="font-brand text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-luxury text-[#F5F0E6]">
-            {campaign?.title || "STEP INTO ELEGANCE"}
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-400 max-w-xl mx-auto tracking-wide leading-relaxed">
-            {campaign?.subtitle || "Handcrafted Pakistani footwear artistry meets timeless international luxury. Experience uncompromising comfort, master shoemaking, and prestigious silhouettes."}
-          </p>
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/all"
-              className="inline-flex items-center gap-2 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold text-xs uppercase tracking-luxury px-8 py-3.5 transition-all shadow-[0_4px_20px_rgba(212,175,55,0.2)] hover:scale-105"
-            >
-              <span>Explore Collection</span>
-              <ArrowRight size={14} />
-            </Link>
-            <Link
-              href="/men"
-              className="inline-flex items-center gap-2 border border-[#2A2A2A] hover:border-[#D4AF37] bg-[#111111] text-[#F5F0E6] text-xs uppercase tracking-luxury px-6 py-3.5 transition-colors"
-            >
-              <span>Men&apos;s Boutique</span>
-            </Link>
-            <Link
-              href="/women"
-              className="inline-flex items-center gap-2 border border-[#2A2A2A] hover:border-[#D4AF37] bg-[#111111] text-[#F5F0E6] text-xs uppercase tracking-luxury px-6 py-3.5 transition-colors"
-            >
-              <span>Women&apos;s Boutique</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. Shop by Category (Phase 8 requirement) */}
-      <section className="space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-[11px] font-bold tracking-brand uppercase text-[#D4AF37]">
+    <div className="space-y-12 sm:space-y-20 pb-12">
+      {/* 1. Curated Categories (Immediate Product-First Entry) */}
+      <section className="space-y-4 sm:space-y-6 pt-2">
+        <div className="text-center space-y-1">
+          <span className="text-[10px] sm:text-[11px] font-bold tracking-brand uppercase text-[#D4AF37]">
             Curated Boutiques
-          </h2>
-          <h3 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#F5F0E6]">
+          </span>
+          <h1 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#F5F0E6]">
             SHOP BY CATEGORY
-          </h3>
+          </h1>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           {categories
             .filter((c) => c.slug !== "all")
-            .map((cat) => (
+            .map((cat, idx) => (
               <Link
                 key={cat.slug}
                 href={`/${cat.slug}`}
-                className="group relative aspect-[4/5] overflow-hidden border border-[#2A2A2A] bg-[#111111] hover:border-[#D4AF37] transition-all duration-300"
+                className={`group relative aspect-[4/5] overflow-hidden border border-[#2A2A2A] bg-[#111111] hover:border-[#D4AF37] transition-all duration-300 shadow-md ${
+                  idx === 4 ? "col-span-2 sm:col-span-1" : ""
+                }`}
               >
                 <Image
-                  src={categoryThumbnails[cat.slug] || "/products/luxury-oxford.svg"}
+                  src={categoryThumbnails[cat.slug] || "/products/prod-men-boots-1-1.svg"}
                   alt={cat.name}
                   fill
-                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110 opacity-75 group-hover:opacity-100"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110 opacity-80 group-hover:opacity-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-black/40 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4 text-center">
-                  <span className="font-brand text-xs sm:text-sm font-bold tracking-luxury uppercase text-[#F5F0E6] group-hover:text-[#D4AF37] transition-colors">
+                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 text-center">
+                  <span className="font-brand text-xs sm:text-sm font-bold tracking-luxury uppercase text-[#F5F0E6] group-hover:text-[#D4AF37] transition-colors block">
                     {cat.name}
                   </span>
-                  <div className="text-[10px] text-gray-400 tracking-wider uppercase mt-1">
+                  <div className="text-[10px] text-gray-400 tracking-wider uppercase mt-0.5">
                     {cat.subcategories?.length || 0} Styles
                   </div>
                 </div>

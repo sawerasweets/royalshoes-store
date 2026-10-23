@@ -76,44 +76,32 @@ export default function AdminPaymentsPage() {
               No manual payments pending verification.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
-                    <th className="p-3.5">Date</th>
-                    <th className="p-3.5">Order #</th>
-                    <th className="p-3.5">Customer</th>
-                    <th className="p-3.5">Method</th>
-                    <th className="p-3.5">Reference ID (TRX)</th>
-                    <th className="p-3.5 text-right">Amount (PKR)</th>
-                    <th className="p-3.5 text-center">Status</th>
-                    <th className="p-3.5 text-center">Verification Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#2A2A2A]">
-                  {payments.map((p) => (
-                    <tr key={p.id} className="hover:bg-[#171717] transition-colors">
-                      <td className="p-3.5 text-gray-400 text-[11px]">
+            <>
+              {/* MOBILE CARDS */}
+              <div className="block md:hidden divide-y divide-[#2A2A2A]">
+                {payments.map((p) => (
+                  <div key={p.id} className="p-4 space-y-3 bg-[#111111]">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-mono font-bold text-[#D4AF37]">
+                        Order #{p.orderNumber || p.orderId}
+                      </span>
+                      <span className="text-[11px] text-gray-400">
                         {new Date(p.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="p-3.5 font-mono font-bold text-[#D4AF37]">
-                        <a href={`/order/${p.orderNumber}`} target="_blank" className="hover:underline">
-                          {p.orderNumber || p.orderId}
-                        </a>
-                      </td>
-                      <td className="p-3.5 font-medium text-[#F5F0E6]">
-                        {p.customerName || "Customer"}
-                      </td>
-                      <td className="p-3.5 text-gray-300 font-semibold">{p.method}</td>
-                      <td className="p-3.5 font-mono text-xs text-[#D4AF37]">
-                        {p.referenceNumber || "None (COD)"}
-                      </td>
-                      <td className="p-3.5 text-right font-mono font-bold text-[#F5F0E6]">
-                        {formatPKR(p.amount)}
-                      </td>
-                      <td className="p-3.5 text-center">
+                      </span>
+                    </div>
+
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="font-medium text-sm text-[#F5F0E6]">{p.customerName || "Customer"}</div>
+                        <div className="text-xs text-gray-300 font-semibold mt-0.5">{p.method}</div>
+                        <div className="text-xs text-[#D4AF37] font-mono mt-0.5">TRX: {p.referenceNumber || "None (COD)"}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-mono font-bold text-sm text-[#F5F0E6]">
+                          {formatPKR(p.amount)}
+                        </div>
                         <span
-                          className={`px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider ${
+                          className={`inline-block mt-1 px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider ${
                             p.status === "VERIFIED"
                               ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400"
                               : p.status === "REJECTED"
@@ -123,38 +111,114 @@ export default function AdminPaymentsPage() {
                         >
                           {p.status}
                         </span>
-                      </td>
-                      <td className="p-3.5 text-center">
-                        {p.status === "PENDING" ? (
-                          <div className="flex items-center justify-center gap-2">
-                            <button
-                              onClick={() => handleVerify(p, "VERIFIED")}
-                              disabled={actionLoading === p.id}
-                              className="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] uppercase tracking-luxury flex items-center gap-1 shadow-sm"
-                            >
-                              <Check size={12} />
-                              <span>Verify</span>
-                            </button>
-                            <button
-                              onClick={() => handleVerify(p, "REJECTED")}
-                              disabled={actionLoading === p.id}
-                              className="px-3 py-1 bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-700 font-bold text-[10px] uppercase tracking-luxury flex items-center gap-1"
-                            >
-                              <X size={12} />
-                              <span>Reject</span>
-                            </button>
-                          </div>
-                        ) : (
-                          <span className="text-gray-500 text-[11px]">
-                            {p.verifiedBy ? `By ${p.verifiedBy}` : "Completed"}
-                          </span>
-                        )}
-                      </td>
+                      </div>
+                    </div>
+
+                    {p.status === "PENDING" && (
+                      <div className="flex items-center gap-2 pt-1">
+                        <button
+                          onClick={() => handleVerify(p, "VERIFIED")}
+                          disabled={actionLoading === p.id}
+                          className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-luxury flex items-center justify-center gap-1.5 shadow-sm rounded-sm"
+                        >
+                          <Check size={14} />
+                          <span>Verify</span>
+                        </button>
+                        <button
+                          onClick={() => handleVerify(p, "REJECTED")}
+                          disabled={actionLoading === p.id}
+                          className="flex-1 py-2 bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-700 font-bold text-xs uppercase tracking-luxury flex items-center justify-center gap-1.5 rounded-sm"
+                        >
+                          <X size={14} />
+                          <span>Reject</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* DESKTOP TABLE */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
+                      <th className="p-3.5">Date</th>
+                      <th className="p-3.5">Order #</th>
+                      <th className="p-3.5">Customer</th>
+                      <th className="p-3.5">Method</th>
+                      <th className="p-3.5">Reference ID (TRX)</th>
+                      <th className="p-3.5 text-right">Amount (PKR)</th>
+                      <th className="p-3.5 text-center">Status</th>
+                      <th className="p-3.5 text-center">Verification Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-[#2A2A2A]">
+                    {payments.map((p) => (
+                      <tr key={p.id} className="hover:bg-[#171717] transition-colors">
+                        <td className="p-3.5 text-gray-400 text-[11px]">
+                          {new Date(p.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="p-3.5 font-mono font-bold text-[#D4AF37]">
+                          <a href={`/order/${p.orderNumber}`} target="_blank" className="hover:underline">
+                            {p.orderNumber || p.orderId}
+                          </a>
+                        </td>
+                        <td className="p-3.5 font-medium text-[#F5F0E6]">
+                          {p.customerName || "Customer"}
+                        </td>
+                        <td className="p-3.5 text-gray-300 font-semibold">{p.method}</td>
+                        <td className="p-3.5 font-mono text-xs text-[#D4AF37]">
+                          {p.referenceNumber || "None (COD)"}
+                        </td>
+                        <td className="p-3.5 text-right font-mono font-bold text-[#F5F0E6]">
+                          {formatPKR(p.amount)}
+                        </td>
+                        <td className="p-3.5 text-center">
+                          <span
+                            className={`px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider ${
+                              p.status === "VERIFIED"
+                                ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400"
+                                : p.status === "REJECTED"
+                                ? "bg-rose-950/40 border-rose-500/40 text-rose-400"
+                                : "bg-amber-950/40 border-amber-500/40 text-amber-400"
+                            }`}
+                          >
+                            {p.status}
+                          </span>
+                        </td>
+                        <td className="p-3.5 text-center">
+                          {p.status === "PENDING" ? (
+                            <div className="flex items-center justify-center gap-2">
+                              <button
+                                onClick={() => handleVerify(p, "VERIFIED")}
+                                disabled={actionLoading === p.id}
+                                className="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] uppercase tracking-luxury flex items-center gap-1 shadow-sm"
+                              >
+                                <Check size={12} />
+                                <span>Verify</span>
+                              </button>
+                              <button
+                                onClick={() => handleVerify(p, "REJECTED")}
+                                disabled={actionLoading === p.id}
+                                className="px-3 py-1 bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-700 font-bold text-[10px] uppercase tracking-luxury flex items-center gap-1"
+                              >
+                                <X size={12} />
+                                <span>Reject</span>
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-gray-500 text-[11px]">
+                              {p.verifiedBy ? `By ${p.verifiedBy}` : "Completed"}
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </div>
       </div>

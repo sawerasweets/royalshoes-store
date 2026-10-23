@@ -137,76 +137,133 @@ export default function AdminOrdersPage() {
           </div>
         </div>
 
-        {/* Orders Table */}
+        {/* Orders View: Mobile Cards + Desktop Table */}
         <div className="bg-[#111111] border border-[#2A2A2A] overflow-hidden">
           {loading ? (
             <div className="p-12 text-center text-xs text-gray-400">Loading order records...</div>
           ) : filteredOrders.length === 0 ? (
             <div className="p-12 text-center text-xs text-gray-500">No matching orders found.</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
-                    <th className="p-3.5">Order #</th>
-                    <th className="p-3.5">Date</th>
-                    <th className="p-3.5">Customer</th>
-                    <th className="p-3.5">City</th>
-                    <th className="p-3.5">Items</th>
-                    <th className="p-3.5">Status</th>
-                    <th className="p-3.5">Payment</th>
-                    <th className="p-3.5 text-right">Total</th>
-                    <th className="p-3.5 text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#2A2A2A]">
-                  {filteredOrders.map((o) => (
-                    <tr key={o.id} className="hover:bg-[#171717] transition-colors">
-                      <td className="p-3.5 font-mono font-bold text-[#D4AF37]">
+            <>
+              {/* MOBILE CARDS */}
+              <div className="block md:hidden divide-y divide-[#2A2A2A]">
+                {filteredOrders.map((o) => (
+                  <div key={o.id} className="p-4 space-y-3 bg-[#111111]">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-mono font-bold text-[#D4AF37] text-sm">
                         {o.orderNumber}
-                      </td>
-                      <td className="p-3.5 text-gray-400 text-[11px]">
+                      </span>
+                      <span className="text-[11px] text-gray-400">
                         {new Date(o.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="p-3.5 font-medium text-[#F5F0E6]">
-                        <div>{o.customerName}</div>
-                        <div className="text-[10px] text-gray-400 font-mono">{o.customerPhone}</div>
-                      </td>
-                      <td className="p-3.5 text-gray-300">{o.city}</td>
-                      <td className="p-3.5 text-gray-400">{o.items?.length || 1}</td>
-                      <td className="p-3.5">
-                        <span className="px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider bg-[#080808] border-gray-700 text-gray-200">
-                          {o.status}
-                        </span>
-                      </td>
-                      <td className="p-3.5">
-                        <span className={`px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider ${
-                          o.paymentStatus === "VERIFIED"
-                            ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400"
-                            : "bg-amber-950/40 border-amber-500/40 text-amber-400"
-                        }`}>
-                          {o.paymentStatus}
-                        </span>
-                      </td>
-                      <td className="p-3.5 text-right font-mono font-bold text-[#F5F0E6]">
-                        {formatPKR(o.grandTotal)}
-                      </td>
-                      <td className="p-3.5 text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          <button
-                            onClick={() => openEditModal(o)}
-                            className="p-1.5 border border-[#2A2A2A] hover:border-[#D4AF37] text-gray-400 hover:text-[#D4AF37] transition-colors"
-                            title="Manage Order Status"
-                          >
-                            <Edit3 size={14} />
-                          </button>
+                      </span>
+                    </div>
+
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="font-medium text-sm text-[#F5F0E6]">{o.customerName}</div>
+                        <div className="text-xs text-gray-400 font-mono">{o.customerPhone}</div>
+                        <div className="text-xs text-gray-400 mt-0.5">{o.city}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-mono font-bold text-sm text-[#D4AF37]">
+                          {formatPKR(o.grandTotal)}
                         </div>
-                      </td>
+                        <div className="text-[10px] text-gray-400 uppercase mt-0.5">
+                          {o.paymentMethod}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-1 text-[10px] uppercase font-bold">
+                      <span className="px-2 py-0.5 border border-gray-700 bg-[#080808] text-gray-200">
+                        Status: {o.status}
+                      </span>
+                      <span className={`px-2 py-0.5 border ${
+                        o.paymentStatus === "VERIFIED"
+                          ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400"
+                          : "bg-amber-950/40 border-amber-500/40 text-amber-400"
+                      }`}>
+                        Pay: {o.paymentStatus}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => openEditModal(o)}
+                      className="w-full py-2 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold text-xs uppercase tracking-luxury flex items-center justify-center gap-2 rounded-sm shadow transition-colors"
+                    >
+                      <Edit3 size={13} />
+                      <span>Manage Order Status</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* DESKTOP TABLE */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
+                      <th className="p-3.5">Order #</th>
+                      <th className="p-3.5">Date</th>
+                      <th className="p-3.5">Customer</th>
+                      <th className="p-3.5">City</th>
+                      <th className="p-3.5">Items</th>
+                      <th className="p-3.5">Status</th>
+                      <th className="p-3.5">Payment</th>
+                      <th className="p-3.5 text-right">Total</th>
+                      <th className="p-3.5 text-center">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-[#2A2A2A]">
+                    {filteredOrders.map((o) => (
+                      <tr key={o.id} className="hover:bg-[#171717] transition-colors">
+                        <td className="p-3.5 font-mono font-bold text-[#D4AF37]">
+                          {o.orderNumber}
+                        </td>
+                        <td className="p-3.5 text-gray-400 text-[11px]">
+                          {new Date(o.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="p-3.5 font-medium text-[#F5F0E6]">
+                          <div>{o.customerName}</div>
+                          <div className="text-[10px] text-gray-400 font-mono">{o.customerPhone}</div>
+                        </td>
+                        <td className="p-3.5 text-gray-300">{o.city}</td>
+                        <td className="p-3.5 text-gray-400">{o.items?.length || 1}</td>
+                        <td className="p-3.5">
+                          <span className="px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider bg-[#080808] border-gray-700 text-gray-200">
+                            {o.status}
+                          </span>
+                        </td>
+                        <td className="p-3.5">
+                          <span className={`px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider ${
+                            o.paymentStatus === "VERIFIED"
+                              ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400"
+                              : "bg-amber-950/40 border-amber-500/40 text-amber-400"
+                          }`}>
+                            {o.paymentStatus}
+                          </span>
+                        </td>
+                        <td className="p-3.5 text-right font-mono font-bold text-[#F5F0E6]">
+                          {formatPKR(o.grandTotal)}
+                        </td>
+                        <td className="p-3.5 text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => openEditModal(o)}
+                              className="inline-flex items-center gap-1 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-2.5 py-1 text-[11px] font-bold uppercase tracking-luxury rounded-sm shadow transition-colors"
+                              title="Manage Order Status"
+                            >
+                              <Edit3 size={11} />
+                              <span>Manage</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </div>
 
