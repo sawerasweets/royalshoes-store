@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, Truck, RotateCcw, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, RotateCcw, Sparkles, Home } from "lucide-react";
 import prisma from "@/lib/db";
 import { BRAND, MAIN_CATEGORIES } from "@/lib/constants";
 import ProductCard from "@/components/storefront/ProductCard";
@@ -62,46 +62,60 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-12 sm:space-y-20 pb-12">
-      {/* 1. Curated Categories (Immediate Product-First Entry) */}
-      <section className="space-y-4 sm:space-y-6 pt-2">
-        <div className="text-center space-y-1">
-          <span className="text-[10px] sm:text-[11px] font-bold tracking-brand uppercase text-[#D4AF37]">
+      {/* 1. Curated Circular Category Bar (Compact, 1 Single Row, With HOME) */}
+      <section className="space-y-3 pt-1">
+        <div className="text-center space-y-0.5">
+          <span className="text-[9px] sm:text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
             Curated Boutiques
           </span>
-          <h1 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#F5F0E6]">
+          <h1 className="font-brand text-xl sm:text-2xl font-extrabold tracking-luxury text-[#F5F0E6]">
             SHOP BY CATEGORY
           </h1>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-          {categories
-            .filter((c) => c.slug !== "all")
-            .map((cat, idx) => (
-              <Link
-                key={cat.slug}
-                href={`/${cat.slug}`}
-                className={`group relative aspect-[4/5] overflow-hidden border border-[#2A2A2A] bg-[#111111] hover:border-[#D4AF37] transition-all duration-300 shadow-md ${
-                  idx === 4 ? "col-span-2 sm:col-span-1" : ""
-                }`}
-              >
+        {/* 1 Row of Circular Story Icons (WhatsApp Icon Style) */}
+        <div className="flex items-center justify-start sm:justify-center gap-3.5 sm:gap-6 overflow-x-auto py-2 px-1 scrollbar-none">
+          {/* HOME Circle */}
+          <Link
+            href="/"
+            className="flex flex-col items-center gap-1.5 flex-shrink-0 group"
+          >
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-[#D4AF37] bg-[#111111] overflow-hidden flex items-center justify-center shadow-[0_0_12px_rgba(212,175,55,0.25)] group-hover:scale-110 group-hover:bg-[#D4AF37] text-[#D4AF37] group-hover:text-[#080808] transition-all">
+              <Home size={22} className="transition-transform group-hover:scale-110" />
+            </div>
+            <span className="text-[10px] sm:text-[11px] font-bold tracking-luxury uppercase text-[#D4AF37] group-hover:text-white transition-colors whitespace-nowrap">
+              Home
+            </span>
+          </Link>
+
+          {/* Category Circles (Men, Women, Bags, Accessories, Kids, All) */}
+          {[
+            { name: "Men", slug: "men", image: "/products/prod-men-formal-shoes-1-1.svg" },
+            { name: "Women", slug: "women", image: "/products/prod-women-block-heels-1-1.svg" },
+            { name: "Bags", slug: "bags", image: "/products/prod-bags-backpacks-1-1.svg" },
+            { name: "Accessories", slug: "accessories", image: "/products/prod-accessories-wallets-1-1.svg" },
+            { name: "Kids", slug: "kids", image: "/products/prod-kids-boys-shoes-1-1.svg" },
+            { name: "All", slug: "all", image: "/products/prod-men-formal-shoes-1-1.svg" },
+          ].map((cat) => (
+            <Link
+              key={cat.slug}
+              href={`/${cat.slug}`}
+              className="flex flex-col items-center gap-1.5 flex-shrink-0 group"
+            >
+              <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-[#D4AF37] bg-[#0A0A0A] overflow-hidden flex items-center justify-center shadow-[0_0_12px_rgba(212,175,55,0.2)] group-hover:scale-110 group-hover:border-[#F5E0A9] transition-all">
                 <Image
-                  src={categoryThumbnails[cat.slug] || "/products/prod-men-boots-1-1.svg"}
+                  src={cat.image}
                   alt={cat.name}
                   fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                  sizes="64px"
+                  className="object-cover scale-150 object-center transition-transform duration-300 group-hover:scale-175"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-black/40 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 text-center">
-                  <span className="font-brand text-xs sm:text-sm font-bold tracking-luxury uppercase text-[#F5F0E6] group-hover:text-[#D4AF37] transition-colors block">
-                    {cat.name}
-                  </span>
-                  <div className="text-[10px] text-gray-400 tracking-wider uppercase mt-0.5">
-                    {cat.subcategories?.length || 0} Styles
-                  </div>
-                </div>
-              </Link>
-            ))}
+              </div>
+              <span className="text-[10px] sm:text-[11px] font-bold tracking-luxury uppercase text-[#F5F0E6] group-hover:text-[#D4AF37] transition-colors whitespace-nowrap">
+                {cat.name}
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
 
