@@ -1,15 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, Truck, RotateCcw, Sparkles, Home } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, RotateCcw, Sparkles, Home, MessageCircle } from "lucide-react";
 import prisma from "@/lib/db";
-import { BRAND, MAIN_CATEGORIES } from "@/lib/constants";
+import { BRAND } from "@/lib/constants";
 import ProductCard from "@/components/storefront/ProductCard";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // Fetch all homepage data in parallel for maximum speed
+  // Fetch real database records in parallel
   const [
     campaign,
     featuredProducts,
@@ -19,30 +19,47 @@ export default async function HomePage() {
     womenProducts,
     categories,
   ] = await Promise.all([
-    prisma.homepageCampaign.findFirst(),
+    prisma.homepageCampaign.findFirst().catch(() => null),
     prisma.product.findMany({
       where: { isPublished: true, isFeatured: true },
-      include: { images: true, variants: true },
+      include: {
+        images: true,
+        variants: true,
+      },
       take: 8,
     }),
     prisma.product.findMany({
       where: { isPublished: true, isNewArrival: true },
-      include: { images: true, variants: true },
-      take: 4,
+      include: {
+        images: true,
+        variants: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 8,
     }),
     prisma.product.findMany({
       where: { isPublished: true, isBestseller: true },
-      include: { images: true, variants: true },
-      take: 4,
+      include: {
+        images: true,
+        variants: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 8,
     }),
     prisma.product.findMany({
       where: { isPublished: true, categoryId: "cat-men" },
-      include: { images: true, variants: true },
+      include: {
+        images: true,
+        variants: true,
+      },
       take: 4,
     }),
     prisma.product.findMany({
       where: { isPublished: true, categoryId: "cat-women" },
-      include: { images: true, variants: true },
+      include: {
+        images: true,
+        variants: true,
+      },
       take: 4,
     }),
     prisma.category.findMany({
@@ -51,29 +68,73 @@ export default async function HomePage() {
     }),
   ]);
 
-  const categoryThumbnails: Record<string, string> = {
-    men: "/products/prod-men-formal-shoes-1-1.svg",
-    women: "/products/prod-women-block-heels-1-1.svg",
-    bags: "/products/prod-bags-backpacks-1-1.svg",
-    accessories: "/products/prod-accessories-wallets-1-1.svg",
-    kids: "/products/prod-kids-boys-shoes-1-1.svg",
-    all: "/products/prod-men-formal-shoes-1-1.svg",
-  };
-
   return (
-    <div className="space-y-12 sm:space-y-20 pb-12">
-      {/* 1. Curated Circular Category Bar (Compact, 1 Single Row, With HOME) */}
-      <section className="space-y-3 pt-1">
+    <div className="space-y-12 sm:space-y-16 pb-12">
+      {/* 1. PREMIUM HERO SECTION (Requirement 1) */}
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#0C0C0C] via-[#111111] to-[#0A0A0A] border border-[#2A2A2A] shadow-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 items-center min-h-[380px] lg:min-h-[440px]">
+          {/* Left Text Column */}
+          <div className="lg:col-span-7 p-6 sm:p-10 lg:p-12 space-y-4 sm:space-y-6 z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1A1A1A] border border-[#D4AF37]/40 text-[#D4AF37] text-[10px] sm:text-[11px] font-bold uppercase tracking-brand">
+              <Sparkles size={12} className="text-[#D4AF37]" />
+              <span>Royal Shoes Luxury Footwear</span>
+            </div>
+
+            <div className="space-y-2">
+              <h1 className="font-brand text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-luxury text-[#F5F0E6] leading-tight">
+                DISCOVER YOUR STYLE
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-300 max-w-xl leading-relaxed">
+                Explore footwear and accessories designed for everyday comfort and timeless style.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+              <Link
+                href="/all"
+                className="bg-[#D4AF37] hover:bg-[#E5C158] text-[#080808] font-bold text-xs uppercase tracking-luxury px-7 py-3.5 transition-all shadow-[0_4px_20px_rgba(212,175,55,0.25)] flex items-center gap-2 group"
+              >
+                <span>SHOP NOW</span>
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                href="/all?filter=new"
+                className="border border-[#2A2A2A] hover:border-[#D4AF37] text-[#F5F0E6] hover:text-[#D4AF37] font-semibold text-xs uppercase tracking-luxury px-6 py-3.5 transition-all bg-[#080808]/60 backdrop-blur-sm"
+              >
+                Explore New Arrivals
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Campaign Image Visual */}
+          <div className="relative lg:col-span-5 h-64 sm:h-80 lg:h-full min-h-[260px] lg:min-h-[440px] w-full overflow-hidden bg-[#0A0A0A]">
+            <Image
+              src="/hero/hero-campaign.jpg"
+              alt="ROYAL SHOES Luxury Footwear Collection"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 42vw"
+              className="object-cover object-center transform scale-100 hover:scale-105 transition-transform duration-700"
+            />
+            {/* Subtle Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#0C0C0C] via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 border-t lg:border-t-0 lg:border-l border-[#2A2A2A] pointer-events-none" />
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Curated Circular Category Bar (Requirement 3 & User Request 9) */}
+      <section className="space-y-3 pt-2">
         <div className="text-center space-y-0.5">
           <span className="text-[9px] sm:text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
             Curated Boutiques
           </span>
-          <h1 className="font-brand text-xl sm:text-2xl font-extrabold tracking-luxury text-[#F5F0E6]">
+          <h2 className="font-brand text-xl sm:text-2xl font-extrabold tracking-luxury text-[#F5F0E6]">
             SHOP BY CATEGORY
-          </h1>
+          </h2>
         </div>
 
-        {/* 1 Row of Circular Story Icons (WhatsApp Icon Style) */}
+        {/* 1 Row of Circular Story Icons */}
         <div className="flex items-center justify-start sm:justify-center gap-3.5 sm:gap-6 overflow-x-auto py-2 px-1 scrollbar-none">
           {/* HOME Circle */}
           <Link
@@ -88,14 +149,14 @@ export default async function HomePage() {
             </span>
           </Link>
 
-          {/* Category Circles (Men, Women, Bags, Accessories, Kids, All) */}
+          {/* Category Circles (Men, Women, Bags, Accessories, Kids, All) with genuine JPG photography */}
           {[
-            { name: "Men", slug: "men", image: "/products/prod-men-formal-shoes-1-1.svg" },
-            { name: "Women", slug: "women", image: "/products/prod-women-block-heels-1-1.svg" },
-            { name: "Bags", slug: "bags", image: "/products/prod-bags-backpacks-1-1.svg" },
-            { name: "Accessories", slug: "accessories", image: "/products/prod-accessories-wallets-1-1.svg" },
-            { name: "Kids", slug: "kids", image: "/products/prod-kids-boys-shoes-1-1.svg" },
-            { name: "All", slug: "all", image: "/products/prod-men-formal-shoes-1-1.svg" },
+            { name: "Men", slug: "men", image: "/products/men-formal/men-formal-1.jpg" },
+            { name: "Women", slug: "women", image: "/products/women-heels/women-heels-1.jpg" },
+            { name: "Bags", slug: "bags", image: "/products/bags/bags-1.jpg" },
+            { name: "Accessories", slug: "accessories", image: "/products/accessories/accessories-1.jpg" },
+            { name: "Kids", slug: "kids", image: "/products/kids/kids-1.jpg" },
+            { name: "All", slug: "all", image: "/products/men-loafers/men-loafers-1.jpg" },
           ].map((cat) => (
             <Link
               key={cat.slug}
@@ -108,7 +169,7 @@ export default async function HomePage() {
                   alt={cat.name}
                   fill
                   sizes="64px"
-                  className="object-cover scale-150 object-center transition-transform duration-300 group-hover:scale-175"
+                  className="object-cover object-center transition-transform duration-300 group-hover:scale-115"
                 />
               </div>
               <span className="text-[10px] sm:text-[11px] font-bold tracking-luxury uppercase text-[#F5F0E6] group-hover:text-[#D4AF37] transition-colors whitespace-nowrap">
@@ -119,7 +180,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 3. New Arrivals Section */}
+      {/* 3. New Arrivals Section (Requirement 4: 4 desktop cols, 2 mobile cols, real DB products) */}
       {newArrivals.length > 0 && (
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#2A2A2A] pb-4">
@@ -140,7 +201,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
             {newArrivals.map((prod) => (
               <ProductCard
                 key={prod.id}
@@ -153,9 +214,16 @@ export default async function HomePage() {
                   originalPrice: prod.originalPrice,
                   categoryName: prod.categoryName,
                   subcategoryName: prod.subcategoryName,
-                  primaryImage: prod.images[0]?.url || "/products/luxury-oxford.svg",
+                  primaryImage: prod.images[0]?.url || "/products/men-formal/men-formal-1.jpg",
                   isNewArrival: prod.isNewArrival,
                   isBestseller: prod.isBestseller,
+                  variants: prod.variants.map((v) => ({
+                    id: v.id,
+                    size: v.size,
+                    color: v.color,
+                    stock: v.stock,
+                    additionalPrice: v.additionalPrice,
+                  })),
                 }}
               />
             ))}
@@ -163,7 +231,61 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 4. Featured Men's Collection */}
+      {/* 4. Best Sellers Showcase (Requirement 5: Separate Section, Real DB Data) */}
+      {bestsellers.length > 0 && (
+        <section className="space-y-6 bg-[#111111]/40 border border-[#2A2A2A] p-6 sm:p-10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#2A2A2A]/60 pb-4">
+            <div>
+              <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
+                Customer Favorites
+              </span>
+              <h2 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#F5F0E6] mt-0.5">
+                BEST SELLERS
+              </h2>
+              <p className="text-xs text-gray-400 mt-1 max-w-md">
+                Our most celebrated silhouettes, defined by immaculate stitching and unmatched poise.
+              </p>
+            </div>
+            <Link
+              href="/all?filter=bestseller"
+              className="inline-flex items-center gap-1.5 text-xs uppercase tracking-luxury text-[#D4AF37] hover:text-[#E5C158] font-semibold mt-2 sm:mt-0 transition-colors"
+            >
+              <span>View All Bestsellers</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 pt-2">
+            {bestsellers.map((prod) => (
+              <ProductCard
+                key={prod.id}
+                product={{
+                  id: prod.id,
+                  name: prod.name,
+                  slug: prod.slug,
+                  sku: prod.sku,
+                  price: prod.price,
+                  originalPrice: prod.originalPrice,
+                  categoryName: prod.categoryName,
+                  subcategoryName: prod.subcategoryName,
+                  primaryImage: prod.images[0]?.url || "/products/men-loafers/men-loafers-1.jpg",
+                  isNewArrival: prod.isNewArrival,
+                  isBestseller: prod.isBestseller,
+                  variants: prod.variants.map((v) => ({
+                    id: v.id,
+                    size: v.size,
+                    color: v.color,
+                    stock: v.stock,
+                    additionalPrice: v.additionalPrice,
+                  })),
+                }}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 5. Featured Men's Collection */}
       {menProducts.length > 0 && (
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#2A2A2A] pb-4">
@@ -184,7 +306,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
             {menProducts.map((prod) => (
               <ProductCard
                 key={prod.id}
@@ -197,9 +319,16 @@ export default async function HomePage() {
                   originalPrice: prod.originalPrice,
                   categoryName: "MEN",
                   subcategoryName: prod.subcategoryName,
-                  primaryImage: prod.images[0]?.url || "/products/luxury-oxford.svg",
+                  primaryImage: prod.images[0]?.url || "/products/men-formal/men-formal-1.jpg",
                   isNewArrival: prod.isNewArrival,
                   isBestseller: prod.isBestseller,
+                  variants: prod.variants.map((v) => ({
+                    id: v.id,
+                    size: v.size,
+                    color: v.color,
+                    stock: v.stock,
+                    additionalPrice: v.additionalPrice,
+                  })),
                 }}
               />
             ))}
@@ -207,7 +336,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 5. Featured Women's Collection */}
+      {/* 6. Featured Women's Collection */}
       {womenProducts.length > 0 && (
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#2A2A2A] pb-4">
@@ -228,7 +357,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
             {womenProducts.map((prod) => (
               <ProductCard
                 key={prod.id}
@@ -241,47 +370,16 @@ export default async function HomePage() {
                   originalPrice: prod.originalPrice,
                   categoryName: "WOMEN",
                   subcategoryName: prod.subcategoryName,
-                  primaryImage: prod.images[0]?.url || "/products/luxury-oxford.svg",
+                  primaryImage: prod.images[0]?.url || "/products/women-heels/women-heels-1.jpg",
                   isNewArrival: prod.isNewArrival,
                   isBestseller: prod.isBestseller,
-                }}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* 6. Bestsellers Showcase (Real DB Data) */}
-      {bestsellers.length > 0 && (
-        <section className="space-y-6 bg-[#111111]/40 border border-[#2A2A2A] p-6 sm:p-10">
-          <div className="text-center space-y-1">
-            <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
-              Customer Favorites
-            </span>
-            <h2 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#F5F0E6]">
-              ROYAL SHOES BESTSELLERS
-            </h2>
-            <p className="text-xs text-gray-400 max-w-md mx-auto">
-              Our most celebrated silhouettes, defined by immaculate stitching and unmatched poise.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 pt-4">
-            {bestsellers.map((prod) => (
-              <ProductCard
-                key={prod.id}
-                product={{
-                  id: prod.id,
-                  name: prod.name,
-                  slug: prod.slug,
-                  sku: prod.sku,
-                  price: prod.price,
-                  originalPrice: prod.originalPrice,
-                  categoryName: prod.categoryName,
-                  subcategoryName: prod.subcategoryName,
-                  primaryImage: prod.images[0]?.url || "/products/luxury-oxford.svg",
-                  isNewArrival: prod.isNewArrival,
-                  isBestseller: prod.isBestseller,
+                  variants: prod.variants.map((v) => ({
+                    id: v.id,
+                    size: v.size,
+                    color: v.color,
+                    stock: v.stock,
+                    additionalPrice: v.additionalPrice,
+                  })),
                 }}
               />
             ))}
@@ -310,30 +408,74 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 8. Trust & Delivery Information (Phase 8 requirement) */}
+      {/* 8. Trust and Customer Support (Requirement 7) */}
       <section className="border-t border-[#2A2A2A] pt-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-          <div className="p-6 bg-[#111111] border border-[#2A2A2A]">
-            <Truck size={28} className="mx-auto text-[#D4AF37] mb-3" />
-            <h4 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">Pakistan Nationwide Delivery</h4>
-            <p className="text-xs text-gray-400 mt-2 leading-relaxed">
-              Express tracked delivery to Karachi, Lahore, Islamabad, Faisalabad, and all across Pakistan.
-            </p>
-          </div>
-          <div className="p-6 bg-[#111111] border border-[#2A2A2A]">
-            <ShieldCheck size={28} className="mx-auto text-[#D4AF37] mb-3" />
-            <h4 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">Genuine Craftsmanship</h4>
-            <p className="text-xs text-gray-400 mt-2 leading-relaxed">
-              100% authentic materials, premium leather insoles, and master-stitched durability in every pair.
-            </p>
-          </div>
-          <div className="p-6 bg-[#111111] border border-[#2A2A2A]">
-            <RotateCcw size={28} className="mx-auto text-[#D4AF37] mb-3" />
-            <h4 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">Direct Concierge Care</h4>
-            <p className="text-xs text-gray-400 mt-2 leading-relaxed">
-              Personalized size and styling advice via phone & WhatsApp at <strong className="text-[#D4AF37] font-mono">{BRAND.contact.phoneDisplay}</strong>.
-            </p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-center">
+          <Link
+            href="/shipping"
+            className="p-6 bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37]/60 transition-all group flex flex-col items-center justify-between"
+          >
+            <div>
+              <Truck size={28} className="mx-auto text-[#D4AF37] mb-3 group-hover:scale-110 transition-transform" />
+              <h4 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">Cash on Delivery</h4>
+              <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+                Pay safely with Cash on Delivery at your doorstep anywhere across Pakistan.
+              </p>
+            </div>
+            <span className="text-[10px] font-bold tracking-luxury uppercase text-[#D4AF37] mt-4 flex items-center gap-1 group-hover:underline">
+              Shipping Info <ArrowRight size={11} />
+            </span>
+          </Link>
+
+          <Link
+            href="/shipping"
+            className="p-6 bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37]/60 transition-all group flex flex-col items-center justify-between"
+          >
+            <div>
+              <ShieldCheck size={28} className="mx-auto text-[#D4AF37] mb-3 group-hover:scale-110 transition-transform" />
+              <h4 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">Delivery Information</h4>
+              <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+                Express tracked dispatch to Karachi, Lahore, Islamabad, Faisalabad, & nationwide.
+              </p>
+            </div>
+            <span className="text-[10px] font-bold tracking-luxury uppercase text-[#D4AF37] mt-4 flex items-center gap-1 group-hover:underline">
+              Delivery Details <ArrowRight size={11} />
+            </span>
+          </Link>
+
+          <Link
+            href="/returns"
+            className="p-6 bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37]/60 transition-all group flex flex-col items-center justify-between"
+          >
+            <div>
+              <RotateCcw size={28} className="mx-auto text-[#D4AF37] mb-3 group-hover:scale-110 transition-transform" />
+              <h4 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">Returns & Exchange</h4>
+              <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+                7-day easy size exchange guarantee ensuring your absolute comfort.
+              </p>
+            </div>
+            <span className="text-[10px] font-bold tracking-luxury uppercase text-[#D4AF37] mt-4 flex items-center gap-1 group-hover:underline">
+              Exchange Policy <ArrowRight size={11} />
+            </span>
+          </Link>
+
+          <a
+            href={BRAND.contact.whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-6 bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37]/60 transition-all group flex flex-col items-center justify-between"
+          >
+            <div>
+              <MessageCircle size={28} className="mx-auto text-[#D4AF37] mb-3 group-hover:scale-110 transition-transform" />
+              <h4 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">WhatsApp Support</h4>
+              <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+                Live sizing concierge and order tracking at <span className="font-mono text-[#D4AF37]">{BRAND.contact.phoneDisplay}</span>.
+              </p>
+            </div>
+            <span className="text-[10px] font-bold tracking-luxury uppercase text-[#D4AF37] mt-4 flex items-center gap-1 group-hover:underline">
+              Chat on WhatsApp <ArrowRight size={11} />
+            </span>
+          </a>
         </div>
       </section>
     </div>

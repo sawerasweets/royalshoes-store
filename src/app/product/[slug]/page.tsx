@@ -93,9 +93,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   originalPrice: rel.originalPrice,
                   categoryName: rel.categoryName,
                   subcategoryName: rel.subcategoryName,
-                  primaryImage: rel.images[0]?.url || "/products/luxury-oxford.svg",
+                  primaryImage: rel.images[0]?.url || "/products/men-formal/men-formal-1.jpg",
                   isNewArrival: rel.isNewArrival,
                   isBestseller: rel.isBestseller,
+                  variants: rel.variants,
                 }}
               />
             ))}

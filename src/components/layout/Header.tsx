@@ -9,9 +9,16 @@ import { BRAND, MAIN_CATEGORIES } from "@/lib/constants";
 interface HeaderProps {
   cartCount?: number;
   userName?: string | null;
+  announcementText?: string | null;
+  announcementActive?: boolean;
 }
 
-export function Header({ cartCount = 0, userName = null }: HeaderProps) {
+export function Header({
+  cartCount = 0,
+  userName = null,
+  announcementText = null,
+  announcementActive = true,
+}: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,24 +75,32 @@ export function Header({ cartCount = 0, userName = null }: HeaderProps) {
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-[#080808]/95 backdrop-blur-md border-b border-[#2A2A2A]">
-      {/* Top Announcement Bar */}
-      <div className="w-full bg-[#111111] border-b border-[#2A2A2A] text-[11px] uppercase tracking-luxury text-[#F5F0E6]/90 py-1.5 px-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="hidden md:flex items-center gap-4">
-            <span className="text-[#D4AF37]">Complimentary Shipping</span> Across Pakistan Above Rs. 5,000
-          </div>
-          <div className="mx-auto md:mx-0 flex items-center gap-2">
-            <Phone size={11} className="text-[#D4AF37]" />
-            <span>Concierge:</span>
-            <a
-              href={BRAND.contact.phoneTel}
-              className="font-mono text-[#D4AF37] hover:underline tracking-normal font-medium"
-            >
-              {BRAND.contact.phoneDisplay}
-            </a>
+      {/* Top Announcement Bar (Configurable from Admin Settings) */}
+      {announcementActive && (
+        <div className="w-full bg-[#111111] border-b border-[#2A2A2A] text-[11px] uppercase tracking-luxury text-[#F5F0E6]/90 py-1.5 px-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="hidden md:flex items-center gap-4">
+              {announcementText ? (
+                <span className="text-[#F5F0E6] font-medium tracking-luxury">{announcementText}</span>
+              ) : (
+                <>
+                  <span className="text-[#D4AF37]">Complimentary Shipping</span> Across Pakistan Above Rs. 5,000
+                </>
+              )}
+            </div>
+            <div className="mx-auto md:mx-0 flex items-center gap-2">
+              <Phone size={11} className="text-[#D4AF37]" />
+              <span>Concierge:</span>
+              <a
+                href={BRAND.contact.phoneTel}
+                className="font-mono text-[#D4AF37] hover:underline tracking-normal font-medium"
+              >
+                {BRAND.contact.phoneDisplay}
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Header Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

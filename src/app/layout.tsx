@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import { getCurrentUser } from "@/lib/auth";
+import prisma from "@/lib/db";
 
 export const metadata: Metadata = {
   title: {
@@ -37,12 +38,19 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentUser();
+  const [user, settings] = await Promise.all([
+    getCurrentUser(),
+    prisma.storeSettings.findUnique({ where: { id: "singleton" } }).catch(() => null),
+  ]);
 
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen flex flex-col bg-[#080808] text-[#F5F0E6] antialiased selection:bg-[#D4AF37] selection:text-[#080808]">
-        <Header userName={user ? user.name : null} />
+        <Header
+          userName={user ? user.name : null}
+          announcementText={settings?.announcementText}
+          announcementActive={settings?.showAnnouncement ?? true}
+        />
         <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {children}
         </main>

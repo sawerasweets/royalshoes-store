@@ -21,6 +21,7 @@ interface ProductItem {
   images: { url: string; isPrimary?: boolean }[];
   isNewArrival?: boolean;
   isBestseller?: boolean;
+  variants?: { id: string; size: string; color: string; stock: number; additionalPrice?: number }[];
 }
 
 interface CollectionLayoutProps {
@@ -86,9 +87,10 @@ export function CollectionLayout({
                 originalPrice: prod.originalPrice,
                 categoryName: prod.categoryName || title,
                 subcategoryName: prod.subcategoryName,
-                primaryImage: prod.images[0]?.url || "/products/luxury-oxford.svg",
+                primaryImage: prod.images[0]?.url || "/products/men-formal/men-formal-1.jpg",
                 isNewArrival: prod.isNewArrival,
                 isBestseller: prod.isBestseller,
+                variants: prod.variants,
               }}
             />
           ))}
