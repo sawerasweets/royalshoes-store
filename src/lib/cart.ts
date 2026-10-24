@@ -31,12 +31,15 @@ export interface CartCalculationResult {
   freeShippingThreshold: number;
   qualifiesForFreeShipping: boolean;
   couponCode?: string;
+  couponDiscountType?: "PERCENTAGE" | "FIXED" | "FREE_SHIPPING";
+  couponMessage?: string;
   errors: string[];
 }
 
 export async function calculateCart(
   rawItems: CartItemInput[],
-  couponCode?: string
+  couponCode?: string,
+  customerInfo?: { email?: string; phone?: string }
 ): Promise<CartCalculationResult> {
   const settings = await prisma.storeSettings.findUnique({
     where: { id: "singleton" },
@@ -88,7 +91,7 @@ export async function calculateCart(
     subtotal += lineTotal;
 
     const primaryImage = product.images.find((img) => img.isPrimary) || product.images[0];
-    const imageUrl = primaryImage ? primaryImage.url : "/products/luxury-oxford.svg";
+    const imageUrl = primaryImage ? primaryImage.url : "/products/men-formal/men-formal-1.jpg";
 
     calculatedItems.push({
       productId: product.id,
@@ -106,9 +109,12 @@ export async function calculateCart(
     });
   }
 
-  // Calculate Coupon discount
+  // Calculate Privilege Coupon discount
   let discount = 0;
   let validCouponCode: string | undefined = undefined;
+  let couponDiscountType: "PERCENTAGE" | "FIXED" | "FREE_SHIPPING" | undefined = undefined;
+  let couponMessage: string | undefined = undefined;
+  let freeShippingPromoApplied = false;
 
   if (couponCode && couponCode.trim()) {
     const cleanCode = couponCode.trim().toUpperCase();
@@ -116,35 +122,63 @@ export async function calculateCart(
       where: { code: cleanCode },
     });
 
+    const now = new Date();
+    const effectiveStart = coupon?.startDate || coupon?.startsAt;
+    const effectiveEnd = coupon?.endDate || coupon?.expiresAt;
+
     if (!coupon || !coupon.isActive) {
-      errors.push(`Coupon "${cleanCode}" is invalid or expired.`);
-    } else if (coupon.startsAt > new Date()) {
-      errors.push(`Coupon "${cleanCode}" is not active yet.`);
-    } else if (coupon.expiresAt && coupon.expiresAt < new Date()) {
-      errors.push(`Coupon "${cleanCode}" has expired.`);
-    } else if (coupon.usageLimit && coupon.timesUsed >= coupon.usageLimit) {
-      errors.push(`Coupon "${cleanCode}" usage limit has been reached.`);
-    } else if (subtotal < coupon.minOrderAmount) {
+      errors.push(`Privilege Promo Code "${cleanCode}" is invalid or inactive.`);
+    } else if (effectiveStart && new Date(effectiveStart) > now) {
+      errors.push(`Privilege Promo Code "${cleanCode}" is not active yet.`);
+    } else if (effectiveEnd && new Date(effectiveEnd) < now) {
+      errors.push(`Privilege Promo Code "${cleanCode}" has expired.`);
+    } else if (coupon.usageLimit != null && coupon.timesUsed >= coupon.usageLimit) {
+      errors.push(`Privilege Promo Code "${cleanCode}" total redemption limit has been reached.`);
+    } else if (subtotal < (coupon.minOrderAmount || 0)) {
       errors.push(
-        `Coupon "${cleanCode}" requires a minimum order subtotal of Rs. ${coupon.minOrderAmount}.`
+        `Privilege Promo Code "${cleanCode}" requires a minimum order subtotal of Rs. ${(coupon.minOrderAmount || 0).toLocaleString()}.`
       );
     } else {
-      validCouponCode = cleanCode;
-      if (coupon.discountPercent) {
-        discount = (subtotal * coupon.discountPercent) / 100;
-      } else if (coupon.discountAmount) {
-        discount = coupon.discountAmount;
+      // Check per-customer usage limit if email or phone is provided
+      let customerLimitReached = false;
+      if (coupon.perCustomerLimit && (customerInfo?.email || customerInfo?.phone)) {
+        const usageCount = await prisma.couponUsage.count({
+          where: {
+            couponId: coupon.id,
+            customerEmail: customerInfo.email || undefined,
+            customerPhone: customerInfo.phone || undefined,
+          },
+        });
+        if (usageCount >= coupon.perCustomerLimit) {
+          customerLimitReached = true;
+          errors.push(
+            `You have already reached the redemption limit (${coupon.perCustomerLimit} use${coupon.perCustomerLimit > 1 ? "s" : ""}) for code "${cleanCode}".`
+          );
+        }
       }
 
-      if (coupon.maxDiscount && discount > coupon.maxDiscount) {
-        discount = coupon.maxDiscount;
-      }
+      if (!customerLimitReached) {
+        validCouponCode = cleanCode;
+        couponDiscountType = (coupon.discountType as any) || (coupon.discountPercent ? "PERCENTAGE" : "FIXED");
 
-      discount = Math.min(discount, subtotal);
+        if (couponDiscountType === "FREE_SHIPPING") {
+          freeShippingPromoApplied = true;
+          discount = 0;
+          couponMessage = `Complimentary nationwide delivery granted via code ${cleanCode}`;
+        } else if (couponDiscountType === "PERCENTAGE" || coupon.discountPercent) {
+          const rawDiscount = Math.round((subtotal * (coupon.discountPercent || 0)) / 100);
+          discount = coupon.maxDiscount ? Math.min(rawDiscount, coupon.maxDiscount) : rawDiscount;
+          discount = Math.min(discount, subtotal);
+          couponMessage = `${coupon.discountPercent}% privilege discount applied via code ${cleanCode}`;
+        } else if (couponDiscountType === "FIXED" || coupon.discountAmount) {
+          discount = Math.min(coupon.discountAmount || 0, subtotal);
+          couponMessage = `Rs. ${discount.toLocaleString()} privilege discount applied via code ${cleanCode}`;
+        }
+      }
     }
   }
 
-  const qualifiesForFreeShipping = subtotal >= freeShippingThreshold;
+  const qualifiesForFreeShipping = subtotal >= freeShippingThreshold || freeShippingPromoApplied;
   const shippingFee = calculatedItems.length === 0 ? 0 : qualifiesForFreeShipping ? 0 : standardShippingFee;
   const grandTotal = Math.max(0, subtotal - discount + shippingFee);
 
@@ -157,6 +191,8 @@ export async function calculateCart(
     freeShippingThreshold,
     qualifiesForFreeShipping,
     couponCode: validCouponCode,
+    couponDiscountType,
+    couponMessage,
     errors,
   };
 }

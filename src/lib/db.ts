@@ -10,6 +10,9 @@ import {
   OrderModel,
   PaymentModel,
   CouponModel,
+  CouponUsageModel,
+  AuditLogModel,
+  InventoryMovementModel,
 } from "@/types";
 
 declare global {
@@ -119,6 +122,13 @@ const CAMEL_MAP: Record<string, string> = {
   referenceid: "referenceId",
   ipaddress: "ipAddress",
   passwordhash: "passwordHash",
+  discounttype: "discountType",
+  percustomerlimit: "perCustomerLimit",
+  couponid: "couponId",
+  entityid: "entityId",
+  expiresat: "expiresAt",
+  ctalink: "ctaLink",
+  ctatext: "ctaText",
 };
 
 function normalizeRow(row: any): any {
@@ -146,7 +156,9 @@ const CAMEL_WORDS = [
   "currencySymbol", "freeShippingThreshold", "standardShippingFee", "easypaisaInstructions",
   "bankInstructions", "announcementText", "showAnnouncement", "createdAt", "updatedAt",
   "storeName", "storeTagline", "logoUrl", "verifiedBy", "verifiedAt", "postalCode",
-  "fullName", "addressLine", "isDefault", "isPrimary", "additionalPrice"
+  "fullName", "addressLine", "isDefault", "isPrimary", "additionalPrice",
+  "discountType", "perCustomerLimit", "couponId",
+  "entityId", "expiresAt", "ctaLink", "ctaText"
 ];
 CAMEL_WORDS.sort((a, b) => b.length - a.length);
 const CAMEL_REGEX = new RegExp(`(?<!["\`])\\b(${CAMEL_WORDS.join("|")})\\b(?!["\`])`, "g");
@@ -778,10 +790,22 @@ export const prisma = {
         }
 
         if (o.couponCode) {
-          await conn.query(
-            "UPDATE coupons SET timesUsed = timesUsed + 1 WHERE code = ?",
-            [o.couponCode]
+          const [couponRows] = await conn.query(
+            "SELECT id, discountType, discountPercent, discountAmount FROM coupons WHERE code = ? LIMIT 1",
+            [o.couponCode.trim().toUpperCase()]
           );
+          const matched = Array.isArray(couponRows) ? couponRows[0] : couponRows;
+          if (matched && matched.id) {
+            await conn.query(
+              "UPDATE coupons SET timesUsed = timesUsed + 1 WHERE id = ?",
+              [matched.id]
+            );
+            const usageId = `usg-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+            await conn.query(
+              "INSERT INTO coupon_usages (id, couponId, orderId, customerEmail, customerPhone, discountAmount) VALUES (?, ?, ?, ?, ?, ?)",
+              [usageId, matched.id, orderId, o.customerEmail || null, o.customerPhone || null, o.discount || 0]
+            );
+          }
         }
 
         await conn.commit();
@@ -940,41 +964,190 @@ export const prisma = {
   },
 
   coupon: {
-    findUnique: async (args: { where: { code: string } }): Promise<CouponModel | null> => {
-      const [rows] = await pool.query<mysql.RowDataPacket[]>(
-        "SELECT * FROM coupons WHERE code = ? LIMIT 1",
-        [args.where.code.toUpperCase().trim()]
-      );
+    findUnique: async (args: { where: { code?: string; id?: string } }): Promise<CouponModel | null> => {
+      let sql = "SELECT * FROM coupons WHERE ";
+      const params: any[] = [];
+      if (args.where.id) {
+        sql += "id = ? LIMIT 1";
+        params.push(args.where.id);
+      } else if (args.where.code) {
+        sql += "code = ? LIMIT 1";
+        params.push(args.where.code.toUpperCase().trim());
+      } else {
+        return null;
+      }
+      const [rows] = await pool.query<mysql.RowDataPacket[]>(sql, params);
       if (!rows.length) return null;
       const c: any = rows[0];
       return {
         ...c,
+        discountType: c.discountType || (c.discountPercent ? "PERCENTAGE" : "FIXED"),
         discountPercent: c.discountPercent ? Number(c.discountPercent) : null,
         discountAmount: c.discountAmount ? Number(c.discountAmount) : null,
-        minOrderAmount: Number(c.minOrderAmount),
+        minOrderAmount: Number(c.minOrderAmount || 0),
         maxDiscount: c.maxDiscount ? Number(c.maxDiscount) : null,
+        usageLimit: c.usageLimit != null ? Number(c.usageLimit) : null,
+        timesUsed: Number(c.timesUsed || 0),
+        perCustomerLimit: c.perCustomerLimit != null ? Number(c.perCustomerLimit) : 1,
+        description: c.description || null,
         isActive: Boolean(c.isActive),
+        startDate: c.startDate ? new Date(c.startDate) : null,
+        endDate: c.endDate ? new Date(c.endDate) : null,
+        startsAt: c.startDate ? new Date(c.startDate) : null,
+        expiresAt: c.endDate ? new Date(c.endDate) : null,
       };
     },
-    findMany: async (_args?: { orderBy?: any }): Promise<CouponModel[]> => {
-      const [rows] = await pool.query<mysql.RowDataPacket[]>("SELECT * FROM coupons ORDER BY createdAt DESC");
+    findMany: async (args?: { where?: any; orderBy?: any }): Promise<CouponModel[]> => {
+      let sql = "SELECT * FROM coupons";
+      const params: any[] = [];
+      if (args?.where?.search) {
+        sql += " WHERE (code ILIKE ? OR description ILIKE ?)";
+        params.push(`%${args.where.search}%`, `%${args.where.search}%`);
+      }
+      sql += " ORDER BY createdAt DESC";
+      const [rows] = await pool.query<mysql.RowDataPacket[]>(sql, params);
       return rows.map((c: any) => ({
         ...c,
+        discountType: c.discountType || (c.discountPercent ? "PERCENTAGE" : "FIXED"),
         discountPercent: c.discountPercent ? Number(c.discountPercent) : null,
         discountAmount: c.discountAmount ? Number(c.discountAmount) : null,
-        minOrderAmount: Number(c.minOrderAmount),
+        minOrderAmount: Number(c.minOrderAmount || 0),
         maxDiscount: c.maxDiscount ? Number(c.maxDiscount) : null,
+        usageLimit: c.usageLimit != null ? Number(c.usageLimit) : null,
+        timesUsed: Number(c.timesUsed || 0),
+        perCustomerLimit: c.perCustomerLimit != null ? Number(c.perCustomerLimit) : 1,
+        description: c.description || null,
         isActive: Boolean(c.isActive),
+        startDate: c.startDate ? new Date(c.startDate) : null,
+        endDate: c.endDate ? new Date(c.endDate) : null,
+        startsAt: c.startDate ? new Date(c.startDate) : null,
+        expiresAt: c.endDate ? new Date(c.endDate) : null,
       }));
     },
     create: async (args: { data: any }): Promise<CouponModel | null> => {
       const c = args.data;
       const id = c.id || `cp-${Date.now()}`;
+      const code = c.code.toUpperCase().trim();
+      const discountType = c.discountType || "PERCENTAGE";
+      const discountPercent = c.discountPercent != null ? Number(c.discountPercent) : null;
+      const discountAmount = c.discountAmount != null ? Number(c.discountAmount) : null;
+      const minOrderAmount = Number(c.minOrderAmount || 0);
+      const maxDiscount = c.maxDiscount != null ? Number(c.maxDiscount) : null;
+      const usageLimit = c.usageLimit != null ? Number(c.usageLimit) : null;
+      const perCustomerLimit = c.perCustomerLimit != null ? Number(c.perCustomerLimit) : 1;
+      const description = c.description || null;
+      const isActive = c.isActive ?? true;
+      const startDate = c.startDate || c.startsAt || null;
+      const endDate = c.endDate || c.expiresAt || null;
+
       await pool.query(
-        "INSERT INTO coupons (id, code, discountPercent, discountAmount, minOrderAmount, maxDiscount, usageLimit, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        [id, c.code.toUpperCase().trim(), c.discountPercent || null, c.discountAmount || null, c.minOrderAmount || 0, c.maxDiscount || null, c.usageLimit || null, c.isActive ?? true]
+        `INSERT INTO coupons (
+          id, code, discountType, discountPercent, discountAmount, 
+          minOrderAmount, maxDiscount, usageLimit, perCustomerLimit, 
+          description, startDate, endDate, isActive
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          id, code, discountType, discountPercent, discountAmount,
+          minOrderAmount, maxDiscount, usageLimit, perCustomerLimit,
+          description, startDate, endDate, isActive
+        ]
       );
-      return prisma.coupon.findUnique({ where: { code: c.code } });
+      return prisma.coupon.findUnique({ where: { id } });
+    },
+    update: async (args: { where: { id?: string; code?: string }; data: any }): Promise<CouponModel | null> => {
+      const targetId = args.where.id;
+      let existingId = targetId;
+      if (!existingId && args.where.code) {
+        const found = await prisma.coupon.findUnique({ where: { code: args.where.code } });
+        existingId = found?.id;
+      }
+      if (!existingId) return null;
+
+      const fields = Object.keys(args.data);
+      if (fields.length === 0) return prisma.coupon.findUnique({ where: { id: existingId } });
+
+      const setClauses: string[] = [];
+      const values: any[] = [];
+      for (const field of fields) {
+        setClauses.push(`"${field}" = ?`);
+        let val = args.data[field];
+        if (field === "code" && typeof val === "string") val = val.toUpperCase().trim();
+        values.push(val);
+      }
+      values.push(existingId);
+
+      await pool.query(
+        `UPDATE coupons SET ${setClauses.join(", ")} WHERE id = ?`,
+        values
+      );
+      return prisma.coupon.findUnique({ where: { id: existingId } });
+    },
+    delete: async (args: { where: { id: string } }): Promise<boolean> => {
+      await pool.query("DELETE FROM coupons WHERE id = ?", [args.where.id]);
+      return true;
+    },
+  },
+
+  couponUsage: {
+    create: async (args: { data: any }): Promise<CouponUsageModel> => {
+      const id = args.data.id || `usg-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      await pool.query(
+        "INSERT INTO coupon_usages (id, couponId, orderId, customerEmail, customerPhone, discountAmount) VALUES (?, ?, ?, ?, ?, ?)",
+        [id, args.data.couponId, args.data.orderId, args.data.customerEmail || null, args.data.customerPhone || null, args.data.discountAmount || 0]
+      );
+      return { id, ...args.data, createdAt: new Date() };
+    },
+    findMany: async (args?: { where?: { couponId?: string; customerEmail?: string; customerPhone?: string }; take?: number }): Promise<CouponUsageModel[]> => {
+      const take = args?.take || 100;
+      let sql = `
+        SELECT cu.*, o.orderNumber, o.customerName
+        FROM coupon_usages cu
+        LEFT JOIN orders o ON cu.orderId = o.id
+      `;
+      const params: any[] = [];
+      const conds: string[] = [];
+      if (args?.where?.couponId) {
+        conds.push('cu."couponId" = ?');
+        params.push(args.where.couponId);
+      }
+      if (args?.where?.customerEmail) {
+        conds.push('cu."customerEmail" = ?');
+        params.push(args.where.customerEmail);
+      }
+      if (args?.where?.customerPhone) {
+        conds.push('cu."customerPhone" = ?');
+        params.push(args.where.customerPhone);
+      }
+      if (conds.length > 0) {
+        sql += " WHERE " + conds.join(" AND ");
+      }
+      sql += " ORDER BY cu.createdAt DESC LIMIT ?";
+      params.push(take);
+      const [rows] = await pool.query<mysql.RowDataPacket[]>(sql, params);
+      return rows.map((r: any) => ({
+        ...r,
+        discountAmount: Number(r.discountAmount || 0),
+      }));
+    },
+    count: async (args?: { where?: { couponId?: string; customerEmail?: string; customerPhone?: string } }): Promise<number> => {
+      let sql = "SELECT COUNT(*) as count FROM coupon_usages WHERE 1=1";
+      const params: any[] = [];
+      if (args?.where?.couponId) {
+        sql += ' AND "couponId" = ?';
+        params.push(args.where.couponId);
+      }
+      if (args?.where?.customerPhone && args?.where?.customerEmail) {
+        sql += ' AND ("customerPhone" = ? OR "customerEmail" = ?)';
+        params.push(args.where.customerPhone, args.where.customerEmail);
+      } else if (args?.where?.customerPhone) {
+        sql += ' AND "customerPhone" = ?';
+        params.push(args.where.customerPhone);
+      } else if (args?.where?.customerEmail) {
+        sql += ' AND "customerEmail" = ?';
+        params.push(args.where.customerEmail);
+      }
+      const [rows] = await pool.query<mysql.RowDataPacket[]>(sql, params);
+      return Number(rows[0]?.count || 0);
     },
   },
 
@@ -1030,10 +1203,10 @@ export const prisma = {
     create: async (args: { data: { userId?: string | null; action: string; entity: string; entityId?: string | null; details?: string | null; ipAddress?: string | null } }) => {
       const id = `aud-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
       await pool.query(
-        "INSERT INTO audit_logs (id, userId, action, entity, entityId, details, ipAddress) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO audit_logs (id, `userId`, action, entity, `entityId`, details, `ipAddress`) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [id, args.data.userId || null, args.data.action, args.data.entity, args.data.entityId || null, args.data.details || null, args.data.ipAddress || null]
       );
-      return { id, ...args.data };
+      return { id, ...args.data, createdAt: new Date() };
     },
     findMany: async (args?: { take?: number }): Promise<any[]> => {
       const take = args?.take || 50;

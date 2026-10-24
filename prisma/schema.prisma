@@ -328,38 +328,45 @@ model Payment {
 }
 
 model Coupon {
-  id             String         @id @default(cuid())
-  code           String         @unique // e.g. GOLD10, SAWERA15
-  discountPercent Float?        // e.g. 10.0 for 10%
-  discountAmount Float?         // Fixed discount PKR e.g. 500
-  minOrderAmount Float          @default(0)
-  maxDiscount    Float?
-  usageLimit     Int?           // Total uses allowed
-  timesUsed      Int            @default(0)
-  isActive       Boolean        @default(true)
-  startsAt       DateTime       @default(now())
-  expiresAt      DateTime?
-  createdAt      DateTime       @default(now())
+  id               String         @id @default(cuid())
+  code             String         @unique // e.g. GOLD10, ROYAL200, FREESHIP
+  discountType     String         @default("PERCENTAGE") // "PERCENTAGE", "FIXED", "FREE_SHIPPING"
+  discountPercent  Float?         // e.g. 10.0 for 10%
+  discountAmount   Float?         // Fixed discount PKR e.g. 200
+  minOrderAmount   Float          @default(0)
+  maxDiscount      Float?
+  usageLimit       Int?           // Total uses allowed
+  timesUsed        Int            @default(0)
+  perCustomerLimit Int?           @default(1)
+  description      String?
+  isActive         Boolean        @default(true)
+  startDate        DateTime?      @default(now())
+  endDate          DateTime?
+  createdAt        DateTime       @default(now())
 
-  usages         CouponUsage[]
+  usages           CouponUsage[]
 
   @@index([code])
   @@index([isActive])
+  @@map("coupons")
 }
 
 model CouponUsage {
-  id        String   @id @default(cuid())
-  couponId  String
-  userId    String?
-  orderId   String
-  discount  Float
-  createdAt DateTime @default(now())
+  id             String   @id @default(cuid())
+  couponId       String
+  orderId        String
+  customerEmail  String?
+  customerPhone  String?
+  discountAmount Float    @default(0)
+  createdAt      DateTime @default(now())
 
-  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
-  user      User?    @relation(fields: [userId], references: [id])
+  coupon         Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
 
   @@index([couponId])
-  @@index([userId])
+  @@index([orderId])
+  @@index([customerPhone])
+  @@index([customerEmail])
+  @@map("coupon_usages")
 }
 
 model WishlistItem {
@@ -423,4 +430,5 @@ model AuditLog {
   @@index([action])
   @@index([entity])
   @@index([createdAt])
+  @@map("audit_logs")
 }

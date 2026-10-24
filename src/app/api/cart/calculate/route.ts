@@ -6,8 +6,12 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const items = Array.isArray(body.items) ? body.items : [];
     const couponCode = typeof body.couponCode === "string" ? body.couponCode : undefined;
+    const customerInfo =
+      body.customerEmail || body.customerPhone
+        ? { email: body.customerEmail, phone: body.customerPhone }
+        : undefined;
 
-    const result = await calculateCart(items, couponCode);
+    const result = await calculateCart(items, couponCode, customerInfo);
 
     return NextResponse.json({
       success: true,

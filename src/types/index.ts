@@ -175,14 +175,44 @@ export interface OrderModel {
 export interface CouponModel {
   id: string;
   code: string;
+  discountType: "PERCENTAGE" | "FIXED" | "FREE_SHIPPING";
   discountPercent?: number | null;
   discountAmount?: number | null;
   minOrderAmount: number;
   maxDiscount?: number | null;
   usageLimit?: number | null;
   timesUsed: number;
+  perCustomerLimit?: number | null;
+  description?: string | null;
   isActive: boolean;
-  startsAt: Date;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  startsAt?: Date | null;
   expiresAt?: Date | null;
   createdAt: Date;
+}
+
+export interface CouponUsageModel {
+  id: string;
+  couponId: string;
+  orderId: string;
+  customerEmail?: string | null;
+  customerPhone?: string | null;
+  discountAmount: number;
+  createdAt: Date;
+  orderNumber?: string;
+  customerName?: string;
+}
+
+export interface AuditLogModel {
+  id: string;
+  userId?: string | null;
+  action: string;
+  entity: string;
+  entityId?: string | null;
+  details?: string | null;
+  ipAddress?: string | null;
+  createdAt: Date;
+  userName?: string | null;
+  userEmail?: string | null;
 }

@@ -46,12 +46,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 1. Recalculate everything strictly on the server
-    const calculation = await calculateCart(items, couponCode);
+    // 1. Recalculate everything strictly on the server with customer identity
+    const calculation = await calculateCart(items, couponCode, {
+      email: customerEmail ? customerEmail.trim() : undefined,
+      phone: customerPhone ? customerPhone.trim() : undefined,
+    });
 
     if (calculation.errors.length > 0 && calculation.items.length === 0) {
       return NextResponse.json(
         { success: false, error: calculation.errors.join(" ") },
+        { status: 400 }
+      );
+    }
+
+    if (couponCode && !calculation.couponCode && calculation.errors.length > 0) {
+      return NextResponse.json(
+        { success: false, error: calculation.errors[0] },
         { status: 400 }
       );
     }
