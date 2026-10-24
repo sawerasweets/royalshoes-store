@@ -9,6 +9,7 @@ import { BRAND, MAIN_CATEGORIES } from "@/lib/constants";
 interface HeaderProps {
   cartCount?: number;
   userName?: string | null;
+  userRole?: string | null;
   announcementText?: string | null;
   announcementActive?: boolean;
 }
@@ -16,6 +17,7 @@ interface HeaderProps {
 export function Header({
   cartCount = 0,
   userName = null,
+  userRole = null,
   announcementText = null,
   announcementActive = true,
 }: HeaderProps) {
@@ -148,13 +150,17 @@ export function Header({
             </button>
 
             <Link
-              href="/account"
+              href={userRole === "ADMIN" || userRole === "STAFF" ? "/admin" : "/account"}
               className="flex items-center gap-2 text-xs uppercase tracking-wider text-[#F5F0E6]/80 hover:text-[#D4AF37] transition-colors p-2"
               aria-label="Account"
             >
               <UserIcon size={20} />
               <span className="hidden xl:inline text-[11px] tracking-luxury">
-                {userName ? userName.split(" ")[0] : "Account"}
+                {userRole === "ADMIN" || userRole === "STAFF"
+                  ? "ADMIN"
+                  : userName
+                  ? userName.replace(/sawera/gi, "").trim().split(" ")[0].toUpperCase() || "ACCOUNT"
+                  : "ACCOUNT"}
               </span>
             </Link>
 

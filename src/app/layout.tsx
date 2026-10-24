@@ -48,6 +48,7 @@ export default async function RootLayout({
       <body className="min-h-screen flex flex-col bg-[#080808] text-[#F5F0E6] antialiased selection:bg-[#D4AF37] selection:text-[#080808]">
         <Header
           userName={user ? user.name : null}
+          userRole={user ? user.role : null}
           announcementText={settings?.announcementText}
           announcementActive={settings?.showAnnouncement ?? true}
         />
