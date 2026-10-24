@@ -1,10 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
+import PwaRegister from "@/components/common/PwaRegister";
 import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
+
+export const viewport: Viewport = {
+  themeColor: "#080808",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: {
@@ -13,6 +21,16 @@ export const metadata: Metadata = {
   },
   description:
     "Step into elegance with ROYAL SHOES. Handcrafted luxury footwear, artisanal leather bags, and refined accessories. Nationwide delivery across Pakistan.",
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/brand/icon-192.png",
+    apple: "/brand/apple-touch-icon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "ROYAL SHOES",
+  },
   keywords: [
     "ROYAL SHOES",
     "Luxury Footwear Pakistan",
@@ -57,6 +75,7 @@ export default async function RootLayout({
         </main>
         <Footer />
         <WhatsAppButton />
+        <PwaRegister />
       </body>
     </html>
   );

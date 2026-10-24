@@ -1,0 +1,22 @@
+{
+  "appId": "com.royalshoes.store",
+  "appName": "ROYAL SHOES",
+  "webDir": "public",
+  "server": {
+    "url": "https://royalshoes.store",
+    "cleartext": true
+  },
+  "android": {
+    "backgroundColor": "#080808",
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#080808",
+      "showSpinner": false
+    }
+  }
+}

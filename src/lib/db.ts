@@ -708,11 +708,35 @@ export const prisma = {
   },
 
   productVariant: {
-    findMany: async (args: { where: { productId: string } }): Promise<ProductVariantModel[]> => {
+    findUnique: async (args: { where: { id: string } }): Promise<ProductVariantModel | null> => {
       const [rows] = await pool.query<mysql.RowDataPacket[]>(
-        "SELECT * FROM product_variants WHERE productId = ? ORDER BY size ASC, color ASC",
-        [args.where.productId]
+        `SELECT pv.*, p.name as "productName" 
+         FROM product_variants pv 
+         LEFT JOIN products p ON pv.productId = p.id 
+         WHERE pv.id = ? LIMIT 1`,
+        [args.where.id]
       );
+      if (!rows.length) return null;
+      const r: any = rows[0];
+      return { ...r, stock: Number(r.stock), additionalPrice: Number(r.additionalPrice) };
+    },
+    findMany: async (args?: { where?: { productId?: string }; orderBy?: any; take?: number }): Promise<ProductVariantModel[]> => {
+      let sql = `
+        SELECT pv.*, p.name as "productName" 
+        FROM product_variants pv 
+        LEFT JOIN products p ON pv.productId = p.id
+      `;
+      const params: any[] = [];
+      if (args?.where?.productId) {
+        sql += " WHERE pv.productId = ?";
+        params.push(args.where.productId);
+      }
+      sql += " ORDER BY pv.stock ASC, pv.size ASC";
+      if (args?.take) {
+        sql += " LIMIT ?";
+        params.push(args.take);
+      }
+      const [rows] = await pool.query<mysql.RowDataPacket[]>(sql, params);
       return rows.map((r: any) => ({ ...r, stock: Number(r.stock), additionalPrice: Number(r.additionalPrice) }));
     },
     update: async (args: { where: { id: string }; data: any }) => {
@@ -720,7 +744,7 @@ export const prisma = {
       const setClause = fields.map(k => `\`${k}\` = ?`).join(', ');
       const values = [...fields.map(k => args.data[k]), args.where.id];
       await pool.query(`UPDATE product_variants SET ${setClause} WHERE id = ?`, values);
-      return { id: args.where.id };
+      return prisma.productVariant.findUnique({ where: { id: args.where.id } });
     },
     create: async (args: { data: any }): Promise<ProductVariantModel> => {
       const v = args.data;

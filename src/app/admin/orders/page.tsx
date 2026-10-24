@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { formatPKR } from "@/lib/utils";
-import { Package, Search, Filter, Check, Clock, Eye, Edit3, X } from "lucide-react";
+import { Package, Search, Filter, Check, Clock, Eye, Edit3, X, MessageSquare, Truck } from "lucide-react";
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -18,6 +18,22 @@ export default function AdminOrdersPage() {
   const [editPaymentStatus, setEditPaymentStatus] = useState("PENDING");
   const [editTracking, setEditTracking] = useState("");
   const [editNotes, setEditNotes] = useState("");
+
+  const sendWhatsAppNotification = (order: any, type: "CONFIRMATION" | "DISPATCH") => {
+    let phone = (order.customerPhone || "").replace(/[^0-9]/g, "");
+    if (phone.startsWith("0")) phone = "92" + phone.slice(1);
+    if (!phone.startsWith("92")) phone = "92" + phone;
+
+    let text = "";
+    if (type === "CONFIRMATION") {
+      text = `Assalam-o-Alaikum ${order.customerName}! ✨\n\nThis is ROYAL SHOES Concierge.\nYour luxury order *#${order.orderNumber}* for *Rs. ${Number(order.grandTotal).toLocaleString()}* has been *CONFIRMED*!\n\n📍 Delivery: ${order.shippingAddress}, ${order.city}\n💳 Payment: ${order.paymentMethod}\n\nOur artisans are preparing your footwear for dispatch.\nThank you for choosing ROYAL SHOES!`;
+    } else {
+      text = `Assalam-o-Alaikum ${order.customerName}! 🚚\n\nYour ROYAL SHOES parcel *#${order.orderNumber}* has been *DISPATCHED*!\n\n📦 Courier Tracking: *${order.trackingNumber || "Assigned"}*\n💰 Total Payable: Rs. ${Number(order.grandTotal).toLocaleString()}\n\nTrack your delivery or reply here anytime for concierge assistance.\nROYAL SHOES — Step into Elegance`;
+    }
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+  };
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -247,7 +263,15 @@ export default function AdminOrdersPage() {
                           {formatPKR(o.grandTotal)}
                         </td>
                         <td className="p-3.5 text-center">
-                          <div className="flex items-center justify-center gap-2">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => sendWhatsAppNotification(o, "CONFIRMATION")}
+                              className="p-1 bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900 text-emerald-400 rounded transition-colors"
+                              title="Send WhatsApp Order Confirmation"
+                            >
+                              <MessageSquare size={13} />
+                            </button>
                             <button
                               onClick={() => openEditModal(o)}
                               className="inline-flex items-center gap-1 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-2.5 py-1 text-[11px] font-bold uppercase tracking-luxury rounded-sm shadow transition-colors"
@@ -347,6 +371,32 @@ export default function AdminOrdersPage() {
                     placeholder="Internal verification notes..."
                     className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] text-xs text-[#F5F0E6] p-2.5 outline-none"
                   />
+                </div>
+
+                {/* 1-Click WhatsApp Customer Contact */}
+                <div className="p-3 bg-[#080808] border border-[#2A2A2A] space-y-2">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-gray-300 flex items-center justify-between">
+                    <span>Customer WhatsApp Contact ({selectedOrder.customerPhone})</span>
+                    <span className="text-emerald-400 font-normal">1-Click Automated</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => sendWhatsAppNotification(selectedOrder, "CONFIRMATION")}
+                      className="inline-flex items-center justify-center gap-1.5 p-2 bg-emerald-950/60 border border-emerald-500/60 hover:bg-emerald-900 text-emerald-400 text-[11px] font-bold uppercase tracking-wider transition-colors"
+                    >
+                      <MessageSquare size={13} />
+                      <span>Send Confirmation</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => sendWhatsAppNotification(selectedOrder, "DISPATCH")}
+                      className="inline-flex items-center justify-center gap-1.5 p-2 bg-[#171717] border border-[#D4AF37]/60 hover:bg-[#222222] text-[#D4AF37] text-[11px] font-bold uppercase tracking-wider transition-colors"
+                    >
+                      <Truck size={13} />
+                      <span>Send Tracking</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="pt-3 border-t border-[#2A2A2A] flex justify-end gap-3">

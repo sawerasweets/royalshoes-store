@@ -68,6 +68,7 @@ export interface ProductImageModel {
 export interface ProductVariantModel {
   id: string;
   productId: string;
+  productName?: string;
   size: string;
   color: string;
   sku?: string | null;
