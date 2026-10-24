@@ -12,6 +12,7 @@ import {
   History,
   Store,
   LogOut,
+  Tag,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -26,6 +27,7 @@ export function AdminLayout({ children, adminName = "Administrator" }: AdminLayo
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { label: "Orders & Fulfillment", href: "/admin/orders", icon: Package },
     { label: "Products & Stock", href: "/admin/products", icon: ShoppingBag },
+    { label: "VIP Promo Codes", href: "/admin/promos", icon: Tag },
     { label: "Payment Verification", href: "/admin/payments", icon: CreditCard },
     { label: "Store & Contact Settings", href: "/admin/settings", icon: Settings },
     { label: "Audit Logs", href: "/admin/audit", icon: History },

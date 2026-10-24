@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ShieldCheck, Truck, CreditCard, Banknote, ArrowRight, Check, AlertCircle, Phone } from "lucide-react";
+import { ShieldCheck, Truck, CreditCard, Banknote, ArrowRight, Check, AlertCircle, Phone, Tag } from "lucide-react";
 import { formatPKR } from "@/lib/utils";
 import { BRAND } from "@/lib/constants";
 
@@ -43,9 +43,66 @@ export default function CheckoutPage() {
   const [grandTotal, setGrandTotal] = useState(0);
   const [couponCode, setCouponCode] = useState<string | null>(null);
 
+  // Promo code interaction state in checkout
+  const [promoInput, setPromoInput] = useState("");
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [promoSuccess, setPromoSuccess] = useState<string | null>(null);
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const calculateTotals = async (rawItems: any[], codeToTry?: string | null) => {
+    try {
+      const activeCode =
+        codeToTry !== undefined
+          ? codeToTry
+          : couponCode || (typeof window !== "undefined" ? localStorage.getItem("royal_coupon") : null);
+
+      const res = await fetch("/api/cart/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: rawItems,
+          couponCode: activeCode,
+          customerPhone: customerPhone.trim() || undefined,
+          customerEmail: customerEmail.trim() || undefined,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setCalculatedItems(data.items);
+        setSubtotal(data.subtotal);
+        setDiscount(data.discount);
+        setShippingFee(data.shippingFee);
+        setGrandTotal(data.grandTotal);
+
+        if (data.couponCode) {
+          setCouponCode(data.couponCode);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("royal_coupon", data.couponCode);
+          }
+          if (codeToTry) {
+            setPromoSuccess(`Privilege code ${data.couponCode} applied successfully!`);
+            setPromoError(null);
+          }
+        } else {
+          setCouponCode(null);
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("royal_coupon");
+          }
+          if (codeToTry) {
+            setPromoError(data.errors?.[0] || "Invalid or ineligible promo code.");
+            setPromoSuccess(null);
+          }
+        }
+      }
+    } catch {
+      // fallback
+    }
+  };
 
   useEffect(() => {
     const loadCart = async () => {
@@ -59,22 +116,8 @@ export default function CheckoutPage() {
         }
 
         setItems(rawItems);
-
-        const res = await fetch("/api/cart/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ items: rawItems }),
-        });
-
-        const data = await res.json();
-        if (data.success) {
-          setCalculatedItems(data.items);
-          setSubtotal(data.subtotal);
-          setDiscount(data.discount);
-          setShippingFee(data.shippingFee);
-          setGrandTotal(data.grandTotal);
-          setCouponCode(data.couponCode || null);
-        }
+        const storedCoupon = localStorage.getItem("royal_coupon");
+        await calculateTotals(rawItems, storedCoupon);
       } catch {
         // fallback
       } finally {
@@ -84,6 +127,27 @@ export default function CheckoutPage() {
 
     loadCart();
   }, [router]);
+
+  const handleApplyPromoCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!promoInput.trim()) return;
+    setIsApplyingPromo(true);
+    setPromoError(null);
+    setPromoSuccess(null);
+    await calculateTotals(items, promoInput.trim());
+    setIsApplyingPromo(false);
+  };
+
+  const handleRemovePromoCode = async () => {
+    setCouponCode(null);
+    setPromoInput("");
+    setPromoError(null);
+    setPromoSuccess(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("royal_coupon");
+    }
+    await calculateTotals(items, null);
+  };
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,9 +186,10 @@ export default function CheckoutPage() {
       const data = await res.json();
 
       if (data.success && data.orderNumber) {
-        // Clear cart
+        // Clear cart and saved promo code
         localStorage.removeItem("royal_cart");
         localStorage.removeItem("sawera_cart");
+        localStorage.removeItem("royal_coupon");
         window.dispatchEvent(new Event("cart-updated"));
         // Redirect to confirmation
         router.push(`/order/${data.orderNumber}`);
@@ -433,6 +498,58 @@ export default function CheckoutPage() {
               ))}
             </div>
 
+            {/* Promo Code Entry in Checkout */}
+            <div className="pt-2 border-t border-[#2A2A2A] space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+                  <Tag size={13} className="text-[#D4AF37]" />
+                  <span>Privilege Promo Code</span>
+                </span>
+              </div>
+
+              {couponCode ? (
+                <div className="flex items-center justify-between p-2.5 bg-[#171717] border border-emerald-500/40 text-xs text-emerald-400">
+                  <div className="flex items-center gap-2">
+                    <Check size={14} />
+                    <span>Code <strong className="font-mono">{couponCode}</strong> Active</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRemovePromoCode}
+                    className="text-gray-400 hover:text-white text-[11px] underline"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-1.5">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={promoInput}
+                      onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
+                      placeholder="e.g. GOLD10, ROYAL200"
+                      className="flex-1 bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] text-xs text-[#D4AF37] font-mono font-bold px-3 py-2 outline-none uppercase"
+                    />
+                    <button
+                      type="button"
+                      disabled={isApplyingPromo || !promoInput.trim()}
+                      onClick={handleApplyPromoCode}
+                      className="bg-[#222222] hover:bg-[#D4AF37] hover:text-[#080808] text-gray-200 text-xs font-bold uppercase tracking-wider px-4 py-2 border border-[#333333] transition-colors disabled:opacity-40"
+                    >
+                      {isApplyingPromo ? "Verifying..." : "Apply"}
+                    </button>
+                  </div>
+                  {promoError && (
+                    <p className="text-[11px] text-rose-400">{promoError}</p>
+                  )}
+                  {promoSuccess && (
+                    <p className="text-[11px] text-emerald-400">{promoSuccess}</p>
+                  )}
+                </div>
+              )}
+            </div>
+
             {/* Breakdown */}
             <div className="space-y-2 text-xs text-gray-300 pt-2 border-t border-[#2A2A2A]">
               <div className="flex justify-between">
@@ -449,7 +566,9 @@ export default function CheckoutPage() {
                 <span>Nationwide Shipping</span>
                 <span className="font-mono">
                   {shippingFee === 0 ? (
-                    <strong className="text-emerald-400">FREE</strong>
+                    <strong className="text-emerald-400 uppercase tracking-luxury">
+                      {couponCode && discount === 0 ? "WAIVED (VIP PRIVILEGE)" : "FREE"}
+                    </strong>
                   ) : (
                     formatPKR(shippingFee)
                   )}

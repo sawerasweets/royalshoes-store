@@ -1069,7 +1069,7 @@ export const prisma = {
       const setClauses: string[] = [];
       const values: any[] = [];
       for (const field of fields) {
-        setClauses.push(`"${field}" = ?`);
+        setClauses.push(`\`${field}\` = ?`);
         let val = args.data[field];
         if (field === "code" && typeof val === "string") val = val.toUpperCase().trim();
         values.push(val);

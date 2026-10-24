@@ -65,12 +65,14 @@ export default function CartPage() {
         return;
       }
 
+      const activeCoupon = couponToApply !== undefined ? couponToApply : (appliedCoupon || (typeof window !== "undefined" ? localStorage.getItem("royal_coupon") : null));
+
       const res = await fetch("/api/cart/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items,
-          couponCode: couponToApply !== undefined ? couponToApply : appliedCoupon,
+          couponCode: activeCoupon,
         }),
       });
 
@@ -79,9 +81,18 @@ export default function CartPage() {
         setCart(data);
         if (data.couponCode) {
           setAppliedCoupon(data.couponCode);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("royal_coupon", data.couponCode);
+          }
           setCouponError(null);
-        } else if (couponToApply) {
-          setCouponError(data.errors?.[0] || "Invalid or ineligible coupon code.");
+        } else {
+          setAppliedCoupon(null);
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("royal_coupon");
+          }
+          if (couponToApply) {
+            setCouponError(data.errors?.[0] || "Invalid or ineligible promo code.");
+          }
         }
       }
     } catch {
@@ -93,7 +104,8 @@ export default function CartPage() {
   };
 
   useEffect(() => {
-    refreshCart();
+    const savedPromo = typeof window !== "undefined" ? localStorage.getItem("royal_coupon") : null;
+    refreshCart(savedPromo);
   }, []);
 
   const updateQuantity = (variantId: string, newQty: number, maxStock: number) => {
@@ -132,6 +144,9 @@ export default function CartPage() {
     setAppliedCoupon(null);
     setCouponInput("");
     setCouponError(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("royal_coupon");
+    }
     refreshCart(null);
   };
 
@@ -343,7 +358,9 @@ export default function CartPage() {
                 <span>Nationwide Shipping</span>
                 <span className="font-mono">
                   {cart.shippingFee === 0 ? (
-                    <strong className="text-emerald-400 uppercase tracking-luxury">FREE</strong>
+                    <strong className="text-emerald-400 uppercase tracking-luxury">
+                      {appliedCoupon && cart.discount === 0 ? "WAIVED (VIP PRIVILEGE)" : "FREE"}
+                    </strong>
                   ) : (
                     formatPKR(cart.shippingFee)
                   )}
