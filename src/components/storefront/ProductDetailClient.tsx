@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
-import { ShoppingBag, Heart, ShieldCheck, Truck, RotateCcw, Check, AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ShoppingBag, Heart, ShieldCheck, Truck, RotateCcw, Check, AlertCircle, Zap, ArrowRight } from "lucide-react";
 import { formatPKR } from "@/lib/utils";
 import { BRAND } from "@/lib/constants";
 
@@ -56,10 +57,12 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
     return Array.from(set);
   }, [product.variants]);
 
+  const router = useRouter();
   const [selectedSize, setSelectedSize] = useState<string>(availableSizes[0] || "Standard");
   const [selectedColor, setSelectedColor] = useState<string>(availableColors[0] || "Default");
   const [quantity, setQuantity] = useState<number>(1);
   const [isAdding, setIsAdding] = useState(false);
+  const [isBuyingNow, setIsBuyingNow] = useState(false);
   const [addedMessage, setAddedMessage] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
@@ -110,6 +113,37 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
       // fallback
     } finally {
       setIsAdding(false);
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (isOutOfStock || !currentVariant) return;
+
+    setIsBuyingNow(true);
+    try {
+      const stored = localStorage.getItem("royal_cart") || localStorage.getItem("sawera_cart");
+      const cartItems: any[] = stored ? JSON.parse(stored) : [];
+
+      const existingIndex = cartItems.findIndex(
+        (item) => item.variantId === currentVariant.id
+      );
+
+      if (existingIndex > -1) {
+        const newQty = Math.min(cartItems[existingIndex].quantity + quantity, currentStock);
+        cartItems[existingIndex].quantity = newQty;
+      } else {
+        cartItems.push({
+          productId: product.id,
+          variantId: currentVariant.id,
+          quantity: Math.min(quantity, currentStock),
+        });
+      }
+
+      localStorage.setItem("royal_cart", JSON.stringify(cartItems));
+      window.dispatchEvent(new Event("cart-updated"));
+      router.push("/checkout");
+    } catch {
+      setIsBuyingNow(false);
     }
   };
 
@@ -287,9 +321,10 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
 
           {/* Quantity and Actions */}
           <div className="pt-4 space-y-3">
-            <div className="flex items-center gap-3">
+            {/* Action Row 1: Quantity Selector + Add To Shopping Bag + Wishlist */}
+            <div className="flex items-center gap-2.5 sm:gap-3">
               {/* Quantity Selector */}
-              <div className="flex items-center border border-[#2A2A2A] bg-[#111111] text-sm">
+              <div className="flex items-center border border-[#2A2A2A] bg-[#111111] text-sm flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -298,7 +333,7 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                 >
                   -
                 </button>
-                <span className="px-4 py-3 font-mono font-bold text-center w-12">
+                <span className="px-3 py-3 font-mono font-bold text-center w-10 text-xs">
                   {quantity}
                 </span>
                 <button
@@ -313,18 +348,22 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
 
               {/* Add To Cart Button */}
               <button
+                type="button"
                 onClick={handleAddToCart}
                 disabled={isOutOfStock || isAdding}
-                className="flex-1 flex items-center justify-center gap-2 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold text-xs uppercase tracking-luxury py-3.5 px-6 transition-all duration-200 shadow-md disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]"
+                className="flex-1 flex items-center justify-center gap-2 bg-[#171717] hover:bg-[#202020] text-[#F5F0E6] hover:text-[#D4AF37] border border-[#D4AF37]/60 hover:border-[#D4AF37] font-bold text-xs uppercase tracking-luxury py-3.5 px-4 transition-all duration-200 shadow-sm disabled:bg-gray-900 disabled:text-gray-600 disabled:border-gray-800 disabled:cursor-not-allowed active:scale-[0.98]"
               >
-                <ShoppingBag size={17} />
-                <span>{isOutOfStock ? "Out of Stock" : isAdding ? "Adding..." : "Add to Shopping Bag"}</span>
+                <ShoppingBag size={16} className="text-[#D4AF37]" />
+                <span className="truncate">
+                  {isOutOfStock ? "Out of Stock" : isAdding ? "Adding..." : "Add to Shopping Bag"}
+                </span>
               </button>
 
               {/* Wishlist Button */}
               <button
+                type="button"
                 onClick={handleToggleWishlist}
-                className={`p-3.5 border transition-colors ${
+                className={`p-3.5 border transition-colors flex-shrink-0 ${
                   isWishlisted
                     ? "border-rose-500 text-rose-500 bg-rose-500/10"
                     : "border-[#2A2A2A] text-gray-400 hover:text-white hover:border-[#D4AF37] bg-[#111111]"
@@ -334,6 +373,20 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                 <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
               </button>
             </div>
+
+            {/* Action Row 2: DIRECT BUY NOW BUTTON (Full Width VIP Royal Gold) */}
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              disabled={isOutOfStock || isBuyingNow}
+              className="w-full flex items-center justify-center gap-2.5 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-extrabold text-xs uppercase tracking-[0.2em] py-4 px-6 transition-all duration-200 shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed group cursor-pointer"
+            >
+              <Zap size={16} className="fill-[#080808] group-hover:scale-110 transition-transform" />
+              <span>
+                {isOutOfStock ? "Currently Sold Out" : isBuyingNow ? "Opening Secure Checkout..." : "Buy Now — Direct Order"}
+              </span>
+              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+            </button>
 
             {/* Added confirmation alert */}
             {addedMessage && (
