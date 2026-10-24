@@ -291,20 +291,37 @@ export const prisma = {
   },
 
   user: {
-    findUnique: async (args: { where: { id?: string; email?: string }; select?: any }): Promise<UserModel | null> => {
+    findUnique: async (args: { where: { id?: string; email?: string; phone?: string }; select?: any }): Promise<UserModel | null> => {
       let sql = "SELECT * FROM users WHERE ";
       const params: any[] = [];
       if (args.where.id) {
         sql += "id = ? LIMIT 1";
         params.push(args.where.id);
       } else if (args.where.email) {
-        sql += "email = ? LIMIT 1";
+        sql += "LOWER(email) = ? LIMIT 1";
         params.push(args.where.email.toLowerCase().trim());
+      } else if (args.where.phone) {
+        const cleanPhone = args.where.phone.replace(/[\s-]/g, "");
+        sql += "(phone = ? OR REPLACE(REPLACE(phone, '-', ''), ' ', '') = ?) LIMIT 1";
+        params.push(args.where.phone.trim(), cleanPhone);
       } else {
         return null;
       }
       const [rows] = await pool.query<mysql.RowDataPacket[]>(sql, params);
       return (rows[0] as any) || null;
+    },
+    findFirst: async (args: { where: { id?: string; email?: string; phone?: string; identifier?: string } }): Promise<UserModel | null> => {
+      if (args.where.id) return prisma.user.findUnique({ where: { id: args.where.id } });
+      if (args.where.email) return prisma.user.findUnique({ where: { email: args.where.email } });
+      if (args.where.phone) return prisma.user.findUnique({ where: { phone: args.where.phone } });
+      if (args.where.identifier) {
+        const val = args.where.identifier.trim();
+        const clean = val.replace(/[\s-]/g, "");
+        const sql = "SELECT * FROM users WHERE LOWER(email) = ? OR phone = ? OR REPLACE(REPLACE(phone, '-', ''), ' ', '') = ? LIMIT 1";
+        const [rows] = await pool.query<mysql.RowDataPacket[]>(sql, [val.toLowerCase(), val, clean]);
+        return (rows[0] as any) || null;
+      }
+      return null;
     },
     create: async (args: { data: { id?: string; email: string; passwordHash: string; name: string; phone?: string | null; role?: string } }): Promise<UserModel> => {
       const id = args.data.id || `usr-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
