@@ -32,22 +32,22 @@ export default function FAQPage() {
 
   return (
     <div className="py-12 max-w-3xl mx-auto space-y-8">
-      <div className="border-b border-[#2A2A2A] pb-4">
-        <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
+      <div className="border-b border-[#E4DDD3] pb-4">
+        <span className="text-[10px] font-bold tracking-brand uppercase text-[#795548]">
           CLIENT GUIDE
         </span>
-        <h1 className="font-brand text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-luxury text-[#F5F0E6] mt-0.5">
+        <h1 className="font-brand text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-luxury text-[#4A342E] mt-0.5">
           FREQUENTLY ASKED QUESTIONS
         </h1>
       </div>
 
       <div className="space-y-4">
         {faqs.map((faq, i) => (
-          <div key={i} className="p-5 bg-[#111111] border border-[#2A2A2A] space-y-2">
-            <h3 className="font-brand text-sm font-bold text-[#F5F0E6] uppercase tracking-wide">
+          <div key={i} className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+            <h3 className="font-brand text-sm font-bold text-[#4A342E] uppercase tracking-wide">
               {faq.q}
             </h3>
-            <p className="text-xs text-gray-400 leading-relaxed">
+            <p className="text-xs text-[#6B635B] leading-relaxed">
               {faq.a}
             </p>
           </div>

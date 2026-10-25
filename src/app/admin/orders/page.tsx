@@ -105,25 +105,25 @@ export default function AdminOrdersPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#2A2A2A] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E4DDD3] pb-4">
           <div>
-            <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
+            <span className="text-[10px] font-bold tracking-brand uppercase text-[#795548]">
               FULFILLMENT LEDGER
             </span>
-            <h1 className="font-brand text-2xl font-extrabold tracking-luxury text-[#F5F0E6]">
+            <h1 className="font-brand text-2xl font-extrabold tracking-luxury text-[#4A342E]">
               CLIENT ORDERS & FULFILLMENT
             </h1>
           </div>
           <button
             onClick={fetchOrders}
-            className="text-xs uppercase tracking-luxury text-[#D4AF37] hover:underline"
+            className="text-xs uppercase tracking-luxury text-[#795548] hover:underline"
           >
             Refresh Ledger
           </button>
         </div>
 
         {/* Filters Bar */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 bg-[#111111] p-4 border border-[#2A2A2A]">
+        <div className="flex flex-col sm:flex-row items-center gap-4 bg-[#FFFFFF] p-4 border border-[#E4DDD3]">
           <div className="relative flex-1 w-full">
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
@@ -131,16 +131,16 @@ export default function AdminOrdersPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by order #, customer name, or phone..."
-              className="w-full bg-[#080808] border border-[#2A2A2A] text-xs text-[#F5F0E6] pl-9 pr-3.5 py-2.5 outline-none focus:border-[#D4AF37]"
+              className="w-full bg-[#F5F0E6] border border-[#E4DDD3] text-xs text-[#292D30] pl-9 pr-3.5 py-2.5 outline-none focus:border-[#795548]"
             />
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <span className="text-xs text-gray-400 uppercase tracking-wider text-[10px]">Filter:</span>
+            <span className="text-xs text-[#6B635B] uppercase tracking-wider text-[10px]">Filter:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-[#080808] border border-[#2A2A2A] text-xs text-[#F5F0E6] px-3 py-2 outline-none cursor-pointer focus:border-[#D4AF37]"
+              className="bg-[#F5F0E6] border border-[#E4DDD3] text-xs text-[#292D30] px-3 py-2 outline-none cursor-pointer focus:border-[#795548]"
             >
               <option value="ALL">All Statuses</option>
               <option value="PENDING">Pending</option>
@@ -154,44 +154,44 @@ export default function AdminOrdersPage() {
         </div>
 
         {/* Orders View: Mobile Cards + Desktop Table */}
-        <div className="bg-[#111111] border border-[#2A2A2A] overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E4DDD3] overflow-hidden">
           {loading ? (
-            <div className="p-12 text-center text-xs text-gray-400">Loading order records...</div>
+            <div className="p-12 text-center text-xs text-[#6B635B]">Loading order records...</div>
           ) : filteredOrders.length === 0 ? (
             <div className="p-12 text-center text-xs text-gray-500">No matching orders found.</div>
           ) : (
             <>
               {/* MOBILE CARDS */}
-              <div className="block md:hidden divide-y divide-[#2A2A2A]">
+              <div className="block md:hidden divide-y divide-[#E4DDD3]">
                 {filteredOrders.map((o) => (
-                  <div key={o.id} className="p-4 space-y-3 bg-[#111111]">
+                  <div key={o.id} className="p-4 space-y-3 bg-[#FFFFFF]">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-mono font-bold text-[#D4AF37] text-sm">
+                      <span className="font-mono font-bold text-[#795548] text-sm">
                         {o.orderNumber}
                       </span>
-                      <span className="text-[11px] text-gray-400">
+                      <span className="text-[11px] text-[#6B635B]">
                         {new Date(o.createdAt).toLocaleDateString()}
                       </span>
                     </div>
 
                     <div className="flex items-start justify-between">
                       <div>
-                        <div className="font-medium text-sm text-[#F5F0E6]">{o.customerName}</div>
-                        <div className="text-xs text-gray-400 font-mono">{o.customerPhone}</div>
-                        <div className="text-xs text-gray-400 mt-0.5">{o.city}</div>
+                        <div className="font-medium text-sm text-[#292D30]">{o.customerName}</div>
+                        <div className="text-xs text-[#6B635B] font-mono">{o.customerPhone}</div>
+                        <div className="text-xs text-[#6B635B] mt-0.5">{o.city}</div>
                       </div>
                       <div className="text-right">
-                        <div className="font-mono font-bold text-sm text-[#D4AF37]">
+                        <div className="font-mono font-bold text-sm text-[#795548]">
                           {formatPKR(o.grandTotal)}
                         </div>
-                        <div className="text-[10px] text-gray-400 uppercase mt-0.5">
+                        <div className="text-[10px] text-[#6B635B] uppercase mt-0.5">
                           {o.paymentMethod}
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 pt-1 text-[10px] uppercase font-bold">
-                      <span className="px-2 py-0.5 border border-gray-700 bg-[#080808] text-gray-200">
+                      <span className="px-2 py-0.5 border border-gray-700 bg-[#F5F0E6] text-gray-200">
                         Status: {o.status}
                       </span>
                       <span className={`px-2 py-0.5 border ${
@@ -205,7 +205,7 @@ export default function AdminOrdersPage() {
 
                     <button
                       onClick={() => openEditModal(o)}
-                      className="w-full py-2 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold text-xs uppercase tracking-luxury flex items-center justify-center gap-2 rounded-sm shadow transition-colors"
+                      className="w-full py-2 bg-[#795548] hover:bg-[#5D4037] text-white font-bold text-xs uppercase tracking-luxury flex items-center justify-center gap-2 rounded-sm shadow transition-colors"
                     >
                       <Edit3 size={13} />
                       <span>Manage Order Status</span>
@@ -218,7 +218,7 @@ export default function AdminOrdersPage() {
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
+                    <tr className="border-b border-[#E4DDD3] text-[#6B635B] uppercase tracking-luxury text-[10px] bg-[#FAF7F2]">
                       <th className="p-3.5">Order #</th>
                       <th className="p-3.5">Date</th>
                       <th className="p-3.5">Customer</th>
@@ -230,23 +230,23 @@ export default function AdminOrdersPage() {
                       <th className="p-3.5 text-center">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#2A2A2A]">
+                  <tbody className="divide-y divide-[#E4DDD3]">
                     {filteredOrders.map((o) => (
-                      <tr key={o.id} className="hover:bg-[#171717] transition-colors">
-                        <td className="p-3.5 font-mono font-bold text-[#D4AF37]">
+                      <tr key={o.id} className="hover:bg-[#FFFFFF] transition-colors">
+                        <td className="p-3.5 font-mono font-bold text-[#795548]">
                           {o.orderNumber}
                         </td>
-                        <td className="p-3.5 text-gray-400 text-[11px]">
+                        <td className="p-3.5 text-[#6B635B] text-[11px]">
                           {new Date(o.createdAt).toLocaleDateString()}
                         </td>
-                        <td className="p-3.5 font-medium text-[#F5F0E6]">
+                        <td className="p-3.5 font-medium text-[#292D30]">
                           <div>{o.customerName}</div>
-                          <div className="text-[10px] text-gray-400 font-mono">{o.customerPhone}</div>
+                          <div className="text-[10px] text-[#6B635B] font-mono">{o.customerPhone}</div>
                         </td>
-                        <td className="p-3.5 text-gray-300">{o.city}</td>
-                        <td className="p-3.5 text-gray-400">{o.items?.length || 1}</td>
+                        <td className="p-3.5 text-[#5C5855]">{o.city}</td>
+                        <td className="p-3.5 text-[#6B635B]">{o.items?.length || 1}</td>
                         <td className="p-3.5">
-                          <span className="px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider bg-[#080808] border-gray-700 text-gray-200">
+                          <span className="px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider bg-[#F5F0E6] border-gray-700 text-gray-200">
                             {o.status}
                           </span>
                         </td>
@@ -259,7 +259,7 @@ export default function AdminOrdersPage() {
                             {o.paymentStatus}
                           </span>
                         </td>
-                        <td className="p-3.5 text-right font-mono font-bold text-[#F5F0E6]">
+                        <td className="p-3.5 text-right font-mono font-bold text-[#4A342E]">
                           {formatPKR(o.grandTotal)}
                         </td>
                         <td className="p-3.5 text-center">
@@ -274,7 +274,7 @@ export default function AdminOrdersPage() {
                             </button>
                             <button
                               onClick={() => openEditModal(o)}
-                              className="inline-flex items-center gap-1 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-2.5 py-1 text-[11px] font-bold uppercase tracking-luxury rounded-sm shadow transition-colors"
+                              className="inline-flex items-center gap-1 bg-[#795548] hover:bg-[#5D4037] text-white px-2.5 py-1 text-[11px] font-bold uppercase tracking-luxury rounded-sm shadow transition-colors"
                               title="Manage Order Status"
                             >
                               <Edit3 size={11} />
@@ -294,19 +294,19 @@ export default function AdminOrdersPage() {
         {/* Modal for Order Status & Payment Updates */}
         {selectedOrder && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="bg-[#111111] border border-[#D4AF37]/50 max-w-lg w-full p-6 space-y-5 animate-fade-in">
-              <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3">
+            <div className="bg-[#FFFFFF] border border-[#795548]/50 max-w-lg w-full p-6 space-y-5 animate-fade-in">
+              <div className="flex items-center justify-between border-b border-[#E4DDD3] pb-3">
                 <div className="space-y-0.5">
-                  <div className="font-brand text-sm font-bold text-[#F5F0E6]">
+                  <div className="font-brand text-sm font-bold text-[#4A342E]">
                     MANAGE ORDER #{selectedOrder.orderNumber}
                   </div>
-                  <div className="text-xs text-gray-400">
+                  <div className="text-xs text-[#6B635B]">
                     {selectedOrder.customerName} ({selectedOrder.city})
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedOrder(null)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-[#6B635B] hover:text-[#4A342E]"
                 >
                   <X size={18} />
                 </button>
@@ -314,13 +314,13 @@ export default function AdminOrdersPage() {
 
               <form onSubmit={handleSaveStatus} className="space-y-4 text-xs">
                 <div>
-                  <label className="block text-gray-300 font-semibold uppercase mb-1">
+                  <label className="block text-[#5C5855] font-semibold uppercase mb-1">
                     Fulfillment Status (Phase 19 Lifecycle)
                   </label>
                   <select
                     value={editStatus}
                     onChange={(e) => setEditStatus(e.target.value)}
-                    className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] text-xs text-[#F5F0E6] p-2.5 outline-none cursor-pointer"
+                    className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] text-xs text-[#292D30] p-2.5 outline-none cursor-pointer"
                   >
                     <option value="PENDING">PENDING</option>
                     <option value="CONFIRMED">CONFIRMED</option>
@@ -332,13 +332,13 @@ export default function AdminOrdersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 font-semibold uppercase mb-1">
+                  <label className="block text-[#5C5855] font-semibold uppercase mb-1">
                     Payment Status
                   </label>
                   <select
                     value={editPaymentStatus}
                     onChange={(e) => setEditPaymentStatus(e.target.value)}
-                    className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] text-xs text-[#F5F0E6] p-2.5 outline-none cursor-pointer"
+                    className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] text-xs text-[#292D30] p-2.5 outline-none cursor-pointer"
                   >
                     <option value="PENDING">PENDING</option>
                     <option value="VERIFIED">VERIFIED</option>
@@ -348,7 +348,7 @@ export default function AdminOrdersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 font-semibold uppercase mb-1">
+                  <label className="block text-[#5C5855] font-semibold uppercase mb-1">
                     Courier Consignment Tracking Number
                   </label>
                   <input
@@ -356,12 +356,12 @@ export default function AdminOrdersPage() {
                     value={editTracking}
                     onChange={(e) => setEditTracking(e.target.value)}
                     placeholder="e.g. TCS-948172901 / Leopard-82710"
-                    className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] text-xs text-[#F5F0E6] p-2.5 outline-none font-mono"
+                    className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] text-xs text-[#292D30] p-2.5 outline-none font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 font-semibold uppercase mb-1">
+                  <label className="block text-[#5C5855] font-semibold uppercase mb-1">
                     Internal Atelier Notes
                   </label>
                   <textarea
@@ -369,13 +369,13 @@ export default function AdminOrdersPage() {
                     value={editNotes}
                     onChange={(e) => setEditNotes(e.target.value)}
                     placeholder="Internal verification notes..."
-                    className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] text-xs text-[#F5F0E6] p-2.5 outline-none"
+                    className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] text-xs text-[#292D30] p-2.5 outline-none"
                   />
                 </div>
 
                 {/* 1-Click WhatsApp Customer Contact */}
-                <div className="p-3 bg-[#080808] border border-[#2A2A2A] space-y-2">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-gray-300 flex items-center justify-between">
+                <div className="p-3 bg-[#F5F0E6] border border-[#E4DDD3] space-y-2">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#5C5855] flex items-center justify-between">
                     <span>Customer WhatsApp Contact ({selectedOrder.customerPhone})</span>
                     <span className="text-emerald-400 font-normal">1-Click Automated</span>
                   </div>
@@ -391,7 +391,7 @@ export default function AdminOrdersPage() {
                     <button
                       type="button"
                       onClick={() => sendWhatsAppNotification(selectedOrder, "DISPATCH")}
-                      className="inline-flex items-center justify-center gap-1.5 p-2 bg-[#171717] border border-[#D4AF37]/60 hover:bg-[#222222] text-[#D4AF37] text-[11px] font-bold uppercase tracking-wider transition-colors"
+                      className="inline-flex items-center justify-center gap-1.5 p-2 bg-[#FFFFFF] border border-[#795548]/60 hover:bg-[#222222] text-[#795548] text-[11px] font-bold uppercase tracking-wider transition-colors"
                     >
                       <Truck size={13} />
                       <span>Send Tracking</span>
@@ -399,18 +399,18 @@ export default function AdminOrdersPage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#2A2A2A] flex justify-end gap-3">
+                <div className="pt-3 border-t border-[#E4DDD3] flex justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => setSelectedOrder(null)}
-                    className="px-4 py-2 border border-[#2A2A2A] text-gray-400 hover:text-white uppercase tracking-luxury text-[11px]"
+                    className="px-4 py-2 border border-[#E4DDD3] text-[#6B635B] hover:text-[#4A342E] uppercase tracking-luxury text-[11px]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isUpdating}
-                    className="px-6 py-2 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold uppercase tracking-luxury text-[11px]"
+                    className="px-6 py-2 bg-[#795548] hover:bg-[#5D4037] text-white font-bold uppercase tracking-luxury text-[11px]"
                   >
                     {isUpdating ? "Saving..." : "Save Order Status"}
                   </button>

@@ -50,12 +50,12 @@ export default async function AdminDashboardPage() {
     <AdminLayout adminName={admin.name}>
       <div className="space-y-8">
         {/* Welcome Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#2A2A2A] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E4DDD3] pb-4">
           <div>
-            <h1 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#F5F0E6]">
+            <h1 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#4A342E]">
               ATELIER INTELLIGENCE & METRICS
             </h1>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-[#6B635B] mt-1">
               Live database reporting for ROYAL SHOES Black & Gold Edition.
             </p>
           </div>
@@ -70,12 +70,12 @@ export default async function AdminDashboardPage() {
         {/* Real KPI Statistics Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Revenue */}
-          <div className="p-6 bg-[#111111] border border-[#2A2A2A] space-y-2">
-            <div className="flex items-center justify-between text-gray-400 text-xs">
+          <div className="p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+            <div className="flex items-center justify-between text-[#6B635B] text-xs">
               <span className="uppercase tracking-luxury font-bold">Gross Atelier Revenue</span>
-              <DollarSign size={18} className="text-[#D4AF37]" />
+              <DollarSign size={18} className="text-[#795548]" />
             </div>
-            <div className="font-brand text-2xl font-bold font-mono text-[#F5F0E6]">
+            <div className="font-brand text-2xl font-bold font-mono text-[#4A342E]">
               {formatPKR(grossRevenue)}
             </div>
             <div className="text-[11px] text-gray-500">
@@ -84,12 +84,12 @@ export default async function AdminDashboardPage() {
           </div>
 
           {/* Orders */}
-          <div className="p-6 bg-[#111111] border border-[#2A2A2A] space-y-2">
-            <div className="flex items-center justify-between text-gray-400 text-xs">
+          <div className="p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+            <div className="flex items-center justify-between text-[#6B635B] text-xs">
               <span className="uppercase tracking-luxury font-bold">Total Reservations</span>
-              <Package size={18} className="text-[#D4AF37]" />
+              <Package size={18} className="text-[#795548]" />
             </div>
-            <div className="font-brand text-2xl font-bold font-mono text-[#F5F0E6]">
+            <div className="font-brand text-2xl font-bold font-mono text-[#4A342E]">
               {totalOrders}
             </div>
             <div className="text-[11px] text-amber-400 font-medium">
@@ -98,29 +98,29 @@ export default async function AdminDashboardPage() {
           </div>
 
           {/* Pending Verifications */}
-          <div className="p-6 bg-[#111111] border border-[#2A2A2A] space-y-2">
-            <div className="flex items-center justify-between text-gray-400 text-xs">
+          <div className="p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+            <div className="flex items-center justify-between text-[#6B635B] text-xs">
               <span className="uppercase tracking-luxury font-bold">Pending Payments</span>
               <Clock size={18} className="text-amber-400" />
             </div>
-            <div className="font-brand text-2xl font-bold font-mono text-[#F5F0E6]">
+            <div className="font-brand text-2xl font-bold font-mono text-[#4A342E]">
               {pendingPayments}
             </div>
             <Link
               href="/admin/payments"
-              className="text-[11px] text-[#D4AF37] hover:underline font-semibold block"
+              className="text-[11px] text-[#795548] hover:underline font-semibold block"
             >
               Verify manual receipts →
             </Link>
           </div>
 
           {/* Active Products */}
-          <div className="p-6 bg-[#111111] border border-[#2A2A2A] space-y-2">
-            <div className="flex items-center justify-between text-gray-400 text-xs">
+          <div className="p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+            <div className="flex items-center justify-between text-[#6B635B] text-xs">
               <span className="uppercase tracking-luxury font-bold">Published Products</span>
-              <TrendingUp size={18} className="text-[#D4AF37]" />
+              <TrendingUp size={18} className="text-[#795548]" />
             </div>
-            <div className="font-brand text-2xl font-bold font-mono text-[#F5F0E6]">
+            <div className="font-brand text-2xl font-bold font-mono text-[#4A342E]">
               {totalProducts}
             </div>
             <div className="text-[11px] text-gray-500">
@@ -130,14 +130,14 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Recent Orders Section */}
-        <div className="p-6 bg-[#111111] border border-[#2A2A2A] space-y-4">
-          <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3">
-            <h2 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">
+        <div className="p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-4">
+          <div className="flex items-center justify-between border-b border-[#E4DDD3] pb-3">
+            <h2 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#4A342E]">
               Recent Client Orders
             </h2>
             <Link
               href="/admin/orders"
-              className="text-xs text-[#D4AF37] hover:underline font-semibold uppercase tracking-luxury"
+              className="text-xs text-[#795548] hover:underline font-semibold uppercase tracking-luxury"
             >
               View All Orders →
             </Link>
@@ -147,7 +147,7 @@ export default async function AdminDashboardPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px]">
+                  <tr className="border-b border-[#E4DDD3] text-[#6B635B] uppercase tracking-luxury text-[10px]">
                     <th className="py-2.5">Order Number</th>
                     <th className="py-2.5">Client Name</th>
                     <th className="py-2.5">City</th>
@@ -157,18 +157,18 @@ export default async function AdminDashboardPage() {
                     <th className="py-2.5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#2A2A2A]">
+                <tbody className="divide-y divide-[#E4DDD3]">
                   {recentOrders.map((order: any) => (
-                    <tr key={order.id} className="hover:bg-[#171717] transition-colors">
-                      <td className="py-3 font-mono font-bold text-[#D4AF37]">
+                    <tr key={order.id} className="hover:bg-[#FFFFFF] transition-colors">
+                      <td className="py-3 font-mono font-bold text-[#795548]">
                         {order.orderNumber}
                       </td>
-                      <td className="py-3 font-medium text-[#F5F0E6]">
+                      <td className="py-3 font-medium text-[#292D30]">
                         {order.customerName}
                       </td>
-                      <td className="py-3 text-gray-400">{order.city}</td>
+                      <td className="py-3 text-[#6B635B]">{order.city}</td>
                       <td className="py-3">
-                        <span className="px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider bg-[#080808] border-gray-700 text-gray-300">
+                        <span className="px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider bg-[#F5F0E6] border-gray-700 text-[#5C5855]">
                           {order.status}
                         </span>
                       </td>
@@ -181,13 +181,13 @@ export default async function AdminDashboardPage() {
                           {order.paymentStatus}
                         </span>
                       </td>
-                      <td className="py-3 text-right font-mono font-bold text-[#F5F0E6]">
+                      <td className="py-3 text-right font-mono font-bold text-[#4A342E]">
                         {formatPKR(order.grandTotal)}
                       </td>
                       <td className="py-3 text-right">
                         <Link
                           href={`/order/${order.orderNumber}`}
-                          className="text-[#D4AF37] hover:underline text-xs font-semibold"
+                          className="text-[#795548] hover:underline text-xs font-semibold"
                         >
                           View
                         </Link>
@@ -208,36 +208,36 @@ export default async function AdminDashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Link
             href="/admin/products"
-            className="p-5 bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37] transition-colors space-y-2 group"
+            className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] hover:border-[#795548] transition-colors space-y-2 group"
           >
-            <h3 className="font-brand text-xs font-bold uppercase tracking-luxury text-[#F5F0E6] group-hover:text-[#D4AF37]">
+            <h3 className="font-brand text-xs font-bold uppercase tracking-luxury text-[#4A342E] group-hover:text-[#795548]">
               Product & Stock Management
             </h3>
-            <p className="text-[11px] text-gray-400 leading-relaxed">
+            <p className="text-[11px] text-[#6B635B] leading-relaxed">
               Add new footwear silhouettes, adjust prices, edit descriptions, and update variant inventory.
             </p>
           </Link>
 
           <Link
             href="/admin/payments"
-            className="p-5 bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37] transition-colors space-y-2 group"
+            className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] hover:border-[#795548] transition-colors space-y-2 group"
           >
-            <h3 className="font-brand text-xs font-bold uppercase tracking-luxury text-[#F5F0E6] group-hover:text-[#D4AF37]">
+            <h3 className="font-brand text-xs font-bold uppercase tracking-luxury text-[#4A342E] group-hover:text-[#795548]">
               Manual Payment Verification
             </h3>
-            <p className="text-[11px] text-gray-400 leading-relaxed">
+            <p className="text-[11px] text-[#6B635B] leading-relaxed">
               Verify customer Easypaisa transaction IDs (TRX) and direct bank transfer slips before parcel dispatch.
             </p>
           </Link>
 
           <Link
             href="/admin/settings"
-            className="p-5 bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37] transition-colors space-y-2 group"
+            className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] hover:border-[#795548] transition-colors space-y-2 group"
           >
-            <h3 className="font-brand text-xs font-bold uppercase tracking-luxury text-[#F5F0E6] group-hover:text-[#D4AF37]">
+            <h3 className="font-brand text-xs font-bold uppercase tracking-luxury text-[#4A342E] group-hover:text-[#795548]">
               Store & Contact Settings
             </h3>
-            <p className="text-[11px] text-gray-400 leading-relaxed">
+            <p className="text-[11px] text-[#6B635B] leading-relaxed">
               Configure official phone ({BRAND.contact.phoneDisplay}), WhatsApp numbers, and free shipping thresholds.
             </p>
           </Link>

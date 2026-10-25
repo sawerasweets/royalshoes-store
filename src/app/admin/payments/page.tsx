@@ -56,21 +56,21 @@ export default function AdminPaymentsPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div className="border-b border-[#2A2A2A] pb-4">
-          <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
+        <div className="border-b border-[#E4DDD3] pb-4">
+          <span className="text-[10px] font-bold tracking-brand uppercase text-[#795548]">
             FINANCIAL AUDIT
           </span>
-          <h1 className="font-brand text-2xl font-extrabold tracking-luxury text-[#F5F0E6]">
+          <h1 className="font-brand text-2xl font-extrabold tracking-luxury text-[#4A342E]">
             MANUAL PAYMENT VERIFICATION
           </h1>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-[#6B635B] mt-1">
             Validate Easypaisa mobile transfers and direct bank receipts before parcel dispatch.
           </p>
         </div>
 
-        <div className="bg-[#111111] border border-[#2A2A2A] overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E4DDD3] overflow-hidden">
           {loading ? (
-            <div className="p-12 text-center text-xs text-gray-400">Loading payment ledger...</div>
+            <div className="p-12 text-center text-xs text-[#6B635B]">Loading payment ledger...</div>
           ) : payments.length === 0 ? (
             <div className="p-12 text-center text-xs text-gray-500">
               No manual payments pending verification.
@@ -78,26 +78,26 @@ export default function AdminPaymentsPage() {
           ) : (
             <>
               {/* MOBILE CARDS */}
-              <div className="block md:hidden divide-y divide-[#2A2A2A]">
+              <div className="block md:hidden divide-y divide-[#E4DDD3]">
                 {payments.map((p) => (
-                  <div key={p.id} className="p-4 space-y-3 bg-[#111111]">
+                  <div key={p.id} className="p-4 space-y-3 bg-[#FFFFFF]">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-mono font-bold text-[#D4AF37]">
+                      <span className="font-mono font-bold text-[#795548]">
                         Order #{p.orderNumber || p.orderId}
                       </span>
-                      <span className="text-[11px] text-gray-400">
+                      <span className="text-[11px] text-[#6B635B]">
                         {new Date(p.createdAt).toLocaleDateString()}
                       </span>
                     </div>
 
                     <div className="flex items-start justify-between">
                       <div>
-                        <div className="font-medium text-sm text-[#F5F0E6]">{p.customerName || "Customer"}</div>
-                        <div className="text-xs text-gray-300 font-semibold mt-0.5">{p.method}</div>
-                        <div className="text-xs text-[#D4AF37] font-mono mt-0.5">TRX: {p.referenceNumber || "None (COD)"}</div>
+                        <div className="font-medium text-sm text-[#292D30]">{p.customerName || "Customer"}</div>
+                        <div className="text-xs text-[#5C5855] font-semibold mt-0.5">{p.method}</div>
+                        <div className="text-xs text-[#795548] font-mono mt-0.5">TRX: {p.referenceNumber || "None (COD)"}</div>
                       </div>
                       <div className="text-right">
-                        <div className="font-mono font-bold text-sm text-[#F5F0E6]">
+                        <div className="font-mono font-bold text-sm text-[#292D30]">
                           {formatPKR(p.amount)}
                         </div>
                         <span
@@ -142,7 +142,7 @@ export default function AdminPaymentsPage() {
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
+                    <tr className="border-b border-[#E4DDD3] text-[#6B635B] uppercase tracking-luxury text-[10px] bg-[#FAF7F2]">
                       <th className="p-3.5">Date</th>
                       <th className="p-3.5">Order #</th>
                       <th className="p-3.5">Customer</th>
@@ -153,25 +153,25 @@ export default function AdminPaymentsPage() {
                       <th className="p-3.5 text-center">Verification Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#2A2A2A]">
+                  <tbody className="divide-y divide-[#E4DDD3]">
                     {payments.map((p) => (
-                      <tr key={p.id} className="hover:bg-[#171717] transition-colors">
-                        <td className="p-3.5 text-gray-400 text-[11px]">
+                      <tr key={p.id} className="hover:bg-[#FFFFFF] transition-colors">
+                        <td className="p-3.5 text-[#6B635B] text-[11px]">
                           {new Date(p.createdAt).toLocaleDateString()}
                         </td>
-                        <td className="p-3.5 font-mono font-bold text-[#D4AF37]">
+                        <td className="p-3.5 font-mono font-bold text-[#795548]">
                           <a href={`/order/${p.orderNumber}`} target="_blank" className="hover:underline">
                             {p.orderNumber || p.orderId}
                           </a>
                         </td>
-                        <td className="p-3.5 font-medium text-[#F5F0E6]">
+                        <td className="p-3.5 font-medium text-[#292D30]">
                           {p.customerName || "Customer"}
                         </td>
-                        <td className="p-3.5 text-gray-300 font-semibold">{p.method}</td>
-                        <td className="p-3.5 font-mono text-xs text-[#D4AF37]">
+                        <td className="p-3.5 text-[#5C5855] font-semibold">{p.method}</td>
+                        <td className="p-3.5 font-mono text-xs text-[#795548]">
                           {p.referenceNumber || "None (COD)"}
                         </td>
-                        <td className="p-3.5 text-right font-mono font-bold text-[#F5F0E6]">
+                        <td className="p-3.5 text-right font-mono font-bold text-[#4A342E]">
                           {formatPKR(p.amount)}
                         </td>
                         <td className="p-3.5 text-center">

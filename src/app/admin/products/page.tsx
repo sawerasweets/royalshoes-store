@@ -310,22 +310,22 @@ export default function AdminProductsPage() {
       <div className="space-y-6">
         {/* Toast Notification */}
         {toastMessage && (
-          <div className="fixed top-5 right-5 z-50 flex items-center gap-2 bg-[#D4AF37] text-[#080808] px-4 py-2.5 rounded shadow-xl font-bold text-xs uppercase tracking-luxury animate-fade-in">
+          <div className="fixed top-5 right-5 z-50 flex items-center gap-2 bg-[#795548] text-white px-4 py-2.5 rounded shadow-xl font-bold text-xs uppercase tracking-luxury animate-fade-in">
             <CheckCircle2 size={16} />
             <span>{toastMessage}</span>
           </div>
         )}
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#2A2A2A] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E4DDD3] pb-4">
           <div>
-            <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
+            <span className="text-[10px] font-bold tracking-brand uppercase text-[#795548]">
               CATALOGUE MANAGEMENT
             </span>
-            <h1 className="font-brand text-2xl font-extrabold tracking-luxury text-[#F5F0E6]">
+            <h1 className="font-brand text-2xl font-extrabold tracking-luxury text-[#4A342E]">
               PRODUCTS & INVENTORY
             </h1>
-            <p className="text-[11px] text-gray-400 mt-0.5">
+            <p className="text-[11px] text-[#6B635B] mt-0.5">
               Edit rates, discounts, images, stock, and descriptions directly for any piece.
             </p>
           </div>
@@ -349,7 +349,7 @@ export default function AdminProductsPage() {
               });
               setIsCreating(true);
             }}
-            className="inline-flex items-center gap-2 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-5 py-2.5 text-xs font-bold uppercase tracking-luxury transition-all shadow-md"
+            className="inline-flex items-center gap-2 bg-[#795548] hover:bg-[#5D4037] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-luxury transition-all shadow-md"
           >
             <Plus size={15} />
             <span>Add New Product</span>
@@ -365,8 +365,8 @@ export default function AdminProductsPage() {
                 onClick={() => setCategoryFilter(cat)}
                 className={`px-3 py-1.5 text-[11px] font-bold tracking-luxury uppercase transition-colors border ${
                   categoryFilter === cat
-                    ? "bg-[#D4AF37] text-[#080808] border-[#D4AF37]"
-                    : "bg-[#111111] text-gray-300 border-[#2A2A2A] hover:border-[#D4AF37]"
+                    ? "bg-[#795548] text-white border-[#795548]"
+                    : "bg-[#FFFFFF] text-[#5C5855] border-[#E4DDD3] hover:border-[#795548]"
                 }`}
               >
                 {cat}
@@ -381,21 +381,21 @@ export default function AdminProductsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by title, SKU, or subcategory..."
-              className="w-full bg-[#111111] border border-[#2A2A2A] text-xs text-[#F5F0E6] pl-8 pr-3 py-1.5 outline-none focus:border-[#D4AF37]"
+              className="w-full bg-[#FFFFFF] border border-[#E4DDD3] text-xs text-[#292D30] pl-8 pr-3 py-1.5 outline-none focus:border-[#795548]"
             />
           </div>
         </div>
 
         {/* Products View: Mobile Cards + Desktop Table */}
-        <div className="bg-[#111111] border border-[#2A2A2A] overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E4DDD3] overflow-hidden">
           {loading ? (
-            <div className="p-12 text-center text-xs text-gray-400">Loading catalog...</div>
+            <div className="p-12 text-center text-xs text-[#6B635B]">Loading catalog...</div>
           ) : filteredProducts.length === 0 ? (
             <div className="p-12 text-center text-xs text-gray-500">No products match your search.</div>
           ) : (
             <>
               {/* MOBILE CARD VIEW (Optimized for all smartphones) */}
-              <div className="block md:hidden divide-y divide-[#2A2A2A]">
+              <div className="block md:hidden divide-y divide-[#E4DDD3]">
                 {filteredProducts.map((p) => {
                   const hasDiscount = p.originalPrice && p.originalPrice > p.price;
                   const discount = hasDiscount
@@ -405,28 +405,28 @@ export default function AdminProductsPage() {
                   const totalStock = p.variants?.reduce((sum: number, v: any) => sum + (v.stock || 0), 0) ?? 0;
 
                   return (
-                    <div key={p.id} className="p-4 space-y-3 bg-[#111111] hover:bg-[#151515] transition-colors">
+                    <div key={p.id} className="p-4 space-y-3 bg-[#FFFFFF] hover:bg-[#151515] transition-colors">
                       {/* Top Bar: SKU + Status */}
                       <div className="flex items-center justify-between text-[11px]">
-                        <span className="font-mono text-gray-400 font-semibold">{p.sku}</span>
+                        <span className="font-mono text-[#6B635B] font-semibold">{p.sku}</span>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleTogglePublish(p)}
                             className={`px-2 py-0.5 text-[10px] uppercase font-bold border transition-colors ${
                               p.isPublished
                                 ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400"
-                                : "bg-gray-800 border-gray-600 text-gray-400"
+                                : "bg-gray-800 border-gray-600 text-[#6B635B]"
                             }`}
                           >
                             {p.isPublished ? "Active" : "Draft"}
                           </button>
-                          {p.isFeatured && <span className="text-[#D4AF37] text-xs">★</span>}
+                          {p.isFeatured && <span className="text-[#795548] text-xs">★</span>}
                         </div>
                       </div>
 
                       {/* Middle: Image + Details */}
                       <div className="flex gap-3">
-                        <div className="relative w-16 h-20 bg-[#0A0A0A] border border-[#2A2A2A] flex-shrink-0 overflow-hidden">
+                        <div className="relative w-16 h-20 bg-[#FAF7F2] border border-[#E4DDD3] flex-shrink-0 overflow-hidden">
                           <Image
                             src={primaryImg}
                             alt={p.name}
@@ -435,24 +435,24 @@ export default function AdminProductsPage() {
                           />
                         </div>
                         <div className="flex-1 min-w-0 space-y-1">
-                          <div className="font-semibold text-sm text-[#F5F0E6] line-clamp-1">{p.name}</div>
-                          <div className="text-[10px] text-[#D4AF37] uppercase font-bold">
+                          <div className="font-semibold text-sm text-[#292D30] line-clamp-1">{p.name}</div>
+                          <div className="text-[10px] text-[#795548] uppercase font-bold">
                             {p.categoryName || "ROYAL SHOES"} {p.subcategoryName ? `• ${p.subcategoryName}` : ""}
                           </div>
                           <div className="flex items-baseline gap-2 pt-0.5">
-                            <span className="font-mono font-bold text-sm text-[#F5F0E6]">{formatPKR(p.price)}</span>
+                            <span className="font-mono font-bold text-sm text-[#292D30]">{formatPKR(p.price)}</span>
                             {hasDiscount && (
                               <span className="font-mono text-[10px] text-gray-500 line-through">
                                 {formatPKR(p.originalPrice)}
                               </span>
                             )}
                             {hasDiscount && (
-                              <span className="px-1 py-0.2 text-[9px] font-bold bg-[#D4AF37] text-[#080808]">
+                              <span className="px-1 py-0.2 text-[9px] font-bold bg-[#795548] text-white">
                                 -{discount}%
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-gray-400">
+                          <div className="text-[11px] text-[#6B635B]">
                             Stock:{" "}
                             {totalStock > 0 ? (
                               <span className="text-emerald-400 font-bold">{totalStock} units</span>
@@ -467,7 +467,7 @@ export default function AdminProductsPage() {
                       <div className="pt-1 flex items-center gap-2">
                         <button
                           onClick={() => handleOpenEdit(p)}
-                          className="flex-1 py-2.5 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold text-xs uppercase tracking-luxury flex items-center justify-center gap-2 shadow rounded-sm transition-all"
+                          className="flex-1 py-2.5 bg-[#795548] hover:bg-[#5D4037] text-white font-bold text-xs uppercase tracking-luxury flex items-center justify-center gap-2 shadow rounded-sm transition-all"
                         >
                           <Edit3 size={13} />
                           <span>Edit Product & Price</span>
@@ -476,7 +476,7 @@ export default function AdminProductsPage() {
                           href={`/product/${p.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2.5 border border-[#2A2A2A] hover:border-[#D4AF37] text-gray-400 hover:text-[#D4AF37] transition-colors"
+                          className="p-2.5 border border-[#E4DDD3] hover:border-[#795548] text-[#6B635B] hover:text-[#795548] transition-colors"
                           title="View on Storefront"
                         >
                           <ExternalLink size={14} />
@@ -491,7 +491,7 @@ export default function AdminProductsPage() {
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-[#2A2A2A] text-gray-400 uppercase tracking-luxury text-[10px] bg-[#0A0A0A]">
+                    <tr className="border-b border-[#E4DDD3] text-[#6B635B] uppercase tracking-luxury text-[10px] bg-[#FAF7F2]">
                       <th className="p-3.5">Image</th>
                       <th className="p-3.5">Product Title & Action</th>
                       <th className="p-3.5">SKU</th>
@@ -501,10 +501,10 @@ export default function AdminProductsPage() {
                       <th className="p-3.5 text-center">Status</th>
                       <th className="p-3.5 text-center">Featured</th>
                       <th className="p-3.5 text-center">Stock</th>
-                      <th className="p-3.5 text-center sticky right-0 bg-[#0A0A0A] shadow-[-6px_0_12px_rgba(0,0,0,0.6)] z-10">Actions</th>
+                      <th className="p-3.5 text-center sticky right-0 bg-[#FAF7F2] shadow-[-6px_0_12px_rgba(0,0,0,0.6)] z-10">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#2A2A2A]">
+                  <tbody className="divide-y divide-[#E4DDD3]">
                     {filteredProducts.map((p) => {
                       const hasDiscount = p.originalPrice && p.originalPrice > p.price;
                       const discount = hasDiscount
@@ -514,9 +514,9 @@ export default function AdminProductsPage() {
                       const totalStock = p.variants?.reduce((sum: number, v: any) => sum + (v.stock || 0), 0) ?? 0;
 
                       return (
-                        <tr key={p.id} className="hover:bg-[#171717] transition-colors group">
+                        <tr key={p.id} className="hover:bg-[#FFFFFF] transition-colors group">
                           <td className="p-3.5">
-                            <div className="relative w-11 h-14 bg-[#0A0A0A] border border-[#2A2A2A] overflow-hidden">
+                            <div className="relative w-11 h-14 bg-[#FAF7F2] border border-[#E4DDD3] overflow-hidden">
                               <Image
                                 src={primaryImg}
                                 alt={p.name}
@@ -526,13 +526,13 @@ export default function AdminProductsPage() {
                             </div>
                           </td>
                           <td className="p-3.5 min-w-[220px]">
-                            <div className="font-semibold text-[#F5F0E6] line-clamp-1">{p.name}</div>
-                            <div className="text-[10px] text-gray-400 truncate max-w-xs">{p.description}</div>
+                            <div className="font-semibold text-[#292D30] line-clamp-1">{p.name}</div>
+                            <div className="text-[10px] text-[#6B635B] truncate max-w-xs">{p.description}</div>
                             {/* Immediate In-Cell Edit Button (Unmissable) */}
                             <div className="mt-2 flex items-center gap-2">
                               <button
                                 onClick={() => handleOpenEdit(p)}
-                                className="inline-flex items-center gap-1.5 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-2.5 py-1 text-[11px] font-bold uppercase tracking-luxury rounded-sm shadow transition-all hover:scale-105"
+                                className="inline-flex items-center gap-1.5 bg-[#795548] hover:bg-[#5D4037] text-white px-2.5 py-1 text-[11px] font-bold uppercase tracking-luxury rounded-sm shadow transition-all hover:scale-105"
                                 title="Edit product details, price, discount, picture & stock"
                               >
                                 <Edit3 size={11} />
@@ -542,7 +542,7 @@ export default function AdminProductsPage() {
                                 href={`/product/${p.slug}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-[#D4AF37] border border-[#2A2A2A] hover:border-[#D4AF37] px-2 py-0.5 transition-colors"
+                                className="inline-flex items-center gap-1 text-[11px] text-[#6B635B] hover:text-[#795548] border border-[#E4DDD3] hover:border-[#795548] px-2 py-0.5 transition-colors"
                                 title="View on Storefront"
                               >
                                 <ExternalLink size={11} />
@@ -550,17 +550,17 @@ export default function AdminProductsPage() {
                               </a>
                             </div>
                           </td>
-                          <td className="p-3.5 font-mono text-gray-400 text-[11px] whitespace-nowrap">{p.sku}</td>
-                          <td className="p-3.5 text-gray-300 whitespace-nowrap">
-                            <span className="text-[10px] uppercase font-bold text-[#D4AF37] block">
+                          <td className="p-3.5 font-mono text-[#6B635B] text-[11px] whitespace-nowrap">{p.sku}</td>
+                          <td className="p-3.5 text-[#5C5855] whitespace-nowrap">
+                            <span className="text-[10px] uppercase font-bold text-[#795548] block">
                               {p.categoryName || "ROYAL SHOES"}
                             </span>
-                            <span className="text-[11px] text-gray-300">
+                            <span className="text-[11px] text-[#5C5855]">
                               {p.subcategoryName || "—"}
                             </span>
                           </td>
                           <td className="p-3.5 text-right whitespace-nowrap">
-                            <div className="font-mono font-bold text-[#F5F0E6]">
+                            <div className="font-mono font-bold text-[#4A342E]">
                               {formatPKR(p.price)}
                             </div>
                             {hasDiscount && (
@@ -571,7 +571,7 @@ export default function AdminProductsPage() {
                           </td>
                           <td className="p-3.5 text-center whitespace-nowrap">
                             {hasDiscount ? (
-                              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-[#D4AF37] text-[#080808]">
+                              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-[#795548] text-white">
                                 -{discount}%
                               </span>
                             ) : (
@@ -584,7 +584,7 @@ export default function AdminProductsPage() {
                               className={`px-2 py-0.5 text-[10px] uppercase font-bold border transition-colors ${
                                 p.isPublished
                                   ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-400 hover:border-emerald-400"
-                                  : "bg-gray-800 border-gray-600 text-gray-400 hover:border-gray-400"
+                                  : "bg-gray-800 border-gray-600 text-[#6B635B] hover:border-gray-400"
                               }`}
                             >
                               {p.isPublished ? "Active" : "Draft"}
@@ -592,23 +592,23 @@ export default function AdminProductsPage() {
                           </td>
                           <td className="p-3.5 text-center">
                             {p.isFeatured ? (
-                              <span className="text-[#D4AF37] text-sm">★</span>
+                              <span className="text-[#795548] text-sm">★</span>
                             ) : (
                               <span className="text-gray-600 text-xs">—</span>
                             )}
                           </td>
-                          <td className="p-3.5 text-center font-mono text-gray-300">
+                          <td className="p-3.5 text-center font-mono text-[#5C5855]">
                             {totalStock > 0 ? (
                               <span className="text-emerald-400">{totalStock}</span>
                             ) : (
                               <span className="text-red-400 font-bold">0</span>
                             )}
                           </td>
-                          <td className="p-3.5 text-center whitespace-nowrap sticky right-0 bg-[#111111] group-hover:bg-[#171717] shadow-[-6px_0_12px_rgba(0,0,0,0.6)] z-10">
+                          <td className="p-3.5 text-center whitespace-nowrap sticky right-0 bg-[#FFFFFF] group-hover:bg-[#FFFFFF] shadow-[-6px_0_12px_rgba(0,0,0,0.6)] z-10">
                             <div className="flex items-center justify-center gap-2">
                               <button
                                 onClick={() => handleOpenEdit(p)}
-                                className="inline-flex items-center gap-1 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] px-3 py-1 font-bold text-[11px] uppercase tracking-luxury shadow transition-colors"
+                                className="inline-flex items-center gap-1 bg-[#795548] hover:bg-[#5D4037] text-white px-3 py-1 font-bold text-[11px] uppercase tracking-luxury shadow transition-colors"
                                 title="Edit product details, discount, picture, and stock"
                               >
                                 <Edit3 size={11} />
@@ -618,7 +618,7 @@ export default function AdminProductsPage() {
                                 href={`/product/${p.slug}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-1 border border-[#2A2A2A] hover:border-[#D4AF37] text-gray-400 hover:text-[#D4AF37] transition-colors"
+                                className="p-1 border border-[#E4DDD3] hover:border-[#795548] text-[#6B635B] hover:text-[#795548] transition-colors"
                                 title="View on Storefront"
                               >
                                 <ExternalLink size={12} />
@@ -640,25 +640,25 @@ export default function AdminProductsPage() {
         {/* ========================================================= */}
         {isEditing && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
-            <div className="bg-[#111111] border border-[#D4AF37] max-w-2xl w-full p-6 space-y-5 my-8 shadow-2xl animate-fade-in max-h-[92vh] overflow-y-auto">
+            <div className="bg-[#FFFFFF] border border-[#795548] max-w-2xl w-full p-6 space-y-5 my-8 shadow-2xl animate-fade-in max-h-[92vh] overflow-y-auto">
               {/* Modal Header */}
-              <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3">
+              <div className="flex items-center justify-between border-b border-[#E4DDD3] pb-3">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 bg-[#D4AF37] text-black">
+                  <div className="p-1.5 bg-[#795548] text-black">
                     <Edit3 size={16} />
                   </div>
                   <div>
-                    <h3 className="font-brand text-sm font-bold text-[#F5F0E6] uppercase tracking-luxury">
+                    <h3 className="font-brand text-sm font-bold text-[#4A342E] uppercase tracking-luxury">
                       Edit Product Details
                     </h3>
-                    <p className="text-[10px] text-gray-400">
+                    <p className="text-[10px] text-[#6B635B]">
                       ID: {editFormData.id} | SKU: {editFormData.sku}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="p-1 text-gray-400 hover:text-white transition-colors"
+                  className="p-1 text-[#6B635B] hover:text-[#4A342E] transition-colors"
                 >
                   <X size={18} />
                 </button>
@@ -668,23 +668,23 @@ export default function AdminProductsPage() {
                 {/* 1. Title & SKU */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="sm:col-span-2">
-                    <label className="block text-gray-300 font-semibold mb-1">Product Title *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">Product Title *</label>
                     <input
                       type="text"
                       required
                       value={editFormData.name}
                       onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
-                      className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] p-2.5 text-[#F5F0E6] outline-none font-medium"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] p-2.5 text-[#292D30] outline-none font-medium"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-300 font-semibold mb-1">SKU *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">SKU *</label>
                     <input
                       type="text"
                       required
                       value={editFormData.sku}
                       onChange={(e) => setEditFormData({ ...editFormData, sku: e.target.value })}
-                      className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] p-2.5 text-[#F5F0E6] outline-none font-mono"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] p-2.5 text-[#292D30] outline-none font-mono"
                     />
                   </div>
                 </div>
@@ -692,7 +692,7 @@ export default function AdminProductsPage() {
                 {/* 2. Category & Subcategory Selection */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-gray-300 font-semibold mb-1">Main Category *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">Main Category *</label>
                     <select
                       value={editFormData.categoryId}
                       onChange={(e) => {
@@ -704,7 +704,7 @@ export default function AdminProductsPage() {
                           subcategoryId: firstSub,
                         });
                       }}
-                      className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] p-2.5 text-[#F5F0E6] outline-none cursor-pointer uppercase font-semibold"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] p-2.5 text-[#292D30] outline-none cursor-pointer uppercase font-semibold"
                     >
                       <option value="cat-men">MEN</option>
                       <option value="cat-women">WOMEN</option>
@@ -714,11 +714,11 @@ export default function AdminProductsPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-300 font-semibold mb-1">Subcategory *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">Subcategory *</label>
                     <select
                       value={editFormData.subcategoryId}
                       onChange={(e) => setEditFormData({ ...editFormData, subcategoryId: e.target.value })}
-                      className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] p-2.5 text-[#F5F0E6] outline-none cursor-pointer"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] p-2.5 text-[#292D30] outline-none cursor-pointer"
                     >
                       {activeSubs.map((sub) => (
                         <option key={sub.id} value={sub.id}>
@@ -730,14 +730,14 @@ export default function AdminProductsPage() {
                 </div>
 
                 {/* 3. Pricing, Discount & Sale Calculation */}
-                <div className="p-3.5 bg-[#0A0A0A] border border-[#2A2A2A] space-y-3">
-                  <div className="flex items-center justify-between border-b border-[#1A1A1A] pb-2">
-                    <span className="font-brand text-[11px] font-bold uppercase tracking-luxury text-[#D4AF37] flex items-center gap-1.5">
+                <div className="p-3.5 bg-[#FAF7F2] border border-[#E4DDD3] space-y-3">
+                  <div className="flex items-center justify-between border-b border-[#EFE9DF] pb-2">
+                    <span className="font-brand text-[11px] font-bold uppercase tracking-luxury text-[#795548] flex items-center gap-1.5">
                       <Percent size={13} />
                       <span>Rates & Discount Management</span>
                     </span>
                     {discountPercent && (
-                      <span className="px-2 py-0.5 bg-[#D4AF37] text-black font-extrabold text-[10px] uppercase tracking-luxury animate-pulse">
+                      <span className="px-2 py-0.5 bg-[#795548] text-black font-extrabold text-[10px] uppercase tracking-luxury animate-pulse">
                         🔥 {discountPercent}% OFF ACTIVE
                       </span>
                     )}
@@ -745,7 +745,7 @@ export default function AdminProductsPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-gray-300 font-semibold mb-1">
+                      <label className="block text-[#5C5855] font-semibold mb-1">
                         Final Selling Rate (PKR) *
                       </label>
                       <div className="relative">
@@ -755,13 +755,13 @@ export default function AdminProductsPage() {
                           required
                           value={editFormData.price}
                           onChange={(e) => setEditFormData({ ...editFormData, price: e.target.value })}
-                          className="w-full bg-[#111111] border border-[#2A2A2A] focus:border-[#D4AF37] pl-10 pr-3 py-2 text-[#F5F0E6] outline-none font-mono font-bold"
+                          className="w-full bg-[#FFFFFF] border border-[#E4DDD3] focus:border-[#795548] pl-10 pr-3 py-2 text-[#292D30] outline-none font-mono font-bold"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-gray-300 font-semibold mb-1">
+                      <label className="block text-[#5C5855] font-semibold mb-1">
                         Original / Cut Price (PKR)
                       </label>
                       <div className="relative">
@@ -771,7 +771,7 @@ export default function AdminProductsPage() {
                           value={editFormData.originalPrice}
                           onChange={(e) => setEditFormData({ ...editFormData, originalPrice: e.target.value })}
                           placeholder="Optional (shows strike-through)"
-                          className="w-full bg-[#111111] border border-[#2A2A2A] focus:border-[#D4AF37] pl-10 pr-3 py-2 text-gray-300 outline-none font-mono"
+                          className="w-full bg-[#FFFFFF] border border-[#E4DDD3] focus:border-[#795548] pl-10 pr-3 py-2 text-[#5C5855] outline-none font-mono"
                         />
                       </div>
                     </div>
@@ -779,32 +779,32 @@ export default function AdminProductsPage() {
 
                   {/* Preset Discount Buttons */}
                   <div className="flex items-center gap-2 pt-1 flex-wrap">
-                    <span className="text-[10px] text-gray-400 font-semibold uppercase">Apply Preset Discount:</span>
+                    <span className="text-[10px] text-[#6B635B] font-semibold uppercase">Apply Preset Discount:</span>
                     <button
                       type="button"
                       onClick={() => applyPresetDiscount(10)}
-                      className="px-2 py-0.5 bg-[#171717] hover:bg-[#D4AF37] hover:text-black text-gray-300 text-[10px] font-bold border border-[#2A2A2A] transition-colors"
+                      className="px-2 py-0.5 bg-[#FFFFFF] hover:bg-[#795548] hover:text-black text-[#5C5855] text-[10px] font-bold border border-[#E4DDD3] transition-colors"
                     >
                       10% OFF
                     </button>
                     <button
                       type="button"
                       onClick={() => applyPresetDiscount(15)}
-                      className="px-2 py-0.5 bg-[#171717] hover:bg-[#D4AF37] hover:text-black text-gray-300 text-[10px] font-bold border border-[#2A2A2A] transition-colors"
+                      className="px-2 py-0.5 bg-[#FFFFFF] hover:bg-[#795548] hover:text-black text-[#5C5855] text-[10px] font-bold border border-[#E4DDD3] transition-colors"
                     >
                       15% OFF
                     </button>
                     <button
                       type="button"
                       onClick={() => applyPresetDiscount(20)}
-                      className="px-2 py-0.5 bg-[#171717] hover:bg-[#D4AF37] hover:text-black text-gray-300 text-[10px] font-bold border border-[#2A2A2A] transition-colors"
+                      className="px-2 py-0.5 bg-[#FFFFFF] hover:bg-[#795548] hover:text-black text-[#5C5855] text-[10px] font-bold border border-[#E4DDD3] transition-colors"
                     >
                       20% OFF
                     </button>
                     <button
                       type="button"
                       onClick={() => applyPresetDiscount(25)}
-                      className="px-2 py-0.5 bg-[#171717] hover:bg-[#D4AF37] hover:text-black text-gray-300 text-[10px] font-bold border border-[#2A2A2A] transition-colors"
+                      className="px-2 py-0.5 bg-[#FFFFFF] hover:bg-[#795548] hover:text-black text-[#5C5855] text-[10px] font-bold border border-[#E4DDD3] transition-colors"
                     >
                       25% OFF
                     </button>
@@ -821,11 +821,11 @@ export default function AdminProductsPage() {
                 </div>
 
                 {/* 4. Product Image & Upload */}
-                <div className="p-3.5 bg-[#0A0A0A] border border-[#2A2A2A] space-y-3">
-                  <label className="block text-gray-300 font-semibold mb-1">Product Photograph *</label>
+                <div className="p-3.5 bg-[#FAF7F2] border border-[#E4DDD3] space-y-3">
+                  <label className="block text-[#5C5855] font-semibold mb-1">Product Photograph *</label>
                   <div className="flex flex-col sm:flex-row gap-4 items-start">
                     {/* Live Preview */}
-                    <div className="relative w-24 h-28 bg-[#000000] border border-[#D4AF37]/50 flex-shrink-0 overflow-hidden shadow">
+                    <div className="relative w-24 h-28 bg-[#000000] border border-[#795548]/50 flex-shrink-0 overflow-hidden shadow">
                       {editFormData.imageUrl ? (
                         <Image
                           src={editFormData.imageUrl}
@@ -843,13 +843,13 @@ export default function AdminProductsPage() {
                     <div className="flex-1 space-y-2.5 w-full">
                       {/* Image URL Input */}
                       <div>
-                        <span className="text-[10px] text-gray-400 block mb-1">Image URL / Path:</span>
+                        <span className="text-[10px] text-[#6B635B] block mb-1">Image URL / Path:</span>
                         <input
                           type="text"
                           value={editFormData.imageUrl}
                           onChange={(e) => setEditFormData({ ...editFormData, imageUrl: e.target.value })}
                           placeholder="/products/prod-men-sandals-1-1.svg"
-                          className="w-full bg-[#111111] border border-[#2A2A2A] focus:border-[#D4AF37] p-2 text-[#F5F0E6] outline-none font-mono text-[11px]"
+                          className="w-full bg-[#FFFFFF] border border-[#E4DDD3] focus:border-[#795548] p-2 text-[#292D30] outline-none font-mono text-[11px]"
                         />
                       </div>
 
@@ -866,9 +866,9 @@ export default function AdminProductsPage() {
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
                           disabled={isUploading}
-                          className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#1A1A1A] hover:bg-[#2A2A2A] text-[#F5F0E6] border border-[#D4AF37]/40 text-[11px] font-semibold transition-colors"
+                          className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#EFE9DF] hover:bg-[#E4DDD3] text-[#292D30] border border-[#795548]/40 text-[11px] font-semibold transition-colors"
                         >
-                          <Upload size={13} className="text-[#D4AF37]" />
+                          <Upload size={13} className="text-[#795548]" />
                           <span>{isUploading ? "Uploading File..." : "Upload New Image from Computer"}</span>
                         </button>
                         <span className="text-[10px] text-gray-500 block mt-1">
@@ -881,7 +881,7 @@ export default function AdminProductsPage() {
 
                 {/* 5. Stock / Inventory */}
                 <div>
-                  <label className="block text-gray-300 font-semibold mb-1">
+                  <label className="block text-[#5C5855] font-semibold mb-1">
                     Inventory Stock Quantity (Units in Atelier)
                   </label>
                   <input
@@ -889,7 +889,7 @@ export default function AdminProductsPage() {
                     min="0"
                     value={editFormData.stock}
                     onChange={(e) => setEditFormData({ ...editFormData, stock: e.target.value })}
-                    className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] p-2.5 text-[#F5F0E6] outline-none font-mono"
+                    className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] p-2.5 text-[#292D30] outline-none font-mono"
                   />
                   <span className="text-[10px] text-gray-500 block mt-1">
                     Updates in-stock availability across all size and color variants for immediate checkout.
@@ -898,73 +898,73 @@ export default function AdminProductsPage() {
 
                 {/* 6. Description & Material Quality */}
                 <div>
-                  <label className="block text-gray-300 font-semibold mb-1">
+                  <label className="block text-[#5C5855] font-semibold mb-1">
                     Quality & Craftsmanship Description
                   </label>
                   <textarea
                     rows={3}
                     value={editFormData.description}
                     onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
-                    className="w-full bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] p-2.5 text-[#F5F0E6] outline-none leading-relaxed"
+                    className="w-full bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] p-2.5 text-[#292D30] outline-none leading-relaxed"
                   />
                 </div>
 
                 {/* 7. Feature Toggles */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-[#2A2A2A]">
-                  <label className="flex items-center gap-2 cursor-pointer bg-[#0A0A0A] p-2 border border-[#2A2A2A]">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-[#E4DDD3]">
+                  <label className="flex items-center gap-2 cursor-pointer bg-[#FAF7F2] p-2 border border-[#E4DDD3]">
                     <input
                       type="checkbox"
                       checked={editFormData.isPublished}
                       onChange={(e) => setEditFormData({ ...editFormData, isPublished: e.target.checked })}
-                      className="accent-[#D4AF37]"
+                      className="accent-[#795548]"
                     />
-                    <span className="text-[11px] text-gray-300">Published</span>
+                    <span className="text-[11px] text-[#5C5855]">Published</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer bg-[#0A0A0A] p-2 border border-[#2A2A2A]">
+                  <label className="flex items-center gap-2 cursor-pointer bg-[#FAF7F2] p-2 border border-[#E4DDD3]">
                     <input
                       type="checkbox"
                       checked={editFormData.isFeatured}
                       onChange={(e) => setEditFormData({ ...editFormData, isFeatured: e.target.checked })}
-                      className="accent-[#D4AF37]"
+                      className="accent-[#795548]"
                     />
-                    <span className="text-[11px] text-gray-300">Featured ★</span>
+                    <span className="text-[11px] text-[#5C5855]">Featured ★</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer bg-[#0A0A0A] p-2 border border-[#2A2A2A]">
+                  <label className="flex items-center gap-2 cursor-pointer bg-[#FAF7F2] p-2 border border-[#E4DDD3]">
                     <input
                       type="checkbox"
                       checked={editFormData.isNewArrival}
                       onChange={(e) => setEditFormData({ ...editFormData, isNewArrival: e.target.checked })}
-                      className="accent-[#D4AF37]"
+                      className="accent-[#795548]"
                     />
-                    <span className="text-[11px] text-gray-300">New Arrival</span>
+                    <span className="text-[11px] text-[#5C5855]">New Arrival</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer bg-[#0A0A0A] p-2 border border-[#2A2A2A]">
+                  <label className="flex items-center gap-2 cursor-pointer bg-[#FAF7F2] p-2 border border-[#E4DDD3]">
                     <input
                       type="checkbox"
                       checked={editFormData.isBestseller}
                       onChange={(e) => setEditFormData({ ...editFormData, isBestseller: e.target.checked })}
-                      className="accent-[#D4AF37]"
+                      className="accent-[#795548]"
                     />
-                    <span className="text-[11px] text-gray-300">Bestseller</span>
+                    <span className="text-[11px] text-[#5C5855]">Bestseller</span>
                   </label>
                 </div>
 
                 {/* Modal Actions */}
-                <div className="pt-4 border-t border-[#2A2A2A] flex justify-end gap-3">
+                <div className="pt-4 border-t border-[#E4DDD3] flex justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
-                    className="px-5 py-2.5 border border-[#2A2A2A] hover:border-gray-500 text-gray-400 hover:text-white uppercase tracking-luxury text-[11px] transition-colors"
+                    className="px-5 py-2.5 border border-[#E4DDD3] hover:border-gray-500 text-[#6B635B] hover:text-[#4A342E] uppercase tracking-luxury text-[11px] transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-7 py-2.5 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-extrabold uppercase tracking-luxury text-[11px] shadow-lg transition-all"
+                    className="px-7 py-2.5 bg-[#795548] hover:bg-[#5D4037] text-white font-extrabold uppercase tracking-luxury text-[11px] shadow-lg transition-all"
                   >
                     {isSubmitting ? "Saving..." : "Save Changes"}
                   </button>
@@ -977,17 +977,17 @@ export default function AdminProductsPage() {
         {/* Modal for Creating New Product (Reuses same clean structure) */}
         {isCreating && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
-            <div className="bg-[#111111] border border-[#D4AF37] max-w-2xl w-full p-6 space-y-5 my-8 shadow-2xl animate-fade-in max-h-[92vh] overflow-y-auto">
-              <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3">
+            <div className="bg-[#FFFFFF] border border-[#795548] max-w-2xl w-full p-6 space-y-5 my-8 shadow-2xl animate-fade-in max-h-[92vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b border-[#E4DDD3] pb-3">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 bg-[#D4AF37] text-black">
+                  <div className="p-1.5 bg-[#795548] text-black">
                     <Plus size={16} />
                   </div>
-                  <h3 className="font-brand text-sm font-bold text-[#F5F0E6] uppercase tracking-luxury">
+                  <h3 className="font-brand text-sm font-bold text-[#4A342E] uppercase tracking-luxury">
                     Add New Product
                   </h3>
                 </div>
-                <button onClick={() => setIsCreating(false)} className="text-gray-400 hover:text-white">
+                <button onClick={() => setIsCreating(false)} className="text-[#6B635B] hover:text-[#4A342E]">
                   <X size={18} />
                 </button>
               </div>
@@ -995,31 +995,31 @@ export default function AdminProductsPage() {
               <form onSubmit={handleSaveEdit} className="space-y-4 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="sm:col-span-2">
-                    <label className="block text-gray-300 font-semibold mb-1">Product Title *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">Product Title *</label>
                     <input
                       type="text"
                       required
                       value={editFormData.name}
                       onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
                       placeholder="e.g. Royal Oxford Shoes"
-                      className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-[#F5F0E6] outline-none"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] p-2.5 text-[#292D30] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-300 font-semibold mb-1">SKU *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">SKU *</label>
                     <input
                       type="text"
                       required
                       value={editFormData.sku}
                       onChange={(e) => setEditFormData({ ...editFormData, sku: e.target.value })}
-                      className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-[#F5F0E6] outline-none font-mono"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] p-2.5 text-[#292D30] outline-none font-mono"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-gray-300 font-semibold mb-1">Category *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">Category *</label>
                     <select
                       value={editFormData.categoryId}
                       onChange={(e) => {
@@ -1031,7 +1031,7 @@ export default function AdminProductsPage() {
                           subcategoryId: firstSub,
                         });
                       }}
-                      className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-[#F5F0E6] outline-none cursor-pointer uppercase font-semibold"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] p-2.5 text-[#292D30] outline-none cursor-pointer uppercase font-semibold"
                     >
                       <option value="cat-men">MEN</option>
                       <option value="cat-women">WOMEN</option>
@@ -1041,11 +1041,11 @@ export default function AdminProductsPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-300 font-semibold mb-1">Subcategory *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">Subcategory *</label>
                     <select
                       value={editFormData.subcategoryId}
                       onChange={(e) => setEditFormData({ ...editFormData, subcategoryId: e.target.value })}
-                      className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-[#F5F0E6] outline-none cursor-pointer"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] p-2.5 text-[#292D30] outline-none cursor-pointer"
                     >
                       {activeSubs.map((sub) => (
                         <option key={sub.id} value={sub.id}>
@@ -1058,43 +1058,43 @@ export default function AdminProductsPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-gray-300 font-semibold mb-1">Selling Rate (PKR) *</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">Selling Rate (PKR) *</label>
                     <input
                       type="number"
                       required
                       value={editFormData.price}
                       onChange={(e) => setEditFormData({ ...editFormData, price: e.target.value })}
                       placeholder="6950"
-                      className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-[#F5F0E6] outline-none font-mono font-bold"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] p-2.5 text-[#292D30] outline-none font-mono font-bold"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-300 font-semibold mb-1">Original Price (PKR)</label>
+                    <label className="block text-[#5C5855] font-semibold mb-1">Original Price (PKR)</label>
                     <input
                       type="number"
                       value={editFormData.originalPrice}
                       onChange={(e) => setEditFormData({ ...editFormData, originalPrice: e.target.value })}
                       placeholder="Optional"
-                      className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-gray-300 outline-none font-mono"
+                      className="w-full bg-[#F5F0E6] border border-[#E4DDD3] p-2.5 text-[#5C5855] outline-none font-mono"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 font-semibold mb-1">Initial Stock Quantity</label>
+                  <label className="block text-[#5C5855] font-semibold mb-1">Initial Stock Quantity</label>
                   <input
                     type="number"
                     value={editFormData.stock}
                     onChange={(e) => setEditFormData({ ...editFormData, stock: e.target.value })}
-                    className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-[#F5F0E6] outline-none font-mono"
+                    className="w-full bg-[#F5F0E6] border border-[#E4DDD3] p-2.5 text-[#292D30] outline-none font-mono"
                   />
                 </div>
 
                 {/* Product Photograph & Upload */}
-                <div className="p-3.5 bg-[#0A0A0A] border border-[#2A2A2A] space-y-3">
-                  <label className="block text-gray-300 font-semibold mb-1">Product Photograph *</label>
+                <div className="p-3.5 bg-[#FAF7F2] border border-[#E4DDD3] space-y-3">
+                  <label className="block text-[#5C5855] font-semibold mb-1">Product Photograph *</label>
                   <div className="flex flex-col sm:flex-row gap-4 items-start">
-                    <div className="relative w-24 h-28 bg-[#000000] border border-[#D4AF37]/50 flex-shrink-0 overflow-hidden shadow">
+                    <div className="relative w-24 h-28 bg-[#000000] border border-[#795548]/50 flex-shrink-0 overflow-hidden shadow">
                       {editFormData.imageUrl ? (
                         <Image
                           src={editFormData.imageUrl}
@@ -1111,13 +1111,13 @@ export default function AdminProductsPage() {
 
                     <div className="flex-1 space-y-2.5 w-full">
                       <div>
-                        <span className="text-[10px] text-gray-400 block mb-1">Image URL / Path:</span>
+                        <span className="text-[10px] text-[#6B635B] block mb-1">Image URL / Path:</span>
                         <input
                           type="text"
                           value={editFormData.imageUrl}
                           onChange={(e) => setEditFormData({ ...editFormData, imageUrl: e.target.value })}
                           placeholder="/products/prod-men-sandals-1-1.svg"
-                          className="w-full bg-[#111111] border border-[#2A2A2A] focus:border-[#D4AF37] p-2 text-[#F5F0E6] outline-none font-mono text-[11px]"
+                          className="w-full bg-[#FFFFFF] border border-[#E4DDD3] focus:border-[#795548] p-2 text-[#292D30] outline-none font-mono text-[11px]"
                         />
                       </div>
 
@@ -1133,9 +1133,9 @@ export default function AdminProductsPage() {
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
                           disabled={isUploading}
-                          className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#1A1A1A] hover:bg-[#2A2A2A] text-[#F5F0E6] border border-[#D4AF37]/40 text-[11px] font-semibold transition-colors"
+                          className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#EFE9DF] hover:bg-[#E4DDD3] text-[#292D30] border border-[#795548]/40 text-[11px] font-semibold transition-colors"
                         >
-                          <Upload size={13} className="text-[#D4AF37]" />
+                          <Upload size={13} className="text-[#795548]" />
                           <span>{isUploading ? "Uploading File..." : "Upload Image from Device"}</span>
                         </button>
                         <span className="text-[10px] text-gray-500 block mt-1">
@@ -1147,27 +1147,27 @@ export default function AdminProductsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 font-semibold mb-1">Description</label>
+                  <label className="block text-[#5C5855] font-semibold mb-1">Description</label>
                   <textarea
                     rows={3}
                     value={editFormData.description}
                     onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
-                    className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-[#F5F0E6] outline-none"
+                    className="w-full bg-[#F5F0E6] border border-[#E4DDD3] p-2.5 text-[#292D30] outline-none"
                   />
                 </div>
 
-                <div className="pt-3 border-t border-[#2A2A2A] flex justify-end gap-3">
+                <div className="pt-3 border-t border-[#E4DDD3] flex justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => setIsCreating(false)}
-                    className="px-5 py-2.5 border border-[#2A2A2A] text-gray-400 hover:text-white uppercase tracking-luxury text-[11px]"
+                    className="px-5 py-2.5 border border-[#E4DDD3] text-[#6B635B] hover:text-[#4A342E] uppercase tracking-luxury text-[11px]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-7 py-2.5 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold uppercase tracking-luxury text-[11px]"
+                    className="px-7 py-2.5 bg-[#795548] hover:bg-[#5D4037] text-white font-bold uppercase tracking-luxury text-[11px]"
                   >
                     {isSubmitting ? "Adding..." : "Add to Atelier"}
                   </button>

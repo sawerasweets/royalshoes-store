@@ -9,18 +9,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        cream: {
+          DEFAULT: "#F5F0E6",
+          dark: "#EFE9DF",
+          light: "#FAF7F2",
+        },
+        chocolate: {
+          DEFAULT: "#795548",
+          dark: "#4A342E",
+          hover: "#5D4037",
+          light: "#8D6E63",
+        },
         sawera: {
-          bg: "#080808",
-          card: "#111111",
-          surface: "#171717",
-          border: "#2A2A2A",
-          borderLight: "#3D3D3D",
-          gold: "#D4AF37",
-          goldLight: "#E5C158",
-          goldDark: "#A88720",
-          ivory: "#F5F0E6",
-          muted: "#9E9E9E",
-          subtle: "#1C1C1C",
+          bg: "#F5F0E6",
+          card: "#FFFFFF",
+          surface: "#EFE9DF",
+          border: "#E4DDD3",
+          borderLight: "#D9D0C3",
+          gold: "#795548",
+          goldLight: "#8D6E63",
+          goldDark: "#4A342E",
+          ivory: "#292D30",
+          muted: "#6B635B",
+          subtle: "#F9F6F0",
         },
       },
       fontFamily: {

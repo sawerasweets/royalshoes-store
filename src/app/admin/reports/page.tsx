@@ -105,15 +105,15 @@ export default function AdminReportsPage() {
     <AdminLayout>
       <div className="space-y-8">
         {/* Top Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2A] pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#E4DDD3] pb-5">
           <div>
-            <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
+            <span className="text-[10px] font-bold tracking-brand uppercase text-[#795548]">
               EXECUTIVE BUSINESS INTELLIGENCE
             </span>
-            <h1 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#F5F0E6] mt-0.5">
+            <h1 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#4A342E] mt-0.5">
               SALES & REVENUE AUDIT
             </h1>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-[#6B635B] mt-1">
               Live financial reporting, order volume metrics, and high-velocity footwear analytics.
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function AdminReportsPage() {
             <button
               onClick={handleExportCSV}
               disabled={!data || loading}
-              className="inline-flex items-center justify-center gap-2 bg-[#171717] hover:bg-[#202020] text-[#D4AF37] border border-[#D4AF37]/60 hover:border-[#D4AF37] font-bold text-xs uppercase tracking-luxury px-4 py-2.5 transition-colors disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 bg-[#FFFFFF] hover:bg-[#202020] text-[#795548] border border-[#795548]/60 hover:border-[#795548] font-bold text-xs uppercase tracking-luxury px-4 py-2.5 transition-colors disabled:opacity-50"
             >
               <Download size={15} />
               <span>Export CSV Audit</span>
@@ -131,20 +131,20 @@ export default function AdminReportsPage() {
         </div>
 
         {loading || !data ? (
-          <div className="py-24 text-center text-xs text-gray-400 space-y-3">
-            <div className="inline-block w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
+          <div className="py-24 text-center text-xs text-[#6B635B] space-y-3">
+            <div className="inline-block w-8 h-8 border-2 border-[#795548] border-t-transparent rounded-full animate-spin" />
             <div>Calculating Financial Ledger & Sales Metrics...</div>
           </div>
         ) : (
           <>
             {/* Primary Revenue Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-5 bg-[#111111] border border-[#2A2A2A] space-y-2">
-                <div className="flex items-center justify-between text-gray-400">
+              <div className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+                <div className="flex items-center justify-between text-[#6B635B]">
                   <span className="text-[11px] font-bold uppercase tracking-wider">Gross Revenue</span>
-                  <DollarSign size={16} className="text-[#D4AF37]" />
+                  <DollarSign size={16} className="text-[#795548]" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#D4AF37]">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#795548]">
                   {formatPKR(data.stats.totalRevenue)}
                 </div>
                 <div className="text-[10px] text-gray-500">
@@ -152,8 +152,8 @@ export default function AdminReportsPage() {
                 </div>
               </div>
 
-              <div className="p-5 bg-[#111111] border border-[#2A2A2A] space-y-2">
-                <div className="flex items-center justify-between text-gray-400">
+              <div className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+                <div className="flex items-center justify-between text-[#6B635B]">
                   <span className="text-[11px] font-bold uppercase tracking-wider">Today's Sales</span>
                   <TrendingUp size={16} className="text-emerald-400" />
                 </div>
@@ -165,12 +165,12 @@ export default function AdminReportsPage() {
                 </div>
               </div>
 
-              <div className="p-5 bg-[#111111] border border-[#2A2A2A] space-y-2">
-                <div className="flex items-center justify-between text-gray-400">
+              <div className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+                <div className="flex items-center justify-between text-[#6B635B]">
                   <span className="text-[11px] font-bold uppercase tracking-wider">Last 7 Days</span>
                   <Calendar size={16} className="text-blue-400" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#F5F0E6]">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#292D30]">
                   {formatPKR(data.stats.weekSales)}
                 </div>
                 <div className="text-[10px] text-gray-500">
@@ -178,12 +178,12 @@ export default function AdminReportsPage() {
                 </div>
               </div>
 
-              <div className="p-5 bg-[#111111] border border-[#2A2A2A] space-y-2">
-                <div className="flex items-center justify-between text-gray-400">
+              <div className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
+                <div className="flex items-center justify-between text-[#6B635B]">
                   <span className="text-[11px] font-bold uppercase tracking-wider">Avg Order Value (AOV)</span>
-                  <Layers size={16} className="text-[#D4AF37]" />
+                  <Layers size={16} className="text-[#795548]" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#F5F0E6]">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#292D30]">
                   {formatPKR(data.stats.aov)}
                 </div>
                 <div className="text-[10px] text-gray-500">
@@ -193,18 +193,18 @@ export default function AdminReportsPage() {
             </div>
 
             {/* Daily Sales Bar Graph (Last 14 Days) */}
-            <div className="p-6 bg-[#111111] border border-[#2A2A2A] space-y-4">
-              <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3">
+            <div className="p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E4DDD3] pb-3">
                 <div>
-                  <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">
+                  <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#4A342E]">
                     14-DAY REVENUE TRAJECTORY
                   </h3>
-                  <p className="text-[11px] text-gray-400">
+                  <p className="text-[11px] text-[#6B635B]">
                     Daily sales performance graph
                   </p>
                 </div>
-                <div className="flex items-center gap-2 text-[11px] text-gray-400 font-mono">
-                  <span className="w-2.5 h-2.5 bg-[#D4AF37] inline-block" />
+                <div className="flex items-center gap-2 text-[11px] text-[#6B635B] font-mono">
+                  <span className="w-2.5 h-2.5 bg-[#795548] inline-block" />
                   <span>PKR Revenue</span>
                 </div>
               </div>
@@ -218,21 +218,21 @@ export default function AdminReportsPage() {
                       className="flex-1 flex flex-col items-center justify-end h-full gap-2 group relative"
                     >
                       {/* Tooltip on Hover */}
-                      <div className="absolute -top-10 bg-[#080808] border border-[#D4AF37] text-[10px] py-1 px-2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-20 whitespace-nowrap shadow-lg">
-                        <div className="font-bold text-[#D4AF37]">{formatPKR(item.revenue)}</div>
-                        <div className="text-gray-400">{item.orders} orders</div>
+                      <div className="absolute -top-10 bg-[#F5F0E6] border border-[#795548] text-[10px] py-1 px-2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-20 whitespace-nowrap shadow-lg">
+                        <div className="font-bold text-[#795548]">{formatPKR(item.revenue)}</div>
+                        <div className="text-[#6B635B]">{item.orders} orders</div>
                       </div>
 
                       {/* Bar */}
-                      <div className="w-full bg-[#181818] rounded-t-sm h-full flex items-end overflow-hidden">
+                      <div className="w-full bg-[#FAF7F2] rounded-t-sm h-full flex items-end overflow-hidden">
                         <div
-                          className="w-full bg-[#D4AF37] group-hover:bg-[#f3ca4b] transition-all duration-300"
+                          className="w-full bg-[#795548] group-hover:bg-[#f3ca4b] transition-all duration-300"
                           style={{ height: `${heightPercent}%` }}
                         />
                       </div>
 
                       {/* Date Label */}
-                      <span className="text-[9px] font-mono text-gray-400 truncate max-w-full">
+                      <span className="text-[9px] font-mono text-[#6B635B] truncate max-w-full">
                         {item.date}
                       </span>
                     </div>
@@ -244,14 +244,14 @@ export default function AdminReportsPage() {
             {/* Two-Column Grid: Order Lifecycle Pipeline + Payment Methods */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Left: Order Pipeline Status Breakdown */}
-              <div className="lg:col-span-7 p-6 bg-[#111111] border border-[#2A2A2A] space-y-4">
-                <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6] border-b border-[#2A2A2A] pb-3">
+              <div className="lg:col-span-7 p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-4">
+                <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#4A342E] border-b border-[#E4DDD3] pb-3">
                   ORDER LIFECYCLE BREAKDOWN
                 </h3>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] space-y-1">
-                    <div className="text-gray-400 flex items-center gap-1.5 text-[11px]">
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] space-y-1">
+                    <div className="text-[#6B635B] flex items-center gap-1.5 text-[11px]">
                       <Clock size={13} className="text-amber-400" />
                       <span>Pending Review</span>
                     </div>
@@ -260,8 +260,8 @@ export default function AdminReportsPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] space-y-1">
-                    <div className="text-gray-400 flex items-center gap-1.5 text-[11px]">
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] space-y-1">
+                    <div className="text-[#6B635B] flex items-center gap-1.5 text-[11px]">
                       <CheckCircle2 size={13} className="text-blue-400" />
                       <span>Confirmed</span>
                     </div>
@@ -270,8 +270,8 @@ export default function AdminReportsPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] space-y-1">
-                    <div className="text-gray-400 flex items-center gap-1.5 text-[11px]">
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] space-y-1">
+                    <div className="text-[#6B635B] flex items-center gap-1.5 text-[11px]">
                       <Truck size={13} className="text-indigo-400" />
                       <span>Dispatched</span>
                     </div>
@@ -280,8 +280,8 @@ export default function AdminReportsPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] space-y-1">
-                    <div className="text-gray-400 flex items-center gap-1.5 text-[11px]">
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] space-y-1">
+                    <div className="text-[#6B635B] flex items-center gap-1.5 text-[11px]">
                       <CheckCircle2 size={13} className="text-emerald-400" />
                       <span>Delivered</span>
                     </div>
@@ -290,8 +290,8 @@ export default function AdminReportsPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] space-y-1">
-                    <div className="text-gray-400 flex items-center gap-1.5 text-[11px]">
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] space-y-1">
+                    <div className="text-[#6B635B] flex items-center gap-1.5 text-[11px]">
                       <XCircle size={13} className="text-rose-400" />
                       <span>Cancelled</span>
                     </div>
@@ -300,12 +300,12 @@ export default function AdminReportsPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] space-y-1">
-                    <div className="text-gray-400 flex items-center gap-1.5 text-[11px]">
-                      <Package size={13} className="text-[#D4AF37]" />
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] space-y-1">
+                    <div className="text-[#6B635B] flex items-center gap-1.5 text-[11px]">
+                      <Package size={13} className="text-[#795548]" />
                       <span>Total Booked</span>
                     </div>
-                    <div className="text-xl font-bold font-mono text-[#F5F0E6]">
+                    <div className="text-xl font-bold font-mono text-[#292D30]">
                       {data.stats.totalOrders}
                     </div>
                   </div>
@@ -313,25 +313,25 @@ export default function AdminReportsPage() {
               </div>
 
               {/* Right: Payment Method Distribution */}
-              <div className="lg:col-span-5 p-6 bg-[#111111] border border-[#2A2A2A] space-y-4">
-                <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6] border-b border-[#2A2A2A] pb-3">
+              <div className="lg:col-span-5 p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-4">
+                <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#4A342E] border-b border-[#E4DDD3] pb-3">
                   PAYMENT GATEWAYS
                 </h3>
 
                 <div className="space-y-3">
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] flex items-center justify-between">
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-bold text-[#F5F0E6]">Cash On Delivery (COD)</div>
+                      <div className="text-xs font-bold text-[#4A342E]">Cash On Delivery (COD)</div>
                       <div className="text-[10px] text-gray-500">
                         {data.paymentBreakdown.COD?.count || 0} client orders
                       </div>
                     </div>
-                    <div className="text-right font-mono font-bold text-xs text-[#D4AF37]">
+                    <div className="text-right font-mono font-bold text-xs text-[#795548]">
                       {formatPKR(data.paymentBreakdown.COD?.total || 0)}
                     </div>
                   </div>
 
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] flex items-center justify-between">
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] flex items-center justify-between">
                     <div>
                       <div className="text-xs font-bold text-emerald-400">Easypaisa Mobile Transfer</div>
                       <div className="text-[10px] text-gray-500">
@@ -343,7 +343,7 @@ export default function AdminReportsPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-[#0A0A0A] border border-[#2A2A2A] flex items-center justify-between">
+                  <div className="p-3 bg-[#FAF7F2] border border-[#E4DDD3] flex items-center justify-between">
                     <div>
                       <div className="text-xs font-bold text-blue-400">Direct Bank Wire / Meezan</div>
                       <div className="text-[10px] text-gray-500">
@@ -359,17 +359,17 @@ export default function AdminReportsPage() {
             </div>
 
             {/* Top 10 Best-Selling Footwear Models */}
-            <div className="p-6 bg-[#111111] border border-[#2A2A2A] space-y-4">
-              <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3">
+            <div className="p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E4DDD3] pb-3">
                 <div>
-                  <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6]">
+                  <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#4A342E]">
                     TOP SELLING LUXURY FOOTWEAR MODELS
                   </h3>
-                  <p className="text-[11px] text-gray-400">
+                  <p className="text-[11px] text-[#6B635B]">
                     Highest-velocity creations ranked by gross revenue generated
                   </p>
                 </div>
-                <ShoppingBag size={18} className="text-[#D4AF37]" />
+                <ShoppingBag size={18} className="text-[#795548]" />
               </div>
 
               {data.topProducts.length === 0 ? (
@@ -380,7 +380,7 @@ export default function AdminReportsPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
-                      <tr className="border-b border-[#2A2A2A] bg-[#0A0A0A] text-gray-400 uppercase tracking-luxury text-[10px]">
+                      <tr className="border-b border-[#E4DDD3] bg-[#FAF7F2] text-[#6B635B] uppercase tracking-luxury text-[10px]">
                         <th className="p-3 font-bold">Rank</th>
                         <th className="p-3 font-bold">Footwear Model</th>
                         <th className="p-3 font-bold">SKU Reference</th>
@@ -388,22 +388,22 @@ export default function AdminReportsPage() {
                         <th className="p-3 font-bold text-right">Gross Generated</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#2A2A2A]">
+                    <tbody className="divide-y divide-[#E4DDD3]">
                       {data.topProducts.map((p, idx) => (
                         <tr key={idx} className="hover:bg-[#161616] transition-colors">
-                          <td className="p-3 font-mono font-bold text-[#D4AF37]">
+                          <td className="p-3 font-mono font-bold text-[#795548]">
                             #{idx + 1}
                           </td>
-                          <td className="p-3 font-medium text-[#F5F0E6]">
+                          <td className="p-3 font-medium text-[#292D30]">
                             {p.name}
                           </td>
-                          <td className="p-3 font-mono text-gray-400 text-[11px]">
+                          <td className="p-3 font-mono text-[#6B635B] text-[11px]">
                             {p.sku}
                           </td>
-                          <td className="p-3 font-mono text-right text-gray-300">
+                          <td className="p-3 font-mono text-right text-[#5C5855]">
                             {p.units} pairs
                           </td>
-                          <td className="p-3 font-mono text-right font-bold text-[#D4AF37]">
+                          <td className="p-3 font-mono text-right font-bold text-[#795548]">
                             {formatPKR(p.revenue)}
                           </td>
                         </tr>

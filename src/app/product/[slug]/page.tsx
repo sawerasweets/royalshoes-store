@@ -70,12 +70,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
       {/* Related Creations */}
       {relatedProducts.length > 0 && (
-        <section className="pt-12 border-t border-[#2A2A2A] space-y-6">
+        <section className="pt-12 border-t border-[#E4DDD3] space-y-6">
           <div className="text-center space-y-1">
-            <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
+            <span className="text-[10px] font-bold tracking-brand uppercase text-[#795548]">
               Harmonizing Pieces
             </span>
-            <h2 className="font-brand text-2xl font-extrabold tracking-luxury text-[#F5F0E6]">
+            <h2 className="font-brand text-2xl font-extrabold tracking-luxury text-[#4A342E]">
               YOU MAY ALSO ADMIRE
             </h2>
           </div>

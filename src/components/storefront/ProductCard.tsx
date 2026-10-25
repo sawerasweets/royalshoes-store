@@ -113,24 +113,24 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="group relative flex flex-col bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37]/70 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+    <div className="group relative flex flex-col bg-[#FFFFFF] border border-[#E4DDD3] hover:border-[#795548]/70 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
       {/* Product Image Frame */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-white">
         <Link href={`/product/${product.slug}`} className="absolute inset-0 block">
           {/* Badges */}
           <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1.5 pointer-events-none">
             {isOnSale && (
-              <span className="bg-[#D4AF37] text-[#080808] text-[9px] sm:text-[10px] font-bold tracking-luxury uppercase px-2 py-0.5 shadow-md">
+              <span className="bg-[#795548] text-white text-[9px] sm:text-[10px] font-bold tracking-luxury uppercase px-2 py-0.5 shadow-md">
                 -{discountPercent}%
               </span>
             )}
             {product.isNewArrival && !isOnSale && (
-              <span className="bg-[#171717]/90 text-[#F5F0E6] border border-[#D4AF37]/50 text-[9px] sm:text-[10px] font-semibold tracking-luxury uppercase px-2 py-0.5 backdrop-blur-sm">
+              <span className="bg-[#FFFFFF]/90 text-[#292D30] border border-[#795548]/50 text-[9px] sm:text-[10px] font-semibold tracking-luxury uppercase px-2 py-0.5 backdrop-blur-sm">
                 NEW
               </span>
             )}
             {product.isBestseller && (
-              <span className="bg-[#2A2A2A] text-[#D4AF37] text-[9px] sm:text-[10px] font-semibold tracking-luxury uppercase px-2 py-0.5">
+              <span className="bg-[#E4DDD3] text-[#795548] text-[9px] sm:text-[10px] font-semibold tracking-luxury uppercase px-2 py-0.5">
                 BESTSELLER
               </span>
             )}
@@ -147,9 +147,9 @@ export function ProductCard({ product }: ProductCardProps) {
               className="object-contain p-2.5 transition-transform duration-500 ease-out group-hover:scale-105"
             />
           ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-[#141414] to-[#0A0A0A] border border-[#2A2A2A] text-center">
-              <Sparkles className="w-8 h-8 text-[#D4AF37]/70 mb-2" />
-              <span className="text-[10px] font-brand tracking-widest uppercase text-[#D4AF37]">
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-[#FAF7F2] to-[#FAF7F2] border border-[#E4DDD3] text-center">
+              <Sparkles className="w-8 h-8 text-[#795548]/70 mb-2" />
+              <span className="text-[10px] font-brand tracking-widest uppercase text-[#795548]">
                 ROYAL SHOES
               </span>
               <span className="text-[9px] text-gray-500 tracking-wide mt-1 line-clamp-1">
@@ -161,7 +161,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Stock Overlay if Out of Stock */}
           {isOutOfStock && (
             <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px] flex items-center justify-center z-10">
-              <span className="text-[10px] sm:text-[11px] font-bold tracking-luxury uppercase text-[#F5F0E6] border border-[#2A2A2A] bg-[#111111] px-3 py-1">
+              <span className="text-[10px] sm:text-[11px] font-bold tracking-luxury uppercase text-[#292D30] border border-[#E4DDD3] bg-[#FFFFFF] px-3 py-1">
                 Sold Out
               </span>
             </div>
@@ -172,15 +172,15 @@ export function ProductCard({ product }: ProductCardProps) {
         {!isOutOfStock && (
           <div className="absolute inset-x-0 bottom-0 z-20 p-2 sm:p-2.5 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
             {showQuickSelect ? (
-              <div className="bg-[#0A0A0A] border border-[#D4AF37]/80 p-2.5 shadow-2xl space-y-2">
-                <div className="flex items-center justify-between text-[10px] uppercase tracking-luxury text-[#D4AF37]">
+              <div className="bg-[#FAF7F2] border border-[#795548]/80 p-2.5 shadow-2xl space-y-2">
+                <div className="flex items-center justify-between text-[10px] uppercase tracking-luxury text-[#795548]">
                   <span className="font-bold">Select Size:</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowQuickSelect(false);
                     }}
-                    className="text-gray-400 hover:text-white p-0.5"
+                    className="text-[#6B635B] hover:text-[#4A342E] p-0.5"
                   >
                     <X size={12} />
                   </button>
@@ -190,7 +190,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     <button
                       key={v.id}
                       onClick={(e) => handleQuickAdd(e, v)}
-                      className="px-2 py-1 text-[10px] font-mono border border-[#2A2A2A] bg-[#171717] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#080808] text-[#F5F0E6] transition-all"
+                      className="px-2 py-1 text-[10px] font-mono border border-[#E4DDD3] bg-[#FFFFFF] hover:border-[#795548] hover:bg-[#795548] hover:text-white text-[#292D30] transition-all"
                     >
                       {v.size}
                     </button>
@@ -200,7 +200,7 @@ export function ProductCard({ product }: ProductCardProps) {
             ) : justAdded ? (
               <button
                 disabled
-                className="w-full py-2 px-3 bg-[#D4AF37] text-[#080808] text-[10px] sm:text-[11px] font-bold uppercase tracking-luxury flex items-center justify-center gap-1.5 shadow-lg"
+                className="w-full py-2 px-3 bg-[#795548] text-white text-[10px] sm:text-[11px] font-bold uppercase tracking-luxury flex items-center justify-center gap-1.5 shadow-lg"
               >
                 <Check size={13} className="stroke-[3]" />
                 <span>Added to Bag</span>
@@ -209,7 +209,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <button
                 onClick={(e) => handleQuickAdd(e)}
                 disabled={isAdding}
-                className="w-full py-2 px-3 bg-[#080808]/90 hover:bg-[#D4AF37] text-[#F5F0E6] hover:text-[#080808] border border-[#D4AF37]/60 hover:border-[#D4AF37] text-[10px] sm:text-[11px] font-bold uppercase tracking-luxury transition-all flex items-center justify-center gap-1.5 backdrop-blur-sm shadow-md"
+                className="w-full py-2 px-3 bg-[#FFFFFF]/90 hover:bg-[#795548] text-[#795548] hover:text-white border border-[#795548]/60 hover:border-[#795548] text-[10px] sm:text-[11px] font-bold uppercase tracking-luxury transition-all flex items-center justify-center gap-1.5 backdrop-blur-sm shadow-md"
               >
                 <ShoppingBag size={12} />
                 <span>{hasVariants && uniqueSizes.length > 1 ? "Quick Add" : "Add to Bag"}</span>
@@ -220,25 +220,25 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Product Details (Below Image) */}
-      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between bg-[#111111]">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between bg-[#FFFFFF]">
         <div>
           {/* Subcategory / Category Label */}
-          <div className="text-[9px] sm:text-[10px] tracking-luxury uppercase text-[#D4AF37] mb-1 truncate">
+          <div className="text-[9px] sm:text-[10px] tracking-luxury uppercase text-[#795548] mb-1 truncate">
             {product.subcategoryName || product.categoryName || "ROYAL SHOES"}
           </div>
 
           {/* Product Title */}
           <Link href={`/product/${product.slug}`} className="block">
-            <h3 className="text-xs sm:text-sm font-medium text-[#F5F0E6] group-hover:text-[#D4AF37] transition-colors line-clamp-1">
+            <h3 className="text-xs sm:text-sm font-bold text-[#4A342E] group-hover:text-[#795548] transition-colors line-clamp-1">
               {product.name}
             </h3>
           </Link>
         </div>
 
         {/* Price Tag & Action */}
-        <div className="mt-2.5 pt-2 border-t border-[#2A2A2A]/40 flex items-center justify-between">
+        <div className="mt-2.5 pt-2 border-t border-[#E4DDD3]/40 flex items-center justify-between">
           <div className="flex items-baseline gap-2">
-            <span className="text-xs sm:text-sm font-bold text-[#F5F0E6] tracking-wide">
+            <span className="text-xs sm:text-sm font-bold text-[#4A342E] tracking-wide">
               {formatPKR(product.price)}
             </span>
             {isOnSale && (
@@ -251,7 +251,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Direct link arrow */}
           <Link
             href={`/product/${product.slug}`}
-            className="text-gray-500 hover:text-[#D4AF37] transition-colors p-1"
+            className="text-gray-500 hover:text-[#795548] transition-colors p-1"
             aria-label={`View ${product.name}`}
           >
             <ChevronRight size={14} />

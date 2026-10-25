@@ -13,11 +13,11 @@ export const BRAND = {
     cities: ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Quetta", "Sialkot", "Gujranwala", "Hyderabad", "Jhang", "Nationwide Delivery"],
   },
   colors: {
-    primaryBlack: "#080808",
-    secondaryBlack: "#111111",
-    gold: "#D4AF37",
+    primaryBlack: "#F5F0E6",
+    secondaryBlack: "#FFFFFF",
+    gold: "#795548",
     warmIvory: "#F5F0E6",
-    subtleBorder: "#2A2A2A",
+    subtleBorder: "#E4DDD3",
   },
   commerce: {
     currency: "PKR",

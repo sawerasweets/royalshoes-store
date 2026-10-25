@@ -177,8 +177,8 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                 onClick={() => setSelectedImage(img.url)}
                 className={`relative w-16 h-20 sm:w-20 sm:h-24 flex-shrink-0 border bg-white overflow-hidden transition-all ${
                   selectedImage === img.url
-                    ? "border-[#D4AF37] ring-2 ring-[#D4AF37]"
-                    : "border-[#2A2A2A] hover:border-gray-500 opacity-80 hover:opacity-100"
+                    ? "border-[#795548] ring-2 ring-[#795548]"
+                    : "border-[#E4DDD3] hover:border-gray-500 opacity-80 hover:opacity-100"
                 }`}
               >
                 <Image
@@ -193,9 +193,9 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
         )}
 
         {/* Main Stage Image */}
-        <div className="relative aspect-[3/4] w-full bg-white border border-[#D4AF37]/50 overflow-hidden flex-1 shadow-2xl">
+        <div className="relative aspect-[3/4] w-full bg-white border border-[#795548]/50 overflow-hidden flex-1 shadow-2xl">
           {isOnSale && (
-            <span className="absolute top-4 left-4 z-10 bg-[#D4AF37] text-[#080808] text-xs font-bold tracking-luxury uppercase px-3 py-1 shadow-lg">
+            <span className="absolute top-4 left-4 z-10 bg-[#795548] text-white text-xs font-bold tracking-luxury uppercase px-3 py-1 shadow-lg">
               -{discountPercent}% OFF
             </span>
           )}
@@ -214,12 +214,12 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
       <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
         <div className="space-y-4">
           {/* Breadcrumb / Category */}
-          <div className="text-[11px] font-bold tracking-brand uppercase text-[#D4AF37]">
+          <div className="text-[11px] font-bold tracking-brand uppercase text-[#795548]">
             {product.subcategoryName ? `${product.categoryName} • ${product.subcategoryName}` : product.categoryName}
           </div>
 
           {/* Title */}
-          <h1 className="font-brand text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-luxury text-[#F5F0E6]">
+          <h1 className="font-brand text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-luxury text-[#4A342E]">
             {product.name}
           </h1>
 
@@ -229,8 +229,8 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
           </div>
 
           {/* Price Tag */}
-          <div className="flex items-baseline gap-3 pt-1 border-b border-[#2A2A2A] pb-4">
-            <span className="text-2xl sm:text-3xl font-extrabold text-[#F5F0E6] tracking-wide">
+          <div className="flex items-baseline gap-3 pt-1 border-b border-[#E4DDD3] pb-4">
+            <span className="text-2xl sm:text-3xl font-extrabold text-[#4A342E] tracking-wide">
               {formatPKR(currentPrice)}
             </span>
             {isOnSale && (
@@ -238,7 +238,7 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                 {formatPKR(product.originalPrice!)}
               </span>
             )}
-            <span className="text-[11px] text-[#D4AF37] tracking-wider uppercase font-medium">
+            <span className="text-[11px] text-[#795548] tracking-wider uppercase font-medium">
               Tax Included
             </span>
           </div>
@@ -246,8 +246,8 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
           {/* Color Selector */}
           {availableColors.length > 1 && (
             <div className="space-y-2 pt-2">
-              <label className="text-xs font-bold uppercase tracking-luxury text-[#F5F0E6] flex items-center justify-between">
-                <span>Color: <strong className="text-[#D4AF37]">{selectedColor}</strong></span>
+              <label className="text-xs font-bold uppercase tracking-luxury text-[#292D30] flex items-center justify-between">
+                <span>Color: <strong className="text-[#795548]">{selectedColor}</strong></span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {availableColors.map((color) => (
@@ -256,8 +256,8 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                     onClick={() => setSelectedColor(color)}
                     className={`px-4 py-2 text-xs border font-medium transition-all ${
                       selectedColor === color
-                        ? "border-[#D4AF37] bg-[#171717] text-[#D4AF37] ring-1 ring-[#D4AF37]"
-                        : "border-[#2A2A2A] bg-[#111111] text-gray-300 hover:border-gray-500"
+                        ? "border-[#795548] bg-[#FFFFFF] text-[#795548] ring-1 ring-[#795548]"
+                        : "border-[#E4DDD3] bg-[#FFFFFF] text-[#5C5855] hover:border-gray-500"
                     }`}
                   >
                     {color}
@@ -270,9 +270,9 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
           {/* Size Selector */}
           {availableSizes.length > 0 && availableSizes[0] !== "Standard" && (
             <div className="space-y-2 pt-2">
-              <div className="flex items-center justify-between text-xs font-bold uppercase tracking-luxury text-[#F5F0E6]">
-                <span>Select Size: <strong className="text-[#D4AF37]">{selectedSize}</strong></span>
-                <span className="text-[10px] text-gray-400 font-normal underline cursor-pointer hover:text-white">
+              <div className="flex items-center justify-between text-xs font-bold uppercase tracking-luxury text-[#292D30]">
+                <span>Select Size: <strong className="text-[#795548]">{selectedSize}</strong></span>
+                <span className="text-[10px] text-[#6B635B] font-normal underline cursor-pointer hover:text-[#795548]">
                   Size Guide (EU)
                 </span>
               </div>
@@ -290,10 +290,10 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                       disabled={isSizeOOS}
                       className={`py-2.5 text-xs font-bold tracking-wider border transition-all ${
                         isSizeOOS
-                          ? "border-[#2A2A2A]/40 bg-[#0A0A0A] text-gray-600 cursor-not-allowed line-through"
+                          ? "border-[#E4DDD3]/40 bg-[#FAF7F2] text-gray-600 cursor-not-allowed line-through"
                           : selectedSize === size
-                          ? "border-[#D4AF37] bg-[#D4AF37] text-[#080808]"
-                          : "border-[#2A2A2A] bg-[#111111] text-[#F5F0E6] hover:border-[#D4AF37]"
+                          ? "border-[#795548] bg-[#795548] text-white"
+                          : "border-[#E4DDD3] bg-[#FFFFFF] text-[#292D30] hover:border-[#795548]"
                       }`}
                     >
                       {size}
@@ -324,12 +324,12 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
             {/* Action Row 1: Quantity Selector + Add To Shopping Bag + Wishlist */}
             <div className="flex items-center gap-2.5 sm:gap-3">
               {/* Quantity Selector */}
-              <div className="flex items-center border border-[#2A2A2A] bg-[#111111] text-sm flex-shrink-0">
+              <div className="flex items-center border border-[#E4DDD3] bg-[#FFFFFF] text-sm flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   disabled={quantity <= 1 || isOutOfStock}
-                  className="px-3.5 py-3 hover:text-[#D4AF37] disabled:opacity-30 disabled:hover:text-current"
+                  className="px-3.5 py-3 hover:text-[#795548] disabled:opacity-30 disabled:hover:text-current"
                 >
                   -
                 </button>
@@ -340,7 +340,7 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                   type="button"
                   onClick={() => setQuantity(Math.min(currentStock, quantity + 1))}
                   disabled={quantity >= currentStock || isOutOfStock}
-                  className="px-3.5 py-3 hover:text-[#D4AF37] disabled:opacity-30 disabled:hover:text-current"
+                  className="px-3.5 py-3 hover:text-[#795548] disabled:opacity-30 disabled:hover:text-current"
                 >
                   +
                 </button>
@@ -351,9 +351,9 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                 type="button"
                 onClick={handleAddToCart}
                 disabled={isOutOfStock || isAdding}
-                className="flex-1 flex items-center justify-center gap-2 bg-[#171717] hover:bg-[#202020] text-[#F5F0E6] hover:text-[#D4AF37] border border-[#D4AF37]/60 hover:border-[#D4AF37] font-bold text-xs uppercase tracking-luxury py-3.5 px-4 transition-all duration-200 shadow-sm disabled:bg-gray-900 disabled:text-gray-600 disabled:border-gray-800 disabled:cursor-not-allowed active:scale-[0.98]"
+                className="flex-1 flex items-center justify-center gap-2 bg-[#FFFFFF] hover:bg-[#FAF7F2] text-[#795548] border-2 border-[#795548] font-bold text-xs uppercase tracking-luxury py-3.5 px-4 transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
               >
-                <ShoppingBag size={16} className="text-[#D4AF37]" />
+                <ShoppingBag size={16} className="text-[#795548]" />
                 <span className="truncate">
                   {isOutOfStock ? "Out of Stock" : isAdding ? "Adding..." : "Add to Shopping Bag"}
                 </span>
@@ -366,7 +366,7 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
                 className={`p-3.5 border transition-colors flex-shrink-0 ${
                   isWishlisted
                     ? "border-rose-500 text-rose-500 bg-rose-500/10"
-                    : "border-[#2A2A2A] text-gray-400 hover:text-white hover:border-[#D4AF37] bg-[#111111]"
+                    : "border-[#E4DDD3] text-[#6B635B] hover:text-[#795548] hover:border-[#795548] bg-[#FFFFFF]"
                 }`}
                 aria-label="Save to Wishlist"
               >
@@ -374,14 +374,14 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
               </button>
             </div>
 
-            {/* Action Row 2: DIRECT BUY NOW BUTTON (Full Width VIP Royal Gold) */}
+            {/* Action Row 2: DIRECT BUY NOW BUTTON (Full Width VIP Royal Chocolate) */}
             <button
               type="button"
               onClick={handleBuyNow}
               disabled={isOutOfStock || isBuyingNow}
-              className="w-full flex items-center justify-center gap-2.5 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-extrabold text-xs uppercase tracking-[0.2em] py-4 px-6 transition-all duration-200 shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed group cursor-pointer"
+              className="w-full flex items-center justify-center gap-2.5 bg-[#795548] hover:bg-[#5D4037] text-white font-extrabold text-xs uppercase tracking-[0.2em] py-4 px-6 transition-all duration-200 shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed group cursor-pointer"
             >
-              <Zap size={16} className="fill-[#080808] group-hover:scale-110 transition-transform" />
+              <Zap size={16} className="fill-white group-hover:scale-110 transition-transform" />
               <span>
                 {isOutOfStock ? "Currently Sold Out" : isBuyingNow ? "Opening Secure Checkout..." : "Buy Now — Direct Order"}
               </span>
@@ -390,12 +390,12 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
 
             {/* Added confirmation alert */}
             {addedMessage && (
-              <div className="p-3 bg-[#111111] border border-[#D4AF37] text-xs text-[#F5F0E6] flex items-center justify-between animate-fade-in">
+              <div className="p-3 bg-[#FFFFFF] border border-[#795548] text-xs text-[#292D30] flex items-center justify-between animate-fade-in">
                 <span className="flex items-center gap-2">
-                  <Check size={16} className="text-[#D4AF37]" />
+                  <Check size={16} className="text-[#795548]" />
                   <span>Added to bag! Ready for checkout.</span>
                 </span>
-                <a href="/cart" className="text-[#D4AF37] font-bold underline uppercase tracking-luxury">
+                <a href="/cart" className="text-[#795548] font-bold underline uppercase tracking-luxury">
                   View Bag
                 </a>
               </div>
@@ -403,30 +403,30 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
           </div>
 
           {/* Description */}
-          <div className="pt-6 border-t border-[#2A2A2A] space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-luxury text-[#F5F0E6]">
+          <div className="pt-6 border-t border-[#E4DDD3] space-y-2">
+            <h3 className="text-xs font-bold uppercase tracking-luxury text-[#292D30]">
               Atelier Details & Materials
             </h3>
-            <p className="text-xs text-gray-400 leading-relaxed whitespace-pre-line">
+            <p className="text-xs text-[#6B635B] leading-relaxed whitespace-pre-line">
               {product.description}
             </p>
           </div>
         </div>
 
         {/* Value Trust Points */}
-        <div className="pt-6 border-t border-[#2A2A2A] space-y-3 text-xs text-gray-400">
+        <div className="pt-6 border-t border-[#E4DDD3] space-y-3 text-xs text-[#6B635B]">
           <div className="flex items-center gap-3">
-            <Truck size={16} className="text-[#D4AF37]" />
+            <Truck size={16} className="text-[#795548]" />
             <span>
               Complimentary nationwide delivery on orders above <strong>Rs. {freeShippingThreshold.toLocaleString()}</strong>
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <ShieldCheck size={16} className="text-[#D4AF37]" />
+            <ShieldCheck size={16} className="text-[#795548]" />
             <span>100% genuine handcrafted leather with premium shock-absorbent footbeds</span>
           </div>
           <div className="flex items-center gap-3">
-            <RotateCcw size={16} className="text-[#D4AF37]" />
+            <RotateCcw size={16} className="text-[#795548]" />
             <span>Hassle-free 7-day size exchange across all Pakistan cities</span>
           </div>
         </div>

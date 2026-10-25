@@ -153,8 +153,8 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="py-24 text-center">
-        <div className="inline-block w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs uppercase tracking-luxury text-gray-400 mt-4">Reviewing Atelier Selection...</p>
+        <div className="inline-block w-8 h-8 border-2 border-[#795548] border-t-transparent rounded-full animate-spin" />
+        <p className="text-xs uppercase tracking-luxury text-[#6B635B] mt-4">Reviewing Atelier Selection...</p>
       </div>
     );
   }
@@ -164,21 +164,21 @@ export default function CartPage() {
   if (isEmpty) {
     return (
       <div className="py-24 text-center max-w-md mx-auto space-y-6">
-        <div className="w-16 h-16 rounded-full border border-[#D4AF37]/50 flex items-center justify-center text-[#D4AF37] mx-auto">
+        <div className="w-16 h-16 rounded-full border border-[#795548]/50 flex items-center justify-center text-[#795548] mx-auto">
           <ShoppingBag size={28} />
         </div>
         <div className="space-y-2">
-          <h1 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#F5F0E6]">
+          <h1 className="font-brand text-2xl sm:text-3xl font-extrabold tracking-luxury text-[#4A342E]">
             YOUR SHOPPING BAG IS EMPTY
           </h1>
-          <p className="text-xs text-gray-400 leading-relaxed">
+          <p className="text-xs text-[#6B635B] leading-relaxed">
             You have not placed any ROYAL SHOES handcrafted creations into your shopping bag yet.
           </p>
         </div>
         <div>
           <Link
             href="/all"
-            className="inline-flex items-center gap-2 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold text-xs uppercase tracking-luxury px-8 py-3.5 transition-all shadow-md hover:scale-105"
+            className="inline-flex items-center gap-2 bg-[#795548] hover:bg-[#5D4037] text-white font-bold text-xs uppercase tracking-luxury px-8 py-3.5 transition-all shadow-md hover:scale-105"
           >
             <span>Explore Boutique</span>
             <ArrowRight size={14} />
@@ -195,37 +195,37 @@ export default function CartPage() {
   return (
     <div className="space-y-10 pb-20 pt-4">
       {/* Header */}
-      <div className="border-b border-[#2A2A2A] pb-4">
-        <span className="text-[10px] font-bold tracking-brand uppercase text-[#D4AF37]">
+      <div className="border-b border-[#E4DDD3] pb-4">
+        <span className="text-[10px] font-bold tracking-brand uppercase text-[#795548]">
           ROYAL SHOES ATELIER
         </span>
-        <h1 className="font-brand text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-luxury text-[#F5F0E6] mt-0.5">
+        <h1 className="font-brand text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-luxury text-[#4A342E] mt-0.5">
           YOUR SHOPPING BAG ({cart.items.length})
         </h1>
       </div>
 
       {/* Free Shipping Progress Indicator */}
-      <div className="p-4 bg-[#111111] border border-[#2A2A2A] space-y-2">
+      <div className="p-4 bg-[#FFFFFF] border border-[#E4DDD3] space-y-2">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
-            <Truck size={15} className="text-[#D4AF37]" />
-            <span className="text-[#F5F0E6]">
+            <Truck size={15} className="text-[#795548]" />
+            <span className="text-[#292D30]">
               {cart.qualifiesForFreeShipping ? (
                 <strong className="text-emerald-400 uppercase tracking-luxury font-bold">
                   You have unlocked Complimentary Delivery Across Pakistan!
                 </strong>
               ) : (
                 <span>
-                  Add <strong className="text-[#D4AF37]">{formatPKR(remainingForFreeShipping)}</strong> more to enjoy Complimentary Delivery
+                  Add <strong className="text-[#795548]">{formatPKR(remainingForFreeShipping)}</strong> more to enjoy Complimentary Delivery
                 </span>
               )}
             </span>
           </div>
-          <span className="font-mono text-xs text-gray-400">{progressPercent}%</span>
+          <span className="font-mono text-xs text-[#6B635B]">{progressPercent}%</span>
         </div>
-        <div className="w-full bg-[#080808] h-1.5 overflow-hidden">
+        <div className="w-full bg-[#F5F0E6] h-1.5 overflow-hidden">
           <div
-            className="bg-[#D4AF37] h-full transition-all duration-500 ease-out"
+            className="bg-[#795548] h-full transition-all duration-500 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -237,12 +237,12 @@ export default function CartPage() {
           {cart.items.map((item) => (
             <div
               key={item.variantId}
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-[#111111] border border-[#2A2A2A]"
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-[#FFFFFF] border border-[#E4DDD3]"
             >
               <div className="flex items-center gap-4">
                 <Link
                   href={`/product/${item.slug}`}
-                  className="relative w-20 h-24 sm:w-24 sm:h-28 bg-[#0A0A0A] border border-[#2A2A2A] flex-shrink-0 overflow-hidden"
+                  className="relative w-20 h-24 sm:w-24 sm:h-28 bg-[#FAF7F2] border border-[#E4DDD3] flex-shrink-0 overflow-hidden"
                 >
                   <Image
                     src={item.imageUrl}
@@ -255,31 +255,31 @@ export default function CartPage() {
                 <div className="space-y-1">
                   <Link
                     href={`/product/${item.slug}`}
-                    className="font-brand text-sm sm:text-base font-bold text-[#F5F0E6] hover:text-[#D4AF37] transition-colors"
+                    className="font-brand text-sm sm:text-base font-bold text-[#4A342E] hover:text-[#795548] transition-colors"
                   >
                     {item.productName}
                   </Link>
-                  <div className="text-xs text-gray-400 flex flex-wrap gap-2">
-                    <span>Size: <strong className="text-[#F5F0E6]">{item.size}</strong></span>
+                  <div className="text-xs text-[#6B635B] flex flex-wrap gap-2">
+                    <span>Size: <strong className="text-[#292D30]">{item.size}</strong></span>
                     <span>•</span>
-                    <span>Color: <strong className="text-[#F5F0E6]">{item.color}</strong></span>
+                    <span>Color: <strong className="text-[#292D30]">{item.color}</strong></span>
                   </div>
                   <div className="text-[11px] text-gray-500 font-mono">
                     SKU: {item.sku}
                   </div>
-                  <div className="text-xs font-bold text-[#D4AF37] sm:hidden pt-1">
+                  <div className="text-xs font-bold text-[#795548] sm:hidden pt-1">
                     {formatPKR(item.lineTotal)}
                   </div>
                 </div>
               </div>
 
               {/* Quantity controls & Line Total */}
-              <div className="flex items-center justify-between w-full sm:w-auto gap-6 sm:gap-8 pt-2 sm:pt-0 border-t sm:border-0 border-[#2A2A2A]">
+              <div className="flex items-center justify-between w-full sm:w-auto gap-6 sm:gap-8 pt-2 sm:pt-0 border-t sm:border-0 border-[#E4DDD3]">
                 {/* Quantity */}
-                <div className="flex items-center border border-[#2A2A2A] bg-[#080808] text-xs">
+                <div className="flex items-center border border-[#E4DDD3] bg-[#F5F0E6] text-xs">
                   <button
                     onClick={() => updateQuantity(item.variantId, item.quantity - 1, item.availableStock)}
-                    className="px-2.5 py-1.5 hover:text-[#D4AF37]"
+                    className="px-2.5 py-1.5 hover:text-[#795548]"
                   >
                     -
                   </button>
@@ -289,7 +289,7 @@ export default function CartPage() {
                   <button
                     onClick={() => updateQuantity(item.variantId, item.quantity + 1, item.availableStock)}
                     disabled={item.quantity >= item.availableStock}
-                    className="px-2.5 py-1.5 hover:text-[#D4AF37] disabled:opacity-30"
+                    className="px-2.5 py-1.5 hover:text-[#795548] disabled:opacity-30"
                   >
                     +
                   </button>
@@ -297,7 +297,7 @@ export default function CartPage() {
 
                 {/* Line Total */}
                 <div className="hidden sm:block text-right">
-                  <div className="text-sm font-bold text-[#F5F0E6]">
+                  <div className="text-sm font-bold text-[#4A342E]">
                     {formatPKR(item.lineTotal)}
                   </div>
                   {item.quantity > 1 && (
@@ -323,7 +323,7 @@ export default function CartPage() {
           <div className="pt-2">
             <Link
               href="/all"
-              className="inline-flex items-center gap-2 text-xs uppercase tracking-luxury text-[#D4AF37] hover:underline font-semibold"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-luxury text-[#795548] hover:underline font-semibold"
             >
               <span>← Continue Browsing Collections</span>
             </Link>
@@ -333,15 +333,15 @@ export default function CartPage() {
         {/* Right Column: Order Summary & Coupon Form */}
         <div className="lg:col-span-4 space-y-6">
           {/* Summary Card */}
-          <div className="p-6 bg-[#111111] border border-[#2A2A2A] space-y-4">
-            <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#F5F0E6] pb-3 border-b border-[#2A2A2A]">
+          <div className="p-6 bg-[#FFFFFF] border border-[#E4DDD3] space-y-4">
+            <h3 className="font-brand text-sm font-bold tracking-luxury uppercase text-[#4A342E] pb-3 border-b border-[#E4DDD3]">
               ORDER SUMMARY
             </h3>
 
-            <div className="space-y-2.5 text-xs text-gray-300">
+            <div className="space-y-2.5 text-xs text-[#5C5855]">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span className="font-mono text-[#F5F0E6]">{formatPKR(cart.subtotal)}</span>
+                <span className="font-mono text-[#292D30]">{formatPKR(cart.subtotal)}</span>
               </div>
 
               {cart.discount > 0 && (
@@ -369,14 +369,14 @@ export default function CartPage() {
             </div>
 
             {/* Grand Total */}
-            <div className="pt-4 border-t border-[#2A2A2A] flex justify-between items-baseline">
+            <div className="pt-4 border-t border-[#E4DDD3] flex justify-between items-baseline">
               <div>
-                <span className="font-brand text-sm font-bold uppercase tracking-luxury text-[#F5F0E6]">
+                <span className="font-brand text-sm font-bold uppercase tracking-luxury text-[#4A342E]">
                   Grand Total
                 </span>
                 <div className="text-[10px] text-gray-500">Including all duties and charges</div>
               </div>
-              <span className="text-xl font-bold font-mono text-[#D4AF37]">
+              <span className="text-xl font-bold font-mono text-[#795548]">
                 {formatPKR(cart.grandTotal)}
               </span>
             </div>
@@ -385,7 +385,7 @@ export default function CartPage() {
             <div className="pt-4">
               <Link
                 href="/checkout"
-                className="w-full flex items-center justify-center gap-2 bg-[#D4AF37] hover:bg-[#AA8822] text-[#080808] font-bold text-xs uppercase tracking-luxury py-4 px-6 transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 bg-[#795548] hover:bg-[#5D4037] text-white font-bold text-xs uppercase tracking-luxury py-4 px-6 transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>Proceed to Checkout</span>
                 <ArrowRight size={15} />
@@ -394,19 +394,19 @@ export default function CartPage() {
           </div>
 
           {/* Promotional Coupon Form */}
-          <div className="p-5 bg-[#111111] border border-[#2A2A2A] space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-luxury text-[#F5F0E6]">
+          <div className="p-5 bg-[#FFFFFF] border border-[#E4DDD3] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-luxury text-[#4A342E]">
               Privilege Promo Code
             </h4>
             {appliedCoupon ? (
-              <div className="flex items-center justify-between p-2.5 bg-[#171717] border border-emerald-500/40 text-xs text-emerald-400">
+              <div className="flex items-center justify-between p-2.5 bg-[#FAF7F2] border border-emerald-500/40 text-xs text-emerald-600">
                 <span className="flex items-center gap-2">
                   <Tag size={14} />
                   <span>Code <strong>{appliedCoupon}</strong> Applied</span>
                 </span>
                 <button
                   onClick={handleRemoveCoupon}
-                  className="text-gray-400 hover:text-white text-[11px] underline"
+                  className="text-[#6B635B] hover:text-[#4A342E] text-[11px] underline"
                 >
                   Remove
                 </button>
@@ -418,12 +418,12 @@ export default function CartPage() {
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                   placeholder="e.g. GOLD10"
-                  className="flex-1 bg-[#080808] border border-[#2A2A2A] focus:border-[#D4AF37] text-xs text-[#F5F0E6] px-3 py-2 outline-none uppercase font-mono"
+                  className="flex-1 bg-[#F5F0E6] border border-[#E4DDD3] focus:border-[#795548] text-xs text-[#292D30] px-3 py-2 outline-none uppercase font-mono"
                 />
                 <button
                   type="submit"
                   disabled={isUpdating}
-                  className="bg-[#171717] hover:bg-[#2A2A2A] border border-[#2A2A2A] hover:border-[#D4AF37] text-[#F5F0E6] text-[11px] font-bold uppercase tracking-luxury px-4 py-2 transition-colors"
+                  className="bg-[#795548] hover:bg-[#5D4037] text-white text-[11px] font-bold uppercase tracking-luxury px-4 py-2 transition-colors"
                 >
                   Apply
                 </button>
@@ -435,15 +435,15 @@ export default function CartPage() {
           </div>
 
           {/* Concierge Ordering Assistance */}
-          <div className="p-4 border border-[#2A2A2A] bg-[#111111]/40 flex items-center gap-3 text-xs text-gray-400">
-            <MessageCircle size={18} className="text-[#D4AF37] flex-shrink-0" />
+          <div className="p-4 border border-[#E4DDD3] bg-[#FFFFFF]/40 flex items-center gap-3 text-xs text-[#6B635B]">
+            <MessageCircle size={18} className="text-[#795548] flex-shrink-0" />
             <div>
               <span>Prefer to order via WhatsApp? </span>
               <a
                 href={BRAND.contact.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#D4AF37] font-bold underline font-mono ml-1"
+                className="text-[#795548] font-bold underline font-mono ml-1"
               >
                 Chat with Concierge ({BRAND.contact.phoneDisplay})
               </a>

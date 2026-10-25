@@ -49,14 +49,14 @@ export function CollectionLayout({
     <div className="space-y-8 pb-16">
       {/* Centered Category Header (Phase 9 Reference Inspired Simplicity) */}
       <div className="text-center max-w-2xl mx-auto pt-4 sm:pt-8 space-y-2">
-        <div className="text-[10px] tracking-brand uppercase font-bold text-[#D4AF37]">
+        <div className="text-[10px] tracking-brand uppercase font-bold text-[#795548]">
           {tagline}
         </div>
-        <h1 className="font-brand text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-luxury text-[#F5F0E6]">
+        <h1 className="font-brand text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-luxury text-[#4A342E]">
           {currentSub ? `${title} — ${currentSub}` : title}
         </h1>
         {description && (
-          <p className="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xl mx-auto">
+          <p className="text-xs sm:text-sm text-[#6B635B] leading-relaxed max-w-xl mx-auto">
             {description}
           </p>
         )}
@@ -96,13 +96,13 @@ export function CollectionLayout({
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 border border-[#2A2A2A] bg-[#111111] p-8 space-y-4">
-          <p className="text-sm text-gray-400">
+        <div className="text-center py-20 border border-[#E4DDD3] bg-[#FFFFFF] p-8 space-y-4">
+          <p className="text-sm text-[#6B635B]">
             No products found matching the selected criteria in this collection.
           </p>
           <a
             href={basePath}
-            className="inline-block border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#080808] px-6 py-2 text-xs uppercase tracking-luxury font-bold transition-colors"
+            className="inline-block border border-[#795548] text-[#795548] hover:bg-[#795548] hover:text-white px-6 py-2 text-xs uppercase tracking-luxury font-bold transition-colors"
           >
             Clear Filters
           </a>

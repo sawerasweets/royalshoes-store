@@ -8,7 +8,7 @@ import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
 
 export const viewport: Viewport = {
-  themeColor: "#080808",
+  themeColor: "#F5F0E6",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -62,8 +62,8 @@ export default async function RootLayout({
   ]);
 
   return (
-    <html lang="en" className="dark">
-      <body className="min-h-screen flex flex-col bg-[#080808] text-[#F5F0E6] antialiased selection:bg-[#D4AF37] selection:text-[#080808]">
+    <html lang="en">
+      <body className="min-h-screen flex flex-col bg-[#F5F0E6] text-[#292D30] antialiased selection:bg-[#795548] selection:text-white">
         <Header
           userName={user ? user.name : null}
           userRole={user ? user.role : null}
