@@ -115,7 +115,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group relative flex flex-col bg-[#111111] border border-[#2A2A2A] hover:border-[#D4AF37]/70 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
       {/* Product Image Frame */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#0A0A0A]">
+      <div className="relative aspect-[3/4] w-full overflow-hidden bg-white">
         <Link href={`/product/${product.slug}`} className="absolute inset-0 block">
           {/* Badges */}
           <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1.5 pointer-events-none">
@@ -144,7 +144,7 @@ export function ProductCard({ product }: ProductCardProps) {
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               onError={() => setImageError(true)}
-              className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+              className="object-contain p-2.5 transition-transform duration-500 ease-out group-hover:scale-105"
             />
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-[#141414] to-[#0A0A0A] border border-[#2A2A2A] text-center">

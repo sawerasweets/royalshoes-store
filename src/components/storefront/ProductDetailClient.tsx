@@ -175,17 +175,17 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
               <button
                 key={img.id}
                 onClick={() => setSelectedImage(img.url)}
-                className={`relative w-16 h-20 sm:w-20 sm:h-24 flex-shrink-0 border bg-[#0A0A0A] overflow-hidden transition-all ${
+                className={`relative w-16 h-20 sm:w-20 sm:h-24 flex-shrink-0 border bg-white overflow-hidden transition-all ${
                   selectedImage === img.url
-                    ? "border-[#D4AF37] ring-1 ring-[#D4AF37]"
-                    : "border-[#2A2A2A] hover:border-gray-500 opacity-70 hover:opacity-100"
+                    ? "border-[#D4AF37] ring-2 ring-[#D4AF37]"
+                    : "border-[#2A2A2A] hover:border-gray-500 opacity-80 hover:opacity-100"
                 }`}
               >
                 <Image
                   src={img.url}
                   alt={img.altText || product.name}
                   fill
-                  className="object-cover object-center"
+                  className="object-contain p-1"
                 />
               </button>
             ))}
@@ -193,7 +193,7 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
         )}
 
         {/* Main Stage Image */}
-        <div className="relative aspect-[3/4] w-full bg-[#0A0A0A] border border-[#2A2A2A] overflow-hidden flex-1">
+        <div className="relative aspect-[3/4] w-full bg-white border border-[#D4AF37]/50 overflow-hidden flex-1 shadow-2xl">
           {isOnSale && (
             <span className="absolute top-4 left-4 z-10 bg-[#D4AF37] text-[#080808] text-xs font-bold tracking-luxury uppercase px-3 py-1 shadow-lg">
               -{discountPercent}% OFF
@@ -205,7 +205,7 @@ export function ProductDetailClient({ product, freeShippingThreshold = 5000 }: P
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 60vw"
-            className="object-cover object-center transition-all duration-300"
+            className="object-contain p-3 transition-all duration-300"
           />
         </div>
       </div>
