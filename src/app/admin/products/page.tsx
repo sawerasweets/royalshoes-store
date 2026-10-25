@@ -176,34 +176,42 @@ export default function AdminProductsPage() {
     setIsSubmitting(true);
 
     try {
+      const isNew = isCreating;
+      const method = isNew ? "POST" : "PATCH";
+      const payload: any = {
+        name: editFormData.name,
+        sku: editFormData.sku,
+        categoryId: editFormData.categoryId,
+        subcategoryId: editFormData.subcategoryId || null,
+        price: Number(editFormData.price),
+        originalPrice: editFormData.originalPrice ? Number(editFormData.originalPrice) : null,
+        description: editFormData.description,
+        imageUrl: editFormData.imageUrl,
+        stock: Number(editFormData.stock),
+        isPublished: editFormData.isPublished,
+        isFeatured: editFormData.isFeatured,
+        isNewArrival: editFormData.isNewArrival,
+        isBestseller: editFormData.isBestseller,
+      };
+
+      if (!isNew) {
+        payload.id = editFormData.id;
+      }
+
       const res = await fetch("/api/admin/products", {
-        method: "PATCH",
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: editFormData.id,
-          name: editFormData.name,
-          sku: editFormData.sku,
-          categoryId: editFormData.categoryId,
-          subcategoryId: editFormData.subcategoryId || null,
-          price: Number(editFormData.price),
-          originalPrice: editFormData.originalPrice ? Number(editFormData.originalPrice) : null,
-          description: editFormData.description,
-          imageUrl: editFormData.imageUrl,
-          stock: Number(editFormData.stock),
-          isPublished: editFormData.isPublished,
-          isFeatured: editFormData.isFeatured,
-          isNewArrival: editFormData.isNewArrival,
-          isBestseller: editFormData.isBestseller,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
       if (data.success) {
         setIsEditing(false);
-        showToast(`Product "${editFormData.name}" updated successfully!`);
+        setIsCreating(false);
+        showToast(`Product "${editFormData.name}" ${isNew ? "created" : "updated"} successfully!`);
         fetchProducts();
       } else {
-        alert(data.error || "Failed to update product.");
+        alert(data.error || `Failed to ${isNew ? "create" : "update"} product.`);
       }
     } catch {
       alert("Error saving product changes.");
@@ -1080,6 +1088,62 @@ export default function AdminProductsPage() {
                     onChange={(e) => setEditFormData({ ...editFormData, stock: e.target.value })}
                     className="w-full bg-[#080808] border border-[#2A2A2A] p-2.5 text-[#F5F0E6] outline-none font-mono"
                   />
+                </div>
+
+                {/* Product Photograph & Upload */}
+                <div className="p-3.5 bg-[#0A0A0A] border border-[#2A2A2A] space-y-3">
+                  <label className="block text-gray-300 font-semibold mb-1">Product Photograph *</label>
+                  <div className="flex flex-col sm:flex-row gap-4 items-start">
+                    <div className="relative w-24 h-28 bg-[#000000] border border-[#D4AF37]/50 flex-shrink-0 overflow-hidden shadow">
+                      {editFormData.imageUrl ? (
+                        <Image
+                          src={editFormData.imageUrl}
+                          alt="Product preview"
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-600">
+                          No Pic
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 space-y-2.5 w-full">
+                      <div>
+                        <span className="text-[10px] text-gray-400 block mb-1">Image URL / Path:</span>
+                        <input
+                          type="text"
+                          value={editFormData.imageUrl}
+                          onChange={(e) => setEditFormData({ ...editFormData, imageUrl: e.target.value })}
+                          placeholder="/products/prod-men-sandals-1-1.svg"
+                          className="w-full bg-[#111111] border border-[#2A2A2A] focus:border-[#D4AF37] p-2 text-[#F5F0E6] outline-none font-mono text-[11px]"
+                        />
+                      </div>
+
+                      <div>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileUpload}
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isUploading}
+                          className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#1A1A1A] hover:bg-[#2A2A2A] text-[#F5F0E6] border border-[#D4AF37]/40 text-[11px] font-semibold transition-colors"
+                        >
+                          <Upload size={13} className="text-[#D4AF37]" />
+                          <span>{isUploading ? "Uploading File..." : "Upload Image from Device"}</span>
+                        </button>
+                        <span className="text-[10px] text-gray-500 block mt-1">
+                          Accepts JPG, PNG, WEBP, SVG files from your device.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div>

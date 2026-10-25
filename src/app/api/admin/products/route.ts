@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/db";
+import prisma, { pool } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
 
@@ -71,7 +71,6 @@ export async function POST(req: NextRequest) {
     }
 
     if (imageUrl) {
-      const [pool] = [require("@/lib/db").pool];
       await pool.query(
         "INSERT INTO product_images (id, productId, url, displayOrder, isPrimary) VALUES (?, ?, ?, 1, TRUE)",
         [`img-${Date.now()}`, product.id, imageUrl]
@@ -142,8 +141,6 @@ export async function PATCH(req: NextRequest) {
         data: updateData,
       });
     }
-
-    const { pool } = require("@/lib/db");
 
     // Update product image if provided
     if (imageUrl) {

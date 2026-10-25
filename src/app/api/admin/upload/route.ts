@@ -1,45 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
-import fs from "fs";
-import path from "path";
+import { savePersistentFile } from "@/lib/storage";
 
 export async function POST(req: NextRequest) {
   try {
+    // 1. Authorize admin
     await requireAdmin();
 
+    // 2. Parse form data
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
 
     if (!file) {
-      return NextResponse.json({ success: false, error: "No file uploaded." }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "No file was uploaded." },
+        { status: 400 }
+      );
     }
 
+    // 3. Extract and validate file buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Sanitize filename and generate unique name
-    const ext = path.extname(file.name) || ".jpg";
-    const cleanExt = [".jpg", ".jpeg", ".png", ".webp", ".svg"].includes(ext.toLowerCase()) ? ext.toLowerCase() : ".jpg";
-    const filename = `prod-${Date.now()}-${Math.floor(Math.random() * 1000)}${cleanExt}`;
-
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
+    if (buffer.length === 0) {
+      return NextResponse.json(
+        { success: false, error: "Uploaded file is empty." },
+        { status: 400 }
+      );
     }
 
-    const filePath = path.join(uploadsDir, filename);
-    fs.writeFileSync(filePath, buffer);
-
-    const fileUrl = `/uploads/${filename}`;
+    // 4. Save to durable persistent storage
+    const result = await savePersistentFile(buffer, file.name, file.type);
 
     return NextResponse.json({
       success: true,
-      url: fileUrl,
-      filename,
+      url: result.url,
+      filename: result.filename,
+      mimeType: result.mimeType,
     });
   } catch (error: any) {
-    console.error("Upload error:", error);
-    const status = error.message === "UNAUTHORIZED" ? 401 : error.message === "FORBIDDEN" ? 403 : 500;
-    return NextResponse.json({ success: false, error: error.message || "Upload failed." }, { status });
+    console.error("Admin upload error:", error);
+    const status =
+      error.message === "UNAUTHORIZED"
+        ? 401
+        : error.message === "FORBIDDEN"
+        ? 403
+        : 400;
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message || "Failed to upload image file.",
+      },
+      { status: status === 400 && error.message ? 400 : status }
+    );
   }
 }
